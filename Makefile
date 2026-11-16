@@ -1,7 +1,7 @@
 .PHONY: install check test lint format
 
 install:
-	uv venv && uv pip install -e ".[dev]"
+	uv sync --extra dev
 
 lint:
 	uv run ruff check . && uv run ruff format --check .

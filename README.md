@@ -19,7 +19,7 @@ simulated table, so a suggested signing can be scored by the points it is expect
 ```bash
 git clone https://github.com/Vinavil334/xMercato.git
 cd xMercato
-uv venv && uv pip install -e ".[dev]"
+uv sync --extra dev
 
 # Where did the 2025/26 season look like it was heading on 6 January 2026?
 uv run xmercato simulate --results tests/data/serie_a_2025_26.csv --as-of 2026-01-06 --seed 42
