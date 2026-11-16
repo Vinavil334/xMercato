@@ -38,16 +38,34 @@ Stato verificato il **16 novembre 2026**. Le fonti gratuite di dati calcistici c
 
 ## Cosa manca, e come ci si convive
 
-1. **Rose e valori 2026/27.** Finché il dataset Transfermarkt non riparte servono alternative:
-   aspettare, usare un altro dataset pubblico, oppure raccogliere solo il necessario (rose delle 20 di
-   Serie A, poche centinaia di pagine) con [transfermarkt-scraper](https://github.com/dcaribou/transfermarkt-scraper).
-   È una decisione aperta: vedi [STUDIO.md](STUDIO.md#domande-aperte).
+1. **Rose e valori 2026/27.** Finché il dataset Transfermarkt non riparte, le rose delle 20 squadre di
+   Serie A si raccolgono a mano: vedi [qui sotto](#rose-raccolte-a-mano).
 2. **Giocatori fuori dai Big 5.** Per Eredivisie, Portogallo, Belgio, Sud America, Serie B ci sono solo
    minuti, gol e assist (da Transfermarkt). È il limite più pesante per i suggerimenti di mercato,
    perché la Serie A compra molto da quei campionati.
 3. **Stipendi, commissioni, clausole.** Non osservabili gratis. Il "verosimile" si basa su costo del
    cartellino stimato e abitudini di spesa del club.
 4. **Difensori e portieri.** Le statistiche pubbliche misurano bene chi tira e chi rifinisce, male gli altri.
+
+## Rose raccolte a mano
+
+Un file CSV per stagione, compilato a mano e versionato nella repo (`rose/serie_a_2026_27.csv`):
+sono circa 500-550 righe, una per giocatore in rosa. Va aggiornato alla chiusura di ogni finestra di mercato.
+
+| Colonna | Esempio (inventato) | Note |
+|---|---|---|
+| `club` | `Inter` | Stesso nome usato nei file dei risultati |
+| `giocatore` | `Mario Rossi` | |
+| `tm_id` | `123456` | ID Transfermarkt, dall'indirizzo della pagina del giocatore. È la chiave che collega allo storico: senza, il giocatore non ha passato |
+| `data_nascita` | `2001-03-15` | Serve anche a risolvere gli omonimi |
+| `ruolo` | `ATT` | `POR`, `DIF`, `CEN`, `ATT`; il ruolo dettagliato arriva dallo storico |
+| `arrivo` | `2026-08-20` | Data di arrivo nel club |
+| `tipo` | `definitivo` | `definitivo`, `prestito`, `prestito_diritto`, `prestito_obbligo`, `vivaio` |
+| `scadenza` | `2030-06-30` | Scadenza del contratto, se nota |
+| `valore_mln` | `12.5` | Valore di mercato in milioni, con la data in `valore_data` |
+
+Per chi era già in un campionato coperto a giugno 2026, tutto lo storico arriva dal dataset tramite
+`tm_id`: a mano si inseriscono solo l'appartenenza alla rosa e i dati dei nuovi arrivi.
 
 ## Identità dei giocatori
 

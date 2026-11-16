@@ -68,7 +68,7 @@ variazione dei punti attesi (dal modello D).
 
 - **Come si valuta:** per la plausibilità, quanti acquisti reali di un'estate passata comparivano tra
   i primi N suggeriti. Per il successo, curva di calibrazione e Brier score contro la frequenza di base.
-- **Dubbi:** la definizione di "buon acquisto" è una scelta, non un fatto (vedi domande aperte).
+- **Dubbi:** la definizione di "buon acquisto" è una scelta, non un fatto (vedi [decisioni prese](#decisioni-prese)).
   Prestiti con diritto o obbligo di riscatto, molto usati in Serie A, complicano il costo.
   Volontà del giocatore, procuratori e stipendi non si osservano.
 
@@ -114,17 +114,29 @@ variazione dei punti attesi (dal modello D).
 | Statistiche extra Big 5 | Colma il buco principale | API-Football a pagamento (da 19 USD/mese) | Primo candidato se si decide di spendere |
 | **Simulatore tra amici** | Ognuno gestisce un club con un budget, mercato a turni, stagione simulata | Gratis entro i piani free (serve login e database) | Cambia l'architettura: vedi [ARCHITETTURA.md](ARCHITETTURA.md#evoluzione) |
 
+## Decisioni prese
+
+Registro delle scelte, con la data. Si cambia idea aggiungendo una riga, non cancellando.
+
+| Data | Tema | Decisione |
+|---|---|---|
+| 16/11/2026 | **"Buon acquisto"** | Entro due stagioni dall'arrivo il giocatore ha giocato almeno il 40% dei minuti disponibili **e** il suo valore è almeno quello atteso per la sua età |
+| 16/11/2026 | **Rose 2026/27** | Raccolte a mano per le 20 squadre di Serie A, finché il dataset Transfermarkt resta fermo. Formato in [DATI.md](DATI.md#rose-raccolte-a-mano) |
+| 16/11/2026 | **Candidati** | Tutti i campionati. Fuori dai Big 5 i dati sono ridotti: l'incertezza viene stimata e mostrata accanto a ogni suggerimento |
+| 16/11/2026 | **Finestre di mercato** | Entrambe: gennaio 2027 con una versione ridotta, estate 2027 con quella completa (vedi [ROADMAP.md](ROADMAP.md#due-traguardi)) |
+| 16/11/2026 | **Lingua** | Documentazione e README in italiano |
+| 16/11/2026 | **Simulatore interattivo** | Previsto, in tre livelli crescenti (vedi [ROADMAP.md](ROADMAP.md#simulatore-interattivo)) |
+
+### Conseguenze della definizione di "buon acquisto"
+
+- L'etichetta richiede due stagioni di storia: l'ultima estate utilizzabile per l'addestramento è il 2024.
+- "Minuti disponibili" va precisato. Proposta: i minuti di campionato del club che lo ha comprato, nelle
+  due stagioni; i periodi passati in prestito altrove contano come minuti non giocati.
+- "Valore atteso per l'età" viene dal modello B: serve quindi la fase 3 prima della fase 4.
+- Gli acquisti di gennaio hanno una stagione e mezza: da trattare a parte o da escludere dall'addestramento.
+
 ## Domande aperte
 
-Decisioni che cambiano il lavoro, da discutere prima di andare oltre la fase 1.
-
-1. **Cos'è un "buon acquisto"?** Proposta: entro due stagioni ha giocato almeno il 40% dei minuti
-   disponibili **e** il suo valore è almeno quello atteso per la sua età. Alternative: solo rendimento
-   in campo, oppure solo plusvalenza.
-2. **Dati Transfermarkt aggiornati:** aspettare che il dataset riparta, o raccogliere da soli le rose
-   2026/27 delle 20 squadre? La seconda sblocca i suggerimenti "per questa stagione", la prima è più pulita.
-3. **Candidati: solo Big 5 o tutto il mondo?** Solo Big 5 significa dati buoni ma suggerimenti meno
-   realistici. Proposta: Big 5 con xG, più gli altri campionati con dati ridotti e incertezza dichiarata.
-4. **Finestra di mercato di riferimento:** estate 2027 (c'è tempo per fare le cose bene) o gennaio 2027 (molto vicino)?
-5. **Lingua dell'app:** italiano, inglese o entrambe? Il README è in inglese per il portfolio, questi documenti in italiano.
-6. **Quanto tempo a settimana?** La roadmap ipotizza 5-6 ore.
+1. **Quanto tempo a settimana?** La roadmap ipotizza 5-6 ore.
+2. **Prestiti:** un prestito con diritto di riscatto non esercitato è un cattivo acquisto o un non-acquisto?
+3. **Soglia del 40%:** uguale per tutti i ruoli? Un secondo portiere non la raggiunge mai.

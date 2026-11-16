@@ -2,9 +2,12 @@
 
 ## Principio
 
-L'app **non calcola niente**: legge tabelle già pronte. Tutto il lavoro pesante (scaricare, pulire,
-addestrare, simulare) gira in batch, una volta a settimana. Così l'app resta piccola e gratuita, e
-ogni numero mostrato è riproducibile da uno script.
+L'app **non addestra niente**: legge tabelle già pronte. Tutto il lavoro pesante (scaricare, pulire,
+addestrare) gira in batch, una volta a settimana. Così l'app resta piccola e gratuita, e ogni numero
+mostrato è riproducibile da uno script.
+
+L'unico calcolo fatto dal vivo è la **simulazione del campionato**: 10.000 stagioni richiedono circa
+un secondo, quindi il simulatore interattivo può ricalcolare a ogni modifica dell'utente.
 
 ```mermaid
 flowchart LR
@@ -24,7 +27,7 @@ flowchart LR
     T --> I
     F --> I
     N --> I
-    O --> App[App Streamlit<br/>sola lettura]
+    O --> App[App Streamlit<br/>lettura + simulazione dal vivo]
 ```
 
 ## Linguaggi e librerie
@@ -34,7 +37,7 @@ flowchart LR
 | Linguaggio | **Python 3.11+** | Un solo linguaggio per dati, modelli e prima app |
 | Trasformazioni | **SQL su DuckDB**, file Parquet | Nessun server, veloce su un portatile, legge direttamente CSV e Parquet |
 | Modelli | numpy/scipy (Poisson), **scikit-learn**, **LightGBM** | Sufficienti per dati tabellari di queste dimensioni (decine di migliaia di righe) |
-| Simulazione | numpy vettorizzato | 10.000 stagioni in meno di un secondo |
+| Simulazione | numpy vettorizzato | 10.000 stagioni in circa un secondo |
 | App | **Streamlit** | Dal modello alla pagina web senza scrivere frontend |
 | Qualità | `uv`, `ruff`, `pytest`, GitHub Actions | Già configurati nella repo |
 
@@ -64,7 +67,8 @@ src/xmercato/
 ├── recommend/    # fabbisogno, plausibilità, lista per club
 ├── sim/          # season (fatto)
 └── cli.py        # xmercato simulate ...          (fatto)
-app/              # Streamlit, dalla fase 5
+app/              # Streamlit, dalla fase 1b
+rose/             # rose compilate a mano, un CSV per stagione
 tests/            # ogni modello ha un test su dati sintetici a parametri noti
 docs/             # questi documenti
 ```
