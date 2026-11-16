@@ -125,18 +125,33 @@ Registro delle scelte, con la data. Si cambia idea aggiungendo una riga, non can
 | 16/11/2026 | **Candidati** | Tutti i campionati. Fuori dai Big 5 i dati sono ridotti: l'incertezza viene stimata e mostrata accanto a ogni suggerimento |
 | 16/11/2026 | **Finestre di mercato** | Entrambe: gennaio 2027 con una versione ridotta, estate 2027 con quella completa (vedi [ROADMAP.md](ROADMAP.md#due-traguardi)) |
 | 16/11/2026 | **Lingua** | Documentazione e README in italiano |
+| 16/11/2026 | **Prestiti** | Di norma un prestito non è un acquisto: prestito secco e diritto di riscatto non esercitato restano fuori. Obbligo di riscatto e diritto esercitato contano come acquisto dalla data di arrivo. Scelta provvisoria, da rivedere sui dati |
+| 16/11/2026 | **Soglia dei minuti** | Non è fissa: dipende dal ruolo per cui il giocatore è stato preso. Un secondo portiere che fa il secondo portiere è un acquisto riuscito |
+| 16/11/2026 | **Acquisti di gennaio** | Stessa definizione, valutata sulla stagione e mezza disponibile |
 | 16/11/2026 | **Simulatore interattivo** | Previsto, in tre livelli crescenti (vedi [ROADMAP.md](ROADMAP.md#simulatore-interattivo)) |
 
-### Conseguenze della definizione di "buon acquisto"
+### Come si applica la definizione di "buon acquisto"
 
-- L'etichetta richiede due stagioni di storia: l'ultima estate utilizzabile per l'addestramento è il 2024.
-- "Minuti disponibili" va precisato. Proposta: i minuti di campionato del club che lo ha comprato, nelle
-  due stagioni; i periodi passati in prestito altrove contano come minuti non giocati.
-- "Valore atteso per l'età" viene dal modello B: serve quindi la fase 3 prima della fase 4.
-- Gli acquisti di gennaio hanno una stagione e mezza: da trattare a parte o da escludere dall'addestramento.
+- **Ruolo atteso.** Al momento dell'acquisto si stima per cosa è stato preso il giocatore: titolare,
+  rotazione o riserva. La stima usa solo ciò che si sapeva allora: costo rispetto alle spese del club,
+  valore rispetto ai compagni di reparto, età. Da qui vengono i **minuti attesi**.
+- **Criterio dei minuti.** L'acquisto supera il criterio se ha giocato almeno quanto atteso per il suo
+  ruolo. Il 40% dei minuti disponibili resta la soglia per chi è stato preso da titolare; per rotazione
+  e riserva la soglia scende in proporzione ai minuti attesi. I valori esatti si calibrano nella fase 4.
+- **Criterio del valore.** Invariato: valore almeno pari a quello atteso per l'età, dal modello B.
+  Serve quindi la fase 3 prima della fase 4.
+- **Minuti disponibili.** I minuti di campionato del club che lo ha comprato; i periodi passati in
+  prestito altrove contano come minuti non giocati.
+- **Finestra di osservazione.** Due stagioni per gli acquisti estivi, una stagione e mezza per quelli
+  di gennaio, con minuti disponibili e valore atteso calcolati sullo stesso periodo.
+- **Dati utilizzabili.** L'etichetta richiede la finestra completa: l'ultima estate utilizzabile per
+  l'addestramento è il 2024, l'ultimo gennaio il 2025.
+
+Rischio da tenere d'occhio: il ruolo atteso è a sua volta una stima. Se è sbagliata, un titolare mancato
+passa per una riserva riuscita. Va verificata a mano su un campione di acquisti noti.
 
 ## Domande aperte
 
 1. **Quanto tempo a settimana?** La roadmap ipotizza 5-6 ore.
-2. **Prestiti:** un prestito con diritto di riscatto non esercitato è un cattivo acquisto o un non-acquisto?
-3. **Soglia del 40%:** uguale per tutti i ruoli? Un secondo portiere non la raggiunge mai.
+2. **Ruolo atteso:** tre classi (titolare, rotazione, riserva) bastano, o serve una stima continua dei minuti attesi?
+3. **Prestiti:** la regola provvisoria esclude molti affari tipici della Serie A. Da ricontrollare quando ci sono i numeri.
