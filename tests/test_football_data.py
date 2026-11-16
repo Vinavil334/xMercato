@@ -1,11 +1,9 @@
-from pathlib import Path
-
 import pandas as pd
 import pytest
 
 from xmercato.ingest import football_data
 
-FIXTURE = Path(__file__).parent / "data" / "serie_a_2025_26.csv"
+FIXTURE = football_data.SAMPLE_SEASON
 
 
 def test_loads_full_season():

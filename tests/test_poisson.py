@@ -60,3 +60,18 @@ def test_unknown_team_raises():
     df, teams, *_ = _synthetic_league(rounds=1)
     with pytest.raises(ValueError, match="not in `teams`"):
         poisson.fit(df, teams=teams[:-1])
+
+
+def test_scaled_multiplies_expected_goals():
+    df, teams, *_ = _synthetic_league(rounds=2)
+    base = poisson.fit(df, teams=teams)
+    what_if = base.scaled(goals_for={"T00": 1.2}, goals_against={"T00": 0.5})
+    home, away = base.expected_goals("T00", "T01")
+    new_home, new_away = what_if.expected_goals("T00", "T01")
+    assert new_home == pytest.approx(1.2 * home)
+    assert new_away == pytest.approx(0.5 * away)
+    # Matches without T00 are untouched, and the original object is not modified.
+    assert what_if.expected_goals("T02", "T03") == base.expected_goals("T02", "T03")
+    assert base.expected_goals("T00", "T01") == (home, away)
+    with pytest.raises(ValueError, match="positive"):
+        base.scaled(goals_for={"T00": 0.0})

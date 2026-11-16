@@ -9,6 +9,10 @@ dependencies = [
     "numpy>=1.26",
     "pandas>=2.1",
     "scipy>=1.11",
+    # The app. Kept in the core dependencies so that hosting services that only read
+    # uv.lock install it; the modelling code itself never imports Streamlit.
+    "streamlit>=1.67",
+    "altair>=5",
 ]
 
 [project.optional-dependencies]
@@ -33,3 +37,6 @@ src = ["src", "tests"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+"app/*" = ["E501"]  # long user-facing Italian strings
