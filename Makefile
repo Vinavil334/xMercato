@@ -1,4 +1,4 @@
-.PHONY: install check test lint format
+.PHONY: install check test lint format app
 
 install:
 	uv sync --extra dev
@@ -13,3 +13,6 @@ test:
 	uv run pytest -q
 
 check: lint test
+
+app:
+	uv run streamlit run app/streamlit_app.py

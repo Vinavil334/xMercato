@@ -3,6 +3,9 @@
 Works both with the original files (``https://www.football-data.co.uk/mmz4281/2526/I1.csv``,
 dates as dd/mm/yyyy) and with the public-domain mirror in ``datasets/football-datasets``
 on GitHub (ISO dates). Only the columns needed by the match model are kept.
+
+``SAMPLE_SEASON`` is a complete season (Serie A 2025/26, from that mirror) shipped with
+the package for tests, examples and as the app's offline fallback.
 """
 
 from __future__ import annotations
@@ -12,6 +15,7 @@ from pathlib import Path
 import pandas as pd
 
 SERIE_A_URL = "https://www.football-data.co.uk/mmz4281/{season}/I1.csv"
+SAMPLE_SEASON = Path(__file__).resolve().parents[1] / "samples" / "serie_a_2025_26.csv"
 
 _COLUMNS = {
     "Date": "date",

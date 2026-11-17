@@ -25,7 +25,7 @@ lista dei candidati, non la verifica della classifica.
 |---|---|---|---|
 | **0. Fondamenta** | Repo, CI, struttura dati, caricamento risultati, simulatore di base | 1-2 sett. | *In buona parte fatta.* Mancano i caricatori Transfermarkt e Understat e le rose a mano |
 | **1. Classifica** | Forza da xG, peso alle partite recenti, Dixon-Coles, stima pre-stagionale dal valore della rosa | 2-3 sett. | Verifica su 10 stagioni: log-loss per partita confrontata con le quote dei bookmaker; errore sui punti finali |
-| **1b. Simulatore, livello 1** | App Streamlit: classifica simulata, cursori sulla forza delle squadre, risultati forzati | 1-2 sett. | App online con la stagione in corso |
+| **1b. Simulatore, livello 1** | App Streamlit: classifica simulata, cursori sulla forza delle squadre, risultati forzati | 1-2 sett. | *Costruito e provato in locale.* Manca la pubblicazione online, e la prova con i dati della stagione in corso |
 | **G. Mercato di gennaio** | Fabbisogno per ruolo dalle rose a mano; candidati per somiglianza statistica, età e costo | 2-3 sett. | Una pagina per club. *Traguardo di gennaio* |
 | **2. Anagrafica e proiezioni** | Collegamento degli ID tra le fonti; tabella giocatore-stagione; Marcel; modello dei minuti; coefficienti di campionato | 4-5 sett. | Almeno il 95% dei minuti di Serie A collegato tra Understat e Transfermarkt; errore inferiore a "uguale all'anno scorso" |
 | **3. Valore** | Valore equo oggi e valore a 12 mesi | 2-3 sett. | Errore per fasce di valore, confrontato con "resta uguale, corretto per l'età" |
@@ -42,7 +42,7 @@ Tre livelli, ognuno utile da solo e costruito sul precedente.
 
 | Livello | Cosa fa l'utente | Cosa serve | Quando |
 |---|---|---|---|
-| **1. "E se" sulla classifica** | Sceglie la giornata di partenza, alza o abbassa la forza di una squadra, fissa il risultato di una partita; le probabilità di scudetto, Champions e retrocessione si aggiornano | Solo il modello che c'è già, più l'app | Dicembre 2026 |
+| **1. "E se" sulla classifica** | Sceglie la data di partenza, alza o abbassa la forza di una squadra, fissa il risultato di una partita; le probabilità di scudetto, prime quattro e retrocessione si aggiornano | Solo il modello che c'è già, più l'app | **Fatto** (`app/streamlit_app.py`), da pubblicare |
 | **2. "E se" sul mercato** | Aggiunge o toglie giocatori da una rosa; la forza della squadra si ricalcola dalle proiezioni e la classifica cambia | Fasi 1 e 2: il legame tra rosa e forza della squadra è il pezzo mancante | Primavera 2027 |
 | **3. Lega tra amici** | Ognuno gestisce un club con un budget; mercato a turni; la stagione viene simulata giornata per giornata | Livello 2, più login, database e un'interfaccia vera (vedi [ARCHITETTURA.md](ARCHITETTURA.md#evoluzione)) | Dopo l'estate 2027 |
 
@@ -66,6 +66,6 @@ codice: budget iniziali, mercato libero o ad asta, quanto pesa il caso, cosa suc
 
 ## Prossimi tre passi
 
-1. **Simulatore, livello 1**: app Streamlit sulla stagione in corso.
+1. **Pubblicare il simulatore** su Streamlit Community Cloud e controllare che scarichi la stagione in corso.
 2. **Rose 2026/27**: creare `rose/serie_a_2026_27.csv` nel formato descritto in [DATI.md](DATI.md#rose-raccolte-a-mano).
 3. **Caricatore Understat** per la Serie A (xG per partita) e confronto gol contro xG nel modello della classifica.

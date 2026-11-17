@@ -65,9 +65,10 @@ src/xmercato/
 ├── features/     # tabelle giocatore-stagione e club-stagione
 ├── models/       # poisson (fatto), proiezioni, valore, successo acquisti
 ├── recommend/    # fabbisogno, plausibilità, lista per club
-├── sim/          # season (fatto)
+├── sim/          # season (fatto), con scenari "e se"
+├── samples/      # una stagione completa per test ed esempi
 └── cli.py        # xmercato simulate ...          (fatto)
-app/              # Streamlit, dalla fase 1b
+app/              # Streamlit: simulatore di livello 1 (fatto)
 rose/             # rose compilate a mano, un CSV per stagione
 tests/            # ogni modello ha un test su dati sintetici a parametri noti
 docs/             # questi documenti

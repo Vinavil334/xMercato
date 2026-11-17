@@ -11,18 +11,36 @@ xMercato vuole rispondere a tre domande collegate:
 I tre pezzi si alimentano a vicenda: le proiezioni dei giocatori cambiano la forza di una rosa, e la forza
 della rosa guida la classifica simulata. Così ogni acquisto suggerito si può valutare in punti attesi.
 
-> **Stato: agli inizi.** Il simulatore della classifica funziona. Il resto è progettato ma non ancora costruito.
-> Vedi la [roadmap](docs/ROADMAP.md).
+> **Stato: agli inizi.** Il simulatore interattivo della classifica funziona. Il resto è progettato ma non
+> ancora costruito. Vedi la [roadmap](docs/ROADMAP.md).
 
-## Provalo
+## Il simulatore
 
 ```bash
 git clone https://github.com/Vinavil334/xMercato.git
 cd xMercato
 uv sync --extra dev
+uv run streamlit run app/streamlit_app.py
+```
 
+Nell'app si può:
+
+- scegliere fino a che data usare i risultati, per rivedere il campionato com'era in quel momento;
+- rendere una squadra più o meno forte (gol fatti e gol subiti) e vedere come cambiano punti attesi e
+  probabilità di scudetto, prime quattro e retrocessione;
+- fissare il risultato di una partita ancora da giocare.
+
+Scenario e simulazione di base usano gli stessi numeri casuali: cambiano solo le partite toccate dalle
+modifiche, quindi le differenze mostrate non sono rumore.
+
+L'app scarica la stagione in corso da football-data.co.uk; se non ci riesce usa la stagione 2025/26
+inclusa nella repo.
+
+## Da riga di comando
+
+```bash
 # Dove sembrava andare la stagione 2025/26 al 6 gennaio 2026?
-uv run xmercato simulate --results tests/data/serie_a_2025_26.csv --as-of 2026-01-06 --seed 42
+uv run xmercato simulate --results src/xmercato/samples/serie_a_2025_26.csv --as-of 2026-01-06 --seed 42
 ```
 
 ```
@@ -30,12 +48,12 @@ uv run xmercato simulate --results tests/data/serie_a_2025_26.csv --as-of 2026-0
 
             played  points  exp_points  p_title  p_top4  p_relegation
 team
-Inter           17      39      84.700    0.719   0.994         0.000
-Milan           17      38      77.800    0.133   0.900         0.000
-Napoli          17      37      77.700    0.130   0.901         0.000
+Inter           17      39      84.600    0.717   0.995         0.000
+Napoli          17      37      77.900    0.136   0.906         0.000
+Milan           17      38      77.700    0.129   0.901         0.000
 ...
-Verona          17      12      28.600    0.000   0.000         0.793
-Pisa            19      12      28.400    0.000   0.000         0.794
+Verona          17      12      28.600    0.000   0.000         0.794
+Pisa            19      12      28.400    0.000   0.000         0.797
 ```
 
 Per la stagione in corso basta passare a `--results` il file di football-data.co.uk, per esempio
@@ -58,12 +76,13 @@ decide la differenza reti, non gli scontri diretti come nel regolamento della Se
 
 ```bash
 make check   # ruff + pytest
+make app     # avvia il simulatore in locale
 ```
 
 ## Dati e licenza
 
 Il codice è rilasciato con [licenza MIT](LICENSE). La repo non contiene dati di terze parti, a parte un
-piccolo file di risultati di pubblico dominio usato dai test
+piccolo file di risultati di pubblico dominio usato dai test e come riserva dall'app
 (da [datasets/football-datasets](https://github.com/datasets/football-datasets), fonte football-data.co.uk).
 Ogni fonte mantiene le proprie condizioni d'uso: vedi [docs/DATI.md](docs/DATI.md).
 

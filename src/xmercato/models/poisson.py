@@ -15,7 +15,7 @@ time decay, Dixon-Coles low-score correction, and priors built from squad streng
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 import numpy as np
 import pandas as pd
@@ -38,6 +38,27 @@ class TeamStrengths:
         lam_home = np.exp(self.mu + self.home_adv + self.attack[i] - self.defence[j])
         lam_away = np.exp(self.mu + self.attack[j] - self.defence[i])
         return float(lam_home), float(lam_away)
+
+    def scaled(
+        self,
+        goals_for: dict[str, float] | None = None,
+        goals_against: dict[str, float] | None = None,
+    ) -> TeamStrengths:
+        """Copy with some teams made stronger or weaker, for "what if" scenarios.
+
+        ``goals_for={"Inter": 1.10}`` makes Inter score 10% more against everyone;
+        ``goals_against={"Inter": 0.90}`` makes Inter concede 10% fewer.
+        """
+        attack, defence = self.attack.copy(), self.defence.copy()
+        for team, factor in (goals_for or {}).items():
+            if factor <= 0:
+                raise ValueError(f"Scaling factor must be positive, got {factor} for {team}")
+            attack[self.teams.index(team)] += np.log(factor)
+        for team, factor in (goals_against or {}).items():
+            if factor <= 0:
+                raise ValueError(f"Scaling factor must be positive, got {factor} for {team}")
+            defence[self.teams.index(team)] -= np.log(factor)
+        return replace(self, attack=attack, defence=defence)
 
     def to_frame(self) -> pd.DataFrame:
         return pd.DataFrame(
