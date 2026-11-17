@@ -240,3 +240,13 @@ def test_tm_url():
     assert rose.tm_url(123).endswith("/spieler/123")
     with pytest.raises(ValueError):
         rose.tm_url("1; rm")
+
+
+def test_expired_contracts_are_flagged_until_verified():
+    rows = [_valid_row(tm_id="1", scadenza="2026-06-30", verificato="no"), _valid_row(tm_id="2")]
+    text = "\n".join(str(p) for p in rose.check(pd.DataFrame(rows)))
+    assert "1 giocatori con contratto scaduto prima del 01/07/2026" in text
+    assert "righe 2)" in text
+    rows[0]["verificato"] = "si"  # checked by hand: e.g. renewed and file not yet updated
+    text = "\n".join(str(p) for p in rose.check(pd.DataFrame(rows)))
+    assert "contratto scaduto" not in text

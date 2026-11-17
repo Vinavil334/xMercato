@@ -39,7 +39,7 @@ Stato verificato il **16 novembre 2026**. Le fonti gratuite di dati calcistici c
 ## Cosa manca, e come ci si convive
 
 1. **Rose e valori 2026/27.** Finché il dataset Transfermarkt non riparte, le rose delle 20 squadre di
-   Serie A si raccolgono a mano: vedi [qui sotto](#rose-raccolte-a-mano).
+   Serie A si aggiornano a mano partendo da una bozza: vedi [qui sotto](#rose-raccolte-a-mano).
 2. **Giocatori fuori dai Big 5.** Per Eredivisie, Portogallo, Belgio, Sud America, Serie B ci sono solo
    minuti, gol e assist (da Transfermarkt). È il limite più pesante per i suggerimenti di mercato,
    perché la Serie A compra molto da quei campionati.
@@ -49,23 +49,64 @@ Stato verificato il **16 novembre 2026**. Le fonti gratuite di dati calcistici c
 
 ## Rose raccolte a mano
 
-Un file CSV per stagione, compilato a mano e versionato nella repo (`rose/serie_a_2026_27.csv`):
-sono circa 500-550 righe, una per giocatore in rosa. Va aggiornato alla chiusura di ogni finestra di mercato.
+Un file CSV per stagione, versionato nella repo: [`rose/serie_a_2026_27.csv`](../rose/serie_a_2026_27.csv),
+una riga per giocatore in rosa. Va aggiornato alla chiusura di ogni finestra di mercato.
+
+### Formato
 
 | Colonna | Esempio (inventato) | Note |
 |---|---|---|
 | `club` | `Inter` | Stesso nome usato nei file dei risultati |
 | `giocatore` | `Mario Rossi` | |
-| `tm_id` | `123456` | ID Transfermarkt, dall'indirizzo della pagina del giocatore. È la chiave che collega allo storico: senza, il giocatore non ha passato |
+| `tm_id` | `123456` | ID Transfermarkt, dall'indirizzo della pagina del giocatore. È la chiave che collega allo storico: senza, il giocatore non ha passato. Obbligatorio |
 | `data_nascita` | `2001-03-15` | Serve anche a risolvere gli omonimi |
 | `ruolo` | `ATT` | `POR`, `DIF`, `CEN`, `ATT`; il ruolo dettagliato arriva dallo storico |
 | `arrivo` | `2026-08-20` | Data di arrivo nel club |
-| `tipo` | `definitivo` | `definitivo`, `prestito`, `prestito_diritto`, `prestito_obbligo`, `vivaio` |
+| `tipo` | `definitivo` | `definitivo`, `prestito`, `prestito_diritto`, `prestito_obbligo`, `vivaio`. Vuoto finché non verificato |
 | `scadenza` | `2030-06-30` | Scadenza del contratto, se nota |
-| `valore_mln` | `12.5` | Valore di mercato in milioni, con la data in `valore_data` |
+| `valore_mln` | `12.5` | Valore di mercato in milioni, col punto decimale |
+| `valore_data` | `2026-09-01` | Data a cui si riferisce il valore |
+| `fonte` | `manuale` | `tm_2026_07` per le righe della bozza, `manuale` per quelle aggiunte o riscritte a mano |
+| `verificato` | `si` | `si` quando la riga è stata controllata sulla rosa attuale, altrimenti `no` |
 
-Per chi era già in un campionato coperto a giugno 2026, tutto lo storico arriva dal dataset tramite
-`tm_id`: a mano si inseriscono solo l'appartenenza alla rosa e i dati dei nuovi arrivi.
+Date sempre nel formato `AAAA-MM-GG`. Il file si apre con qualsiasi foglio di calcolo, ma va salvato come
+CSV con la virgola come separatore e codifica UTF-8.
+
+### Da dove si parte
+
+La bozza è stata generata dallo snapshot Transfermarkt di luglio 2026 con il workflow
+[Bozza delle rose](../.github/workflows/rose-bozza.yml): 638 giocatori, tutte le righe con `verificato = no`.
+Cosa contiene e cosa no:
+
+- **17 squadre su 20 quasi complete, ma a inizio luglio.** Mancano i movimenti dell'estate 2026 e ci
+  sono tutti i rientri dai prestiti: per questo le rose hanno 31-40 giocatori.
+- **Neopromosse quasi vuote.** La Serie B non è coperta dal dataset: Frosinone e Monza hanno un
+  giocatore, il Venezia quattro. Vanno compilate da zero.
+- **`tipo` sempre vuoto.** Il dataset non distingue i prestiti.
+- **Campi mancanti:** 145 date di arrivo (soprattutto giovani del vivaio), 91 scadenze, 114 valori.
+
+### Come si aggiorna
+
+1. Per una squadra alla volta, apri la sua rosa attuale su Transfermarkt e confrontala con le righe del file.
+2. **Giocatore ancora in rosa:** controlla ruolo, scadenza e valore, compila `tipo`, metti `verificato = si`.
+3. **Giocatore partito** (ceduto, in prestito altrove, svincolato): cancella la riga.
+4. **Nuovo arrivo:** aggiungi una riga con `fonte = manuale` e `verificato = si`. Il `tm_id` è il numero
+   alla fine dell'indirizzo della sua pagina Transfermarkt.
+5. Controlla il file:
+
+   ```bash
+   uv run xmercato rose controlla rose/serie_a_2026_27.csv
+   ```
+
+   Il comando mostra una tabella per club (giocatori, verificati, valore) e due tipi di segnalazioni:
+   **errori**, che rendono il file inutilizzabile e indicano le righe da correggere, e **avvisi**, che
+   segnalano cose incomplete o sospette, come rose troppo grandi o contratti già scaduti.
+
+Si può fare anche una squadra alla volta: il file è utilizzabile in ogni momento, purché senza errori.
+
+Per rigenerare la bozza da zero (per esempio se il dataset Transfermarkt riparte), il workflow si lancia a
+mano dalla scheda *Actions* di GitHub. Se il file esiste già, si ferma, a meno di scegliere esplicitamente
+di sovrascriverlo: così le correzioni fatte a mano non si perdono per errore.
 
 ## Identità dei giocatori
 
@@ -79,8 +120,10 @@ Ogni fonte ha i propri ID. Collegarle è un lavoro a sé (fase 2 della roadmap):
 
 - Transfermarkt considera i propri dati protetti e i termini d'uso vietano lo scraping; i dataset
   pubblici esistono comunque e sono molto usati. Understat non pubblica una licenza.
-- Regole del progetto: **nella repo solo codice**, mai dati grezzi; scraping lento, con cache, solo per
-  ciò che serve; uso personale e non commerciale; fonti sempre citate nell'app.
+- Regole del progetto: **nella repo niente dati grezzi**, con due eccezioni piccole e dichiarate: una
+  stagione di risultati di pubblico dominio (per test ed esempi) e le rose in `rose/`, partite dal
+  dataset Transfermarkt pubblico, che ha licenza CC0, e corrette a mano. Scraping lento, con cache, solo
+  per ciò che serve; uso personale e non commerciale; fonti sempre citate nell'app.
 - Se il progetto dovesse diventare pubblico "sul serio" o commerciale, le fonti vanno ripensate.
 
 ## Dove finiscono i dati

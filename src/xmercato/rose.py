@@ -280,6 +280,14 @@ def check(
             warnings.append(f"{club}: nessun giocatore")
         elif not min_size <= n <= max_size:
             warnings.append(f"{club}: {n} giocatori, fuori dall'intervallo {min_size}-{max_size}")
+    season_start = pd.Timestamp(f"{season[:4]}-07-01")
+    contract_end = pd.to_datetime(df["scadenza"].where(df["scadenza"] != ""), errors="coerce")
+    expired = (contract_end < season_start) & (df["verificato"] == "no")
+    if expired.any():
+        warnings.append(
+            f"{int(expired.sum())} giocatori con contratto scaduto prima del "
+            f"{season_start:%d/%m/%Y}: probabilmente svincolati (righe {_rows(expired)})"
+        )
     todo = df["verificato"] == "no"
     if todo.any():
         warnings.append(f"{int(todo.sum())} righe su {len(df)} ancora da verificare")

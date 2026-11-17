@@ -15,10 +15,6 @@ on:
         description: "Sovrascrivi il file se esiste già (cancella le correzioni a mano)"
         type: boolean
         default: false
-  # Temporary: first run from the branch that introduces this workflow.
-  push:
-    branches: [rose-2026-27]
-    paths: [.github/workflows/rose-bozza.yml]
 
 permissions:
   contents: write
