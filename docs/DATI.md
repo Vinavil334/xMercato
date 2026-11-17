@@ -58,7 +58,7 @@ una riga per giocatore in rosa. Va aggiornato alla chiusura di ogni finestra di 
 |---|---|---|
 | `club` | `Inter` | Stesso nome usato nei file dei risultati |
 | `giocatore` | `Mario Rossi` | |
-| `tm_id` | `123456` | ID Transfermarkt, dall'indirizzo della pagina del giocatore. È la chiave che collega allo storico: senza, il giocatore non ha passato. Obbligatorio |
+| `tm_id` | `123456` | ID Transfermarkt, dall'indirizzo della pagina del giocatore. È la chiave che collega allo storico. Si può lasciare vuoto per chi non ha storico nel dataset (per esempio chi arriva dalla Serie B o da campionati non coperti): il controllo lo segnala come avviso |
 | `data_nascita` | `2001-03-15` | Serve anche a risolvere gli omonimi |
 | `ruolo` | `ATT` | `POR`, `DIF`, `CEN`, `ATT`; il ruolo dettagliato arriva dallo storico |
 | `arrivo` | `2026-08-20` | Data di arrivo nel club |
@@ -85,7 +85,37 @@ Cosa contiene e cosa no:
 - **`tipo` sempre vuoto.** Il dataset non distingue i prestiti.
 - **Campi mancanti:** 145 date di arrivo (soprattutto giovani del vivaio), 91 scadenze, 114 valori.
 
-### Come si aggiorna
+### Aggiornamento automatico da una lista delle rose attuali
+
+Il modo più rapido è partire da un elenco delle rose attuali, solo nomi, e lasciare che il comando
+`riconcilia` faccia il resto. L'elenco è in [`rose/fonti/wikipedia_2026_27.csv`](../rose/fonti/wikipedia_2026_27.csv),
+trascritto dalle voci Wikipedia dei club, con in testa la pagina e la data di ogni rosa.
+
+```bash
+uv run xmercato rose riconcilia --lista rose/fonti/wikipedia_2026_27.csv --tm <cartella tabelle> --report decisioni.csv
+```
+
+Per ogni squadra presente nell'elenco:
+
+- chi è già nel file viene **confermato** (`verificato = si`) e mantiene i dati della bozza;
+- chi manca viene **aggiunto**, cercandolo per nome tra tutti i giocatori del dataset Transfermarkt
+  (ID, data di nascita, ruolo, valore). La scadenza resta vuota, perché quella del dataset è del vecchio contratto;
+- chi non è nell'elenco viene **rimosso**; se un giocatore compare in un'altra squadra non ancora
+  verificata, viene tolto da lì;
+- i nomi con più omonimi plausibili non vengono indovinati: il comando li elenca e basta scrivere il
+  `tm_id` giusto nella colonna `tm_id` dell'elenco;
+- un giocatore di prima squadra che non è nel dataset viene aggiunto senza `tm_id`; un giovane della
+  seconda tabella che non è nel dataset viene escluso.
+
+Il `tipo` viene dedotto così: `prestito` se l'elenco riporta "on loan", `vivaio` per chi ha al massimo
+23 anni e nessun trasferimento in entrata registrato, altrimenti `definitivo`. Non distingue i prestiti con
+diritto od obbligo di riscatto: quelli vanno corretti a mano. Le correzioni fatte a mano nel file
+restano anche se il comando viene rilanciato.
+
+Le squadre che non compaiono nell'elenco restano com'erano. La cartella delle tabelle è quella
+scaricata dal workflow della bozza; i file servono solo in locale e non vanno nella repo.
+
+### Come si aggiorna a mano
 
 1. Per una squadra alla volta, apri la sua rosa attuale su Transfermarkt e confrontala con le righe del file.
 2. **Giocatore ancora in rosa:** controlla ruolo, scadenza e valore, compila `tipo`, metti `verificato = si`.

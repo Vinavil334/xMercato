@@ -3,6 +3,7 @@
 xmercato simulate --results ...      league table simulation
 xmercato rose bozza --out ...        squad draft from the Transfermarkt snapshot
 xmercato rose controlla FILE         check a hand-maintained squad file
+xmercato rose riconcilia --lista ... apply a list of current squads to the squad file
 """
 
 from __future__ import annotations
@@ -13,7 +14,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from xmercato import rose
+from xmercato import rose, rose_sync
 from xmercato.ingest import football_data, transfermarkt
 from xmercato.models import poisson
 from xmercato.sim import season
@@ -61,6 +62,26 @@ def _rose_controlla(args: argparse.Namespace) -> None:
         sys.exit(1)
 
 
+def _rose_riconcilia(args: argparse.Namespace) -> None:
+    squads = rose.read(args.file)
+    current = rose_sync.read_list(args.lista)
+    players = transfermarkt.load_table("players", args.tm)
+    valuations = transfermarkt.load_table("player_valuations", args.tm)
+    outcome = rose_sync.reconcile(squads, current, players, valuations, season=args.stagione)
+
+    counts = outcome.report.groupby(["club", "esito"]).size().unstack(fill_value=0)
+    with pd.option_context("display.width", 160):
+        print(counts.to_string(), end="\n\n")
+    if args.report:
+        outcome.report.to_csv(args.report, index=False, encoding="utf-8")
+        print(f"Dettaglio delle decisioni in {args.report}")
+    if len(outcome.unresolved):
+        print("Omonimi da risolvere (aggiungi il tm_id giusto nella lista e rilancia):")
+        print(outcome.unresolved.to_string(index=False), end="\n\n")
+    outcome.squads.to_csv(args.file, index=False, encoding="utf-8")
+    print(f"{args.file} aggiornato: {len(outcome.squads)} giocatori")
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(prog="xmercato")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -87,6 +108,16 @@ def main(argv: list[str] | None = None) -> None:
     controlla.add_argument("file")
     controlla.add_argument("--stagione", default=seasons[-1], choices=seasons)
     controlla.set_defaults(func=_rose_controlla)
+
+    riconcilia = squads_sub.add_parser(
+        "riconcilia", help="Apply a list of current squads to the squad file"
+    )
+    riconcilia.add_argument("--lista", required=True, help="CSV with the current squads")
+    riconcilia.add_argument("--file", default="rose/serie_a_2026_27.csv")
+    riconcilia.add_argument("--tm", help="Folder with the Transfermarkt *.csv.gz tables")
+    riconcilia.add_argument("--report", help="Where to write every decision, for review")
+    riconcilia.add_argument("--stagione", default=seasons[-1], choices=seasons)
+    riconcilia.set_defaults(func=_rose_riconcilia)
 
     args = parser.parse_args(argv)
     args.func(args)

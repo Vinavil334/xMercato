@@ -180,8 +180,7 @@ def test_check_accepts_a_good_row():
     [
         ({"club": "Pisa"}, "Club non in Serie A"),
         ({"giocatore": " "}, "Nome del giocatore"),
-        ({"tm_id": "abc"}, "tm_id mancante"),
-        ({"tm_id": ""}, "tm_id mancante"),
+        ({"tm_id": "abc"}, "tm_id non numerico"),
         ({"ruolo": "Attaccante"}, "ruolo deve essere"),
         ({"tipo": "comproprietà"}, "tipo deve essere"),
         ({"arrivo": "20/08/2026"}, "arrivo: data non valida"),
@@ -250,3 +249,9 @@ def test_expired_contracts_are_flagged_until_verified():
     rows[0]["verificato"] = "si"  # checked by hand: e.g. renewed and file not yet updated
     text = "\n".join(str(p) for p in rose.check(pd.DataFrame(rows)))
     assert "contratto scaduto" not in text
+
+
+def test_missing_tm_id_is_a_warning():
+    problems = rose.check(pd.DataFrame([_valid_row(tm_id=""), _valid_row(tm_id="")]))
+    assert rose.is_valid(problems)  # two empty ids are not duplicates
+    assert any("senza tm_id" in p.message for p in problems)

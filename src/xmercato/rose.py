@@ -236,12 +236,18 @@ def check(
     if (df["giocatore"] == "").any():
         errors.append(f"Nome del giocatore mancante (righe {_rows(df['giocatore'] == '')})")
 
-    bad = ~df["tm_id"].str.fullmatch(r"[1-9]\d*")
+    no_id = df["tm_id"] == ""
+    bad = ~no_id & ~df["tm_id"].str.fullmatch(r"[1-9]\d*")
     if bad.any():
-        errors.append(f"tm_id mancante o non numerico (righe {_rows(bad)})")
-    dup = df["tm_id"].duplicated(keep=False) & ~bad
+        errors.append(f"tm_id non numerico (righe {_rows(bad)})")
+    dup = df["tm_id"].duplicated(keep=False) & ~bad & ~no_id
     if dup.any():
         errors.append(f"Stesso tm_id su più righe (righe {_rows(dup)})")
+    if no_id.any():
+        warnings.append(
+            f"{int(no_id.sum())} giocatori senza tm_id, quindi senza storico collegato "
+            f"(righe {_rows(no_id)})"
+        )
 
     bad = ~df["ruolo"].isin(RUOLI)
     if bad.any():
