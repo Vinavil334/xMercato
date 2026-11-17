@@ -1,0 +1,55 @@
+name: Estratto temporaneo
+on:
+  push:
+    branches: [tmp-estratto-tm]
+    paths: [.github/workflows/estratto.yml]
+permissions:
+  contents: write
+defaults:
+  run:
+    shell: bash
+jobs:
+  estratto:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scarica e riduci
+        run: |
+          mkdir -p tmp_tm
+          for t in players transfers player_valuations clubs; do
+            curl -fsSL --retry 3 -o "$RUNNER_TEMP/$t.csv.gz" \
+              "https://pub-e682421888d945d684bcae8890b0ec20.r2.dev/data/$t.csv.gz"
+          done
+          python3 - <<'PY'
+          import csv, gzip, os
+          T = os.environ["RUNNER_TEMP"]
+          keep = {
+              "players": ["player_id","name","first_name","last_name","date_of_birth","position","sub_position",
+                          "current_club_id","current_club_name","last_season","contract_expiration_date",
+                          "market_value_in_eur","country_of_citizenship"],
+              "transfers": ["player_id","transfer_date","transfer_season","from_club_id","to_club_id",
+                            "from_club_name","to_club_name","transfer_fee","player_name"],
+              "clubs": ["club_id","name","domestic_competition_id","last_season"],
+          }
+          for t, cols in keep.items():
+              with gzip.open(f"{T}/{t}.csv.gz", "rt", encoding="utf-8") as f, \
+                   gzip.open(f"tmp_tm/{t}.csv.gz", "wt", encoding="utf-8", newline="") as g:
+                  r = csv.DictReader(f); w = csv.writer(g); w.writerow(cols)
+                  for row in r:
+                      w.writerow([row.get(c, "") for c in cols])
+          last = {}
+          with gzip.open(f"{T}/player_valuations.csv.gz", "rt", encoding="utf-8") as f:
+              for row in csv.DictReader(f):
+                  if row["date"] > last.get(row["player_id"], ("",))[0]:
+                      last[row["player_id"]] = (row["date"], row["market_value_in_eur"])
+          with gzip.open("tmp_tm/last_valuation.csv.gz", "wt", encoding="utf-8", newline="") as g:
+              w = csv.writer(g); w.writerow(["player_id","date","market_value_in_eur"])
+              for k, (d, v) in last.items():
+                  w.writerow([k, d, v])
+          PY
+          ls -la tmp_tm
+      - name: Pubblica
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tmp_tm && git commit -m "Estratto temporaneo" && git push origin HEAD:tmp-estratto-tm
