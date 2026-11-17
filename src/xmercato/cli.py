@@ -4,6 +4,7 @@ xmercato simulate --results ...      league table simulation
 xmercato rose bozza --out ...        squad draft from the Transfermarkt snapshot
 xmercato rose controlla FILE         check a hand-maintained squad file
 xmercato rose riconcilia --lista ... apply a list of current squads to the squad file
+xmercato storico --da 2014 --a 2026  results, odds and xG for several seasons
 """
 
 from __future__ import annotations
@@ -15,7 +16,7 @@ from pathlib import Path
 import pandas as pd
 
 from xmercato import rose, rose_sync
-from xmercato.ingest import football_data, transfermarkt
+from xmercato.ingest import football_data, history, transfermarkt
 from xmercato.models import poisson
 from xmercato.sim import season
 
@@ -82,6 +83,22 @@ def _rose_riconcilia(args: argparse.Namespace) -> None:
     print(f"{args.file} aggiornato: {len(outcome.squads)} giocatori")
 
 
+def _storico(args: argparse.Namespace) -> None:
+    seasons = list(range(args.da, args.a + 1))
+    table = history.build(seasons)
+    out = Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    table.to_csv(out, index=False)
+    summary = table.groupby("season").agg(
+        partite=("home", "size"),
+        con_xg=("home_xg", "count"),
+        con_quote=("odds_home", "count"),
+        fonte_quote=("odds_source", lambda s: ",".join(sorted(set(s) - {""}))),
+    )
+    print(summary.to_string(), end="\n\n")
+    print(f"{len(table)} partite scritte in {out}")
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(prog="xmercato")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -118,6 +135,12 @@ def main(argv: list[str] | None = None) -> None:
     riconcilia.add_argument("--report", help="Where to write every decision, for review")
     riconcilia.add_argument("--stagione", default=seasons[-1], choices=seasons)
     riconcilia.set_defaults(func=_rose_riconcilia)
+
+    storico = sub.add_parser("storico", help="Results, odds and xG for several seasons")
+    storico.add_argument("--da", type=int, default=2014, help="First season (start year)")
+    storico.add_argument("--a", type=int, required=True, help="Last season (start year)")
+    storico.add_argument("--out", default="data/storico/serie_a.csv")
+    storico.set_defaults(func=_storico)
 
     args = parser.parse_args(argv)
     args.func(args)
