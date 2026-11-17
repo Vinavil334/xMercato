@@ -18,7 +18,14 @@ def test_normalise():
         ("Piotr Zieliński", "Piotr Zielinski", True),
         ("Mario Gila", "Mario Rui", False),
         ("Lautaro Martínez", "Josep Martínez", False),
-        ("Esposito", "Pio Esposito", False),  # a surname alone is not enough
+        ("Bremer", "Gleison Bremer", True),  # mononym
+        ("EL SHAARAWY Stephan", "Stephan El Shaarawy", True),  # surname first
+        ("Lorenzo Berardi", "Lorenzo Ferrari", False),  # same given name only
+        ("Lorenzo Berardi", "Lorenzo Bardini", False),
+        ("Leonardo Bovio", "Leonardo Bovo", True),  # typo in the source
+        ("Benjamin Cremaschi", "Benja Cremaschi", True),  # shortened given name
+        ("Thorir Helgason", "Þórir Jóhann Helgason", True),  # Icelandic letters
+        ("Ali", "Ali Dembélé", False),  # too short to be a mononym
     ],
 )
 def test_similarity(a, b, same):
@@ -196,3 +203,40 @@ def test_player_verified_at_two_clubs_is_a_conflict():
     out = rose_sync.reconcile(squads, current, _players(), _valuations(), clubs=["Inter"])
     assert "conflitto: verificato in due squadre" in set(out.report["esito"])
     assert len(out.squads[out.squads["giocatore"] == "Ivan Provedel"]) == 2
+
+
+def test_full_name_is_not_matched_to_a_mononym():
+    players = pd.concat(
+        [
+            _players(),
+            pd.DataFrame(
+                [(20, "Samuel", "2006-01-01", "Midfield", "Bahia", 2025, None)],
+                columns=_players().columns,
+            ),
+        ]
+    )
+    current = _list([("Inter", "SQUAD", "MF", "WIAFE Samuel", "", "")])
+    out = rose_sync.reconcile(_squads(), current, players, _valuations(), clubs=["Inter"])
+    assert out.unresolved.empty
+    assert _row(out, "WIAFE Samuel")["tm_id"] == ""
+
+
+@pytest.mark.parametrize(
+    ("note", "tipo"),
+    [
+        ("", None),
+        ("captain", None),
+        ("on loan from Tottenham", "prestito"),
+        ("on loan from Fiorentina; prestito con obbligo di riscatto", "prestito_obbligo"),
+        ("prestito con diritto di riscatto", "prestito_diritto"),
+        ("on loan with an option to buy", "prestito_diritto"),
+    ],
+)
+def test_loan_type_from_note(note, tipo):
+    assert rose_sync.loan_type_from_note(note) == tipo
+
+
+def test_player_without_history_takes_the_formula_from_the_note():
+    current = _list([("Lazio", "SQUAD", "DF", "Someone New", "svincolato (TMW)", "")])
+    out = rose_sync.reconcile(_squads(), current, _players(), _valuations(), clubs=["Lazio"])
+    assert _row(out, "Someone New")["tipo"] == "definitivo"

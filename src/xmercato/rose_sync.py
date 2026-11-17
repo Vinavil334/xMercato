@@ -36,10 +36,10 @@ YOUTH_AGE = 23  # with no recorded transfer in, a player this age or younger is 
 
 def normalise(name: str) -> str:
     """'Hakan Çalhanoğlu' -> 'hakan calhanoglu'; 'Loftus-Cheek' -> 'loftus cheek'."""
-    text = unicodedata.normalize("NFKD", str(name))
+    text = unicodedata.normalize("NFKD", str(name).lower())
     text = "".join(c for c in text if not unicodedata.combining(c))
     text = text.replace("ı", "i").replace("ø", "o").replace("ł", "l").replace("đ", "d")
-    text = text.replace("ß", "ss").replace("æ", "ae")
+    text = text.replace("ß", "ss").replace("æ", "ae").replace("þ", "th").replace("ð", "d")
     return re.sub(r"[^a-z]+", " ", text.lower()).strip()
 
 
@@ -52,10 +52,28 @@ def similarity(a: str, b: str) -> float:
         return 1.0
     ta, tb = na.split(), nb.split()
     short, long_ = (ta, tb) if len(ta) <= len(tb) else (tb, ta)
-    # Every token of the shorter name appears in the longer one, surname included.
-    if len(short) >= 2 and set(short) <= set(long_) and short[-1] in long_:
+    # Every token of the shorter name appears in the longer one: a missing given name,
+    # or names written surname first ("EL SHAARAWY Stephan").
+    if len(short) >= 2 and set(short) <= set(long_):
         return 0.95
-    return difflib.SequenceMatcher(None, na, nb).ratio()
+    # Mononyms ("Bremer" for "Gleison Bremer", "Wesley", "Vitinha").
+    if len(short) == 1 and len(short[0]) >= 4 and short[0] in long_:
+        return 0.9
+    # Spelling differences: every part of the shorter name must be close to some part of
+    # the other, so that "Lorenzo Berardi" does not match "Lorenzo Ferrari".
+    for token in short:
+        if not any(_same_token(token, t) for t in long_):
+            return 0.0
+    plain = difflib.SequenceMatcher(None, na, nb).ratio()
+    ordered = difflib.SequenceMatcher(None, " ".join(sorted(ta)), " ".join(sorted(tb))).ratio()
+    return max(plain, ordered)
+
+
+def _same_token(a: str, b: str) -> bool:
+    """Close spelling, or a shortened form ("Benja" for "Benjamin")."""
+    if len(a) >= 4 and len(b) >= 4 and (a.startswith(b) or b.startswith(a)):
+        return True
+    return difflib.SequenceMatcher(None, a, b).ratio() >= 0.8
 
 
 @dataclass
@@ -83,6 +101,9 @@ def _lookup(
     if not rows:
         return None, []
     pool = players.iloc[rows]
+    if len(normalise(name).split()) >= 2:
+        # A full name is not matched to a one-word name ("Wiafe Samuel" is not "Samuel").
+        pool = pool[pool["name"].map(lambda n: len(normalise(n).split()) >= 2)]
     scores = pool["name"].map(lambda n: similarity(name, n))
     pool = pool.assign(_score=scores)[scores >= SAME_NAME]
     if pool.empty:
@@ -136,7 +157,8 @@ def reconcile(
 
         for item in listed.itertuples():
             note = str(item.nota or "")
-            on_loan = "on loan" in note.lower() or "prestito" in note.lower()
+            loan_type = loan_type_from_note(note)
+            on_loan = loan_type is not None
             role = _ROLE_FROM_SOURCE.get(str(item.ruolo_fonte), "")
             pinned = str(item.tm_id or "").strip()
 
@@ -154,7 +176,7 @@ def reconcile(
                 mine.loc[i, "_matched"] = True
                 row = mine.loc[i].copy()
                 if on_loan:
-                    tipo = "prestito"
+                    tipo = loan_type
                 elif row["arrivo"] == "" and _age(row["data_nascita"], season_start) <= YOUTH_AGE:
                     tipo = "vivaio"
                 else:
@@ -187,7 +209,7 @@ def reconcile(
                                 "club": club,
                                 "giocatore": item.giocatore,
                                 "ruolo": role,
-                                "tipo": "prestito" if on_loan else "",
+                                "tipo": loan_type or _permanent_from_note(note),
                                 "fonte": "manuale",
                                 "verificato": "si",
                             }
@@ -213,7 +235,7 @@ def reconcile(
                         "data_nascita": str(found["date_of_birth"])[:10],
                         "ruolo": _ROLE_FROM_TM.get(found.get("position"), role),
                         "arrivo": "",
-                        "tipo": "prestito" if on_loan else "definitivo",
+                        "tipo": loan_type or _permanent_from_note(note) or "definitivo",
                         "scadenza": "",  # the contract in the snapshot is with the old club
                         "valore_mln": round(value / 1e6, 2) if pd.notna(value) else "",
                         "valore_data": valued_on.get(pid, "") if pd.notna(value) else "",
@@ -251,6 +273,28 @@ def reconcile(
         report=pd.DataFrame(report, columns=["club", "esito", "nome_fonte", "nome_file", "note"]),
         unresolved=pd.DataFrame(unresolved, columns=["club", "giocatore", "ruolo", "candidati"]),
     )
+
+
+def loan_type_from_note(note: str) -> str | None:
+    """The loan formula written in the list's note, or None if the player is not on loan.
+
+    "obbligo" / "obligation" -> prestito_obbligo, "diritto" / "option" -> prestito_diritto,
+    any other mention of a loan -> prestito.
+    """
+    text = note.lower()
+    if not ("loan" in text or "prestito" in text):
+        return None
+    if "obbligo" in text or "obligation" in text:
+        return "prestito_obbligo"
+    if "diritto" in text or "option" in text:
+        return "prestito_diritto"
+    return "prestito"
+
+
+def _permanent_from_note(note: str) -> str:
+    """'definitivo' when the note says the player was bought or signed as a free agent."""
+    text = note.lower()
+    return "definitivo" if any(k in text for k in ("definitivo", "svincolato", "free")) else ""
 
 
 def _age(birth: str, on: pd.Timestamp) -> float:

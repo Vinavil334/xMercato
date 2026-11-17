@@ -72,24 +72,45 @@ una riga per giocatore in rosa. Va aggiornato alla chiusura di ogni finestra di 
 Date sempre nel formato `AAAA-MM-GG`. Il file si apre con qualsiasi foglio di calcolo, ma va salvato come
 CSV con la virgola come separatore e codifica UTF-8.
 
-### Da dove si parte
+### Stato attuale (17 novembre 2026)
 
-La bozza è stata generata dallo snapshot Transfermarkt di luglio 2026 con il workflow
-[Bozza delle rose](../.github/workflows/rose-bozza.yml): 638 giocatori, tutte le righe con `verificato = no`.
-Cosa contiene e cosa no:
+Le rose delle 20 squadre sono **verificate**: 588 giocatori, tutti con `verificato = si`.
+Il file è stato costruito in tre passaggi.
 
-- **17 squadre su 20 quasi complete, ma a inizio luglio.** Mancano i movimenti dell'estate 2026 e ci
-  sono tutti i rientri dai prestiti: per questo le rose hanno 31-40 giocatori.
-- **Neopromosse quasi vuote.** La Serie B non è coperta dal dataset: Frosinone e Monza hanno un
-  giocatore, il Venezia quattro. Vanno compilate da zero.
-- **`tipo` sempre vuoto.** Il dataset non distingue i prestiti.
-- **Campi mancanti:** 145 date di arrivo (soprattutto giovani del vivaio), 91 scadenze, 114 valori.
+1. **Bozza.** Dallo snapshot Transfermarkt di luglio 2026, con il workflow
+   [Bozza delle rose](../.github/workflows/rose-bozza.yml): 638 giocatori, situazione di inizio luglio.
+2. **Rose attuali.** Trascritte dalle voci Wikipedia dei club, aggiornate tra il 28 agosto e il 13
+   ottobre; per il Genoa, la cui voce era ferma a febbraio, dal listone di fantacalcio-online.
+   Elenco e date in [`rose/fonti/wikipedia_2026_27.csv`](../rose/fonti/wikipedia_2026_27.csv).
+3. **Controllo incrociato.** Con il riepilogo dei trasferimenti ufficiali di Tuttomercatoweb
+   ([`rose/fonti/tmw_trasferimenti_estate_2026.csv`](../rose/fonti/tmw_trasferimenti_estate_2026.csv),
+   808 operazioni). Ha corretto le pagine Wikipedia aggiornate prima della chiusura del mercato: 14
+   giocatori ceduti tolti e 11 acquisti dell'ultimo giorno aggiunti. Ha anche permesso di ricavare la
+   formula dei prestiti. L'elenco delle correzioni è in testa al file delle fonti.
+
+Ogni decisione della riconciliazione (confermato, aggiunto, rimosso, escluso) è in
+[`rose/fonti/decisioni_riconciliazione_2026_27.csv`](../rose/fonti/decisioni_riconciliazione_2026_27.csv).
+
+Cosa resta incompleto:
+
+- **27 giocatori senza `tm_id`**, quasi tutti arrivati da campionati non coperti dal dataset (Serie B,
+  giovanili, campionati minori): sono in rosa ma senza storico collegato.
+- **Formula dei prestiti precisa solo in parte.** Su 86 prestiti, 6 sono con obbligo e 4 con diritto
+  di riscatto, verificati su comunicati o articoli. Gli altri sono registrati come `prestito`
+  generico: possono avere un diritto di riscatto che le fonti usate non riportano.
+- **13 giocatori senza `tipo`**: giovani o arrivi minori per cui nessuna fonte indica la formula.
+- **Date di arrivo e scadenze dei nuovi contratti** non sono state raccolte: la scadenza del dataset
+  è quella del vecchio club, quindi per i nuovi arrivi è vuota.
+- **Valori di mercato** fermi a giugno 2026 (ultimo aggiornamento del dataset), più vecchi per chi
+  arriva da campionati non coperti: la data è in `valore_data`.
+- **Giovani aggregati.** Chi è nella prima squadra secondo le fonti è nel file; i giovani acquistati
+  per Primavera e Under 23 no.
 
 ### Aggiornamento automatico da una lista delle rose attuali
 
 Il modo più rapido è partire da un elenco delle rose attuali, solo nomi, e lasciare che il comando
 `riconcilia` faccia il resto. L'elenco è in [`rose/fonti/wikipedia_2026_27.csv`](../rose/fonti/wikipedia_2026_27.csv),
-trascritto dalle voci Wikipedia dei club, con in testa la pagina e la data di ogni rosa.
+con in testa la pagina e la data di ogni rosa e le correzioni fatte con la seconda fonte.
 
 ```bash
 uv run xmercato rose riconcilia --lista rose/fonti/wikipedia_2026_27.csv --tm <cartella tabelle> --report decisioni.csv
@@ -107,10 +128,14 @@ Per ogni squadra presente nell'elenco:
 - un giocatore di prima squadra che non è nel dataset viene aggiunto senza `tm_id`; un giovane della
   seconda tabella che non è nel dataset viene escluso.
 
-Il `tipo` viene dedotto così: `prestito` se l'elenco riporta "on loan", `vivaio` per chi ha al massimo
-23 anni e nessun trasferimento in entrata registrato, altrimenti `definitivo`. Non distingue i prestiti con
-diritto od obbligo di riscatto: quelli vanno corretti a mano. Le correzioni fatte a mano nel file
-restano anche se il comando viene rilanciato.
+Il `tipo` viene dalla nota dell'elenco: `prestito_obbligo` se cita un obbligo di riscatto,
+`prestito_diritto` se cita un diritto (o un'opzione), `prestito` per gli altri prestiti, `definitivo`
+per acquisti e svincolati. Senza nota: `vivaio` per chi ha al massimo 23 anni e nessun trasferimento in
+entrata registrato, altrimenti `definitivo`. Le correzioni fatte a mano nel file restano anche se il
+comando viene rilanciato.
+
+Conviene sempre controllare l'elenco con una seconda fonte: una pagina aggiornata anche solo due
+giorni prima della chiusura del mercato non contiene le operazioni dell'ultimo giorno.
 
 Le squadre che non compaiono nell'elenco restano com'erano. La cartella delle tabelle è quella
 scaricata dal workflow della bozza; i file servono solo in locale e non vanno nella repo.

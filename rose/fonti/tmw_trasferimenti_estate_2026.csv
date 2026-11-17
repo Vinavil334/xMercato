@@ -1,0 +1,809 @@
+club,dir,giocatore,controparte,codice
+Cagliari,IN,Sebastiano Esposito,Inter,riscatto
+Cagliari,IN,Daniel Maldini,,prestito
+Cagliari,IN,Giuseppe Aurelio,Spezia,
+Cagliari,IN,Jacopo Fazzini,Fiorentina,prestito
+Cagliari,IN,Alessandro Romano,Roma,prestito
+Cagliari,IN,Alieu Fadera,Como,prestito
+Cagliari,IN,Harry Winks,Leicester,
+Cagliari,IN,Demi Akarakiri,Everton,a costo zero
+Cagliari,IN,M'Bala Nzola,Fiorentina,a costo zero
+Cagliari,IN,Raphael Kofler,Sudtirol,prestito
+Cagliari,IN,Yukinari Sugawara,Southampton,prestito
+Cagliari,IN,Yanis Massolin,Inter,prestito
+Cagliari,IN,Riccardo Ciervo,Sassuolo,prestito
+Cagliari,IN,Kevin Carlos,Nizza,prestito
+Cagliari,IN,Roberto Gagliardini,,svincolato
+Cagliari,IN,Pietro Battaglini,Empoli,
+Cagliari,IN,Martin Prettenhoffer,Gyor,
+Cagliari,OUT,Gianluca Gaetano,Atalanta,
+Cagliari,OUT,Sebastiano Esposito,Sassuolo,prestito
+Cagliari,OUT,Nik Prelec,Oxford United,riscatto
+Cagliari,OUT,Matteo Prati,Racing Santander,prestito
+Cagliari,OUT,Mateusz Wieteska,Wieczysta,
+Cagliari,OUT,Andrea Belotti,,fine contratto
+Cagliari,OUT,Leonardo Pavoletti,,fine contratto
+Cagliari,OUT,Giuseppe Ciocci,Spezia,a costo zero
+Cagliari,OUT,Othniel Raterink,Den Haag,prestito
+Cagliari,OUT,Francesco Gallea,Juve Stabia,prestito
+Cagliari,OUT,Davide Veroli,Sudtirol,prestito
+Cagliari,OUT,Gabriele Zappa,Hellas Verona,prestito
+Cagliari,OUT,Agustin Albarracin,Albacete,prestito
+Cagliari,OUT,Sebastiano Di Paolo,Avellino,prestito
+Cagliari,OUT,Velizar Iliya-Iliev,Cosenza,prestito
+Cagliari,OUT,Nicolò Cavuoti,Catania,prestito
+Cagliari,OUT,Roberto Malfitano,Barletta,prestito
+Cagliari,OUT,Nicola Pintus,Pianese,prestito
+Cagliari,OUT,Henrijs Auseklis,Virtus Francavilla,
+Cagliari,OUT,Andrea Cogoni,Cosenza,
+Cagliari,OUT,Matteo Marini,Barletta,
+Cagliari,OUT,Tommaso Catta,Uta,
+Cagliari,OUT,Antoni Franke,,fine contratto
+Cagliari,OUT,Jack Nunn,,fine contratto
+Cagliari,OUT,Alessandro Vinciguerra,,fine contratto
+Atalanta,IN,Jonathan Rowe,Bologna,PRE
+Atalanta,IN,Thomas Pompei,Cosenza,DEF
+Atalanta,IN,Franck Kessié,Al Ahli,SVI
+Atalanta,IN,Eljif Elmas,RasenBallsport Leipzig,PRE
+Atalanta,IN,Thomas Kristensen,Udinese,PRE
+Atalanta,IN,Gabriele Bertolini,Fiorentina,DEF
+Atalanta,IN,Gianluca Gaetano,Cagliari,DEF
+Atalanta,IN,Ljubo Puljic,Bayern München,DEF
+Atalanta,IN,Jacopo Mirra,Roma,SVI
+Atalanta,IN,Diego Perillo,Empoli,DEF
+Atalanta,OUT,Federico Zuccon,Foggia,DEF
+Atalanta,OUT,Edoardo Lonardo,Juve Stabia,DEF
+Atalanta,OUT,Federico Cassa,Bologna,DEF
+Atalanta,OUT,Pietro Comi,Lecco,PRE
+Atalanta,OUT,Paolo Vismara,Juve Stabia,DEF
+Atalanta,OUT,Tommaso Del Lungo,Mantova,DEF
+Atalanta,OUT,Ibrahim Sulemana,Sassuolo,PRE
+Atalanta,OUT,Honest Ahanor,Chelsea,DEF
+Atalanta,OUT,Mitchel Bakker,,SVI
+Atalanta,OUT,Marten De Roon,Roma,SVI
+Atalanta,OUT,Francesco Rossi,,RIT
+Atalanta,OUT,Alexandru Capac,Târgu Mures,DEF
+Atalanta,OUT,Luca Gobbo,Renate,PRE
+Atalanta,OUT,Vincenzo Damiano,Genoa,PRE
+Atalanta,OUT,Samuel Giovane,Catanzaro,DEF
+Atalanta,OUT,Leonardo Mendicino,Bari,DEF
+Atalanta,OUT,Berat Djimsiti,Al-Diriyah,DEF
+Atalanta,OUT,Giovanni Bonfanti,Las Palmas,PRE
+Atalanta,OUT,Daniel Maldini,Cagliari,PRE
+Atalanta,OUT,El Bilal Touré,Parma,PRE
+Atalanta,OUT,Andrea Ceresoli,Nürnberg,DEF
+Atalanta,OUT,Dominic Vavassori,Palermo,PRE
+Atalanta,OUT,Pietro Parmiggiani,Ospitaletto,PRE
+Atalanta,OUT,Jonathan Italeng,Renate,DEF
+Atalanta,OUT,Andrea Oliveri,Ascoli,PRE
+Atalanta,OUT,Lorenzo Riccio,Dordrecht,DEF
+Atalanta,OUT,Gabriele Berto,Torres,DEF
+Atalanta,OUT,Moustapha Cissé,Carrarese,PRE
+Atalanta,OUT,Alessandro Cortinovis,Monopoli,DEF
+Atalanta,OUT,Endri Muhameti,Giana Erminio,PRE
+Atalanta,OUT,Pietro Tornaghi,Giana Erminio,PRE
+Atalanta,OUT,Giorgio Cittadini,Frosinone,PRE
+Atalanta,OUT,Marco Palestra,Chelsea,DEF
+Atalanta,OUT,Ben Godfrey,Rangers,PRE
+Bologna,IN,Matteo Darmian,Inter,SVI
+Bologna,IN,Federico Cassa,Atalanta,DEF
+Bologna,IN,Samuel Mbangula,Werder Bremen,PRE
+Bologna,IN,Jay Enem,Crvena Zvezda,DEF
+Bologna,IN,Arthur Theate,Eintracht Frankfurt,PRE
+Bologna,IN,Cillian Tollett,Galway,DEF
+Bologna,IN,Luka Kusic,Radomlje,DEF
+Bologna,IN,Roberto Piccoli,Fiorentina,PRE
+Bologna,IN,Edoardo Trifelli,L'Aquila,PRE
+Bologna,IN,Artem Dovbyk,Roma,PRE
+Bologna,IN,Mikel Amondarain,Estudiantes,DEF
+Bologna,IN,Giacomo Giacomone,Lazio,DEF
+Bologna,IN,Rahim Alhassane,Real Oviedo,DEF
+Bologna,IN,Luigi Caccavo,Lumezzane,DEF
+Bologna,OUT,Jesper Karlsson,Servette,PRE
+Bologna,OUT,Federico Cassa,Catanzaro,PRE
+Bologna,OUT,Niccoló Rossitto,Torino,PRE
+Bologna,OUT,Jonathan Rowe,Atalanta,PRE
+Bologna,OUT,Tommaso Ravaglioli,Lumezzane,DEF
+Bologna,OUT,Charalampos Lykogiannis,AEK,SVI
+Bologna,OUT,Thijs Dallinga,Köln,PRE
+Bologna,OUT,Remo Freuler,Olympiakos,SVI
+Bologna,OUT,Jhon Lucumí,Juventus,DEF
+Bologna,OUT,Mihajlo Ilic,Cesena,PRE
+Bologna,OUT,Benjamín Domínguez,Sassuolo,PRE
+Bologna,OUT,Dimitar Papazov,Perugia,PRE
+Bologna,OUT,Kevin Fustini,Como,DEF
+Bologna,OUT,Federico Ravaglia,Watford,DEF
+Bologna,OUT,Santiago Castro,Roma,DEF
+Bologna,OUT,Francesco Raffaelli,Alcione Milano,PRE
+Bologna,OUT,Gennaro Anatriello,Lumezzane,PRE
+Bologna,OUT,Ossian Nordvall,IF Elfsborg,DEF
+Bologna,OUT,Davide Baroncioni,Lumezzane,DEF
+Bologna,OUT,Flavio Ferrari,Ostia Mare,PRE
+Bologna,OUT,Manuel Rosetti,Forlì,DEF
+Bologna,OUT,Luigi Caccavo,Juve Stabia,PRE
+Bologna,OUT,Lorenzo Menegazzo,Lumezzane,PRE
+Bologna,OUT,Antoine N'diaye,Casarano,PRE
+Bologna,OUT,Niklas Pyyhtiä,Südtirol,PRE
+Bologna,OUT,Riccardo Stivanello,Südtirol,PRE
+Bologna,OUT,Tommaso Ebone,Lumezzane,PRE
+Bologna,OUT,Giuseppe Battimelli,Lecco,SVI
+Bologna,OUT,Mattia Motolese,Virtus Entella,DEF
+Bologna,OUT,Luca Nesi,Carpi,PRE
+Bologna,OUT,Petar Markovic,Grazer,DEF
+Bologna,OUT,Antonio Raimondo,Frosinone,PRE
+Bologna,OUT,Wisdom Amey,Frosinone,PRE
+Bologna,OUT,Kevin Bonifazi,,SVI
+Bologna,OUT,Tommaso Corazza,Vicenza,PRE
+Cagliari,IN,M'bala Nzola,Fiorentina,DEF
+Cagliari,IN,Sebastiano Di Paolo,Siracusa,FP
+Cagliari,OUT,Gennaro Borrelli,Rizespor,PRE
+Cagliari,OUT,Kingstone Mutandwa,Servette,PRE
+Cagliari,OUT,Agustín Albarracín,Albacete,DEF
+Cagliari,OUT,Othniël Raterink,ADO Den Haag,PRE
+Cagliari,OUT,Velizar-Iliya Iliev,Cosenza,PRE
+Cagliari,OUT,Francesco Gallea Beidi,Juve Stabia,PRE
+Cagliari,OUT,Zito Luvumbo,Mallorca,PRE
+Como,IN,Josh Harpur,Bohemians,DEF
+Como,IN,Robert Sánchez,Chelsea,PRE
+Como,IN,Moise Kean,Fiorentina,DEF
+Como,IN,Davide Zamagni,Cesena,DEF
+Como,IN,Samuele Ricci,Milan,PRE
+Como,IN,Willy Kambwala,Villarreal,PRE
+Como,IN,Trevoh Chalobah,Chelsea,DEF
+Como,IN,Yan Couto,Borussia Dortmund,PRE
+Como,IN,Kevin Fustini,Bologna,DEF
+Como,IN,Mohamed El Fezani,Vålerenga,DEF
+Como,IN,Mattia Damioli,Union Brescia,PRE
+Como,IN,Mattia Liberali,Catanzaro,DEF
+Como,IN,Kaiki,Cruzeiro,DEF
+Como,IN,Luis Milla,Getafe,DEF
+Como,IN,Andrés Cuenca,Barcelona,FP
+Como,OUT,Emil Audero,Rayo Vallecano,PRE
+Como,OUT,Matthias Braunöder,Carrarese,DEF
+Como,OUT,Iván Azón,Getafe,PRE
+Como,OUT,Noel Törnqvist,Monza,PRE
+Como,OUT,Ignace Van Der Brempt,Sassuolo,PRE
+Como,OUT,Alessandro Gabrielloni,Palermo,PRE
+Como,OUT,Álvaro Morata,Leganés,PRE
+Como,OUT,Alieu Fadera,Cagliari,PRE
+Como,OUT,Andrés Cuenca,Sporting Gijón,PRE
+Como,OUT,Ali Jasim,Zakho,DEF
+Como,OUT,Fabio Rispoli,Südtirol,PRE
+Como,OUT,Andréa Le Borgne,Hellas Verona,PRE
+Como,OUT,Stefan Posch,Mainz 05,DEF
+Como,OUT,Sergi Roberto,Los Angeles Galaxy,SVI
+Como,OUT,Kristians Mezsargs,Folgore Caratese,PRE
+Como,OUT,Jacopo Simonetta,Vado,PRE
+Como,OUT,Mërgim Vojvoda,Udinese,DEF
+Como,OUT,Yannik Engelhardt,Freiburg,DEF
+Como,OUT,Fellipe Jack,Cremonese,PRE
+Como,OUT,Tommaso Nucifero,Giana Erminio,DEF
+Como,OUT,Giuseppe Mazzaglia,Folgore Caratese,DEF
+Como,OUT,Tommaso Cassandro,Palermo,DEF
+Como,OUT,Federico Chinetti,Mantova,PRE
+Como,OUT,Alberto Moreno,,SVI
+Fiorentina,IN,Pedro Gonçalves,Sporting Lisbona,PRE
+Fiorentina,IN,Wilfried Gnonto,Leeds United,PRE
+Fiorentina,IN,Beto,Everton,DEF
+Fiorentina,IN,Giuseppe Forte,Sampdoria,PRE
+Fiorentina,IN,Thomas Campaniello,Empoli,PRE
+Fiorentina,IN,Alieu Njie,Torino,PRE
+Fiorentina,IN,Mateo Pellegrino,Parma,DEF
+Fiorentina,IN,Franco Mastantuono,Real Madrid,PRE
+Fiorentina,IN,João Mário,Juventus,PRE
+Fiorentina,IN,Víctor Valdepeñas,Real Madrid,DEF
+Fiorentina,IN,Christ Inao Oulaï,Trabzonspor,DEF
+Fiorentina,IN,Álex Jiménez,Bournemouth,PRE
+Fiorentina,IN,Arthur Atta,Udinese,DEF
+Fiorentina,IN,Radu Dragusin,Tottenham,PRE
+Fiorentina,IN,Viery,Grêmio,DEF
+Fiorentina,OUT,M'bala Nzola,Cagliari,DEF
+Fiorentina,OUT,Rolando Mandragora,Torino,DEF
+Fiorentina,OUT,Albert Gudmundsson,Lazio,PRE
+Fiorentina,OUT,Moise Kean,Como,DEF
+Fiorentina,OUT,Lorenzo Paratici,Roma,DEF
+Fiorentina,OUT,Eman Kospo,Mantova,PRE
+Fiorentina,OUT,Riccardo Spaggiari,,SVI
+Fiorentina,OUT,Giovanni Fabbian,Parma,PRE
+Fiorentina,OUT,Niccolò Fortini,Torino,PRE
+Fiorentina,OUT,Konstantinos Varesis,Monza,DEF
+Fiorentina,OUT,Roberto Piccoli,Bologna,PRE
+Fiorentina,OUT,Gabriele Bertolini,Atalanta,DEF
+Fiorentina,OUT,Riccardo Braschi,Thun,DEF
+Fiorentina,OUT,Gianmarco Angiolini,Empoli,DEF
+Fiorentina,OUT,Lapo Deli,Empoli,PRE
+Fiorentina,OUT,Nicolás Valentini,Alavés,DEF
+Fiorentina,OUT,Gabriele Conti,Perugia,DEF
+Fiorentina,OUT,Abdelhamid Sabiri,Eyüpspor,SVI
+Fiorentina,OUT,Simon Sohm,Venezia,PRE
+Fiorentina,OUT,Luca Montenegro,Dolomiti Bellunesi,PRE
+Fiorentina,OUT,Giorgio Puzzoli,Alcione Milano,DEF
+Fiorentina,OUT,Matías Moreno,Venezia,PRE
+Fiorentina,OUT,Niccolò Trapani,Alcione Milano,PRE
+Fiorentina,OUT,Pietro Comuzzo,Torino,PRE
+Fiorentina,OUT,Luís Balbo,Sturm Graz,DEF
+Fiorentina,OUT,Tommaso Vannucchi,Arzignano Valchiampo,PRE
+Fiorentina,OUT,Giulio Scuderi,Juve Stabia,PRE
+Fiorentina,OUT,Antonín Barák,APOEL,DEF
+Fiorentina,OUT,Filippo Distefano,Empoli,DEF
+Fiorentina,OUT,Alessandro Bianco,Modena,DEF
+Fiorentina,OUT,Luigi Morazzini,Pescara,DEF
+Fiorentina,OUT,Mirko Elia,Bari,PRE
+Fiorentina,OUT,Amir Richardson,Le Havre,PRE
+Fiorentina,OUT,Robin Gosens,Schalke 04,PRE
+Fiorentina,OUT,Jonas Harder,Basel,DEF
+Fiorentina,OUT,Jacopo Fazzini,Cagliari,PRE
+Fiorentina,OUT,Maat Daniel Caprini,Cesena,PRE
+Fiorentina,OUT,Pietro Leonardelli,Treviso,PRE
+Fiorentina,OUT,Lorenzo Romani,Carrarese,PRE
+Fiorentina,OUT,Edoardo Sadotti,Alcione Milano,PRE
+Fiorentina,OUT,Tommaso Rubino,Carrarese,PRE
+Fiorentina,OUT,Lorenzo Amatucci,Deportivo,DEF
+Fiorentina,OUT,Tommaso Martinelli,Avellino,PRE
+Fiorentina,OUT,Eddy Kouadio,Monza,PRE
+Fiorentina,OUT,Carlo Evangelista,Pergolettese,PRE
+Fiorentina,OUT,Leonardo Baroncelli,Gubbio,DEF
+Fiorentina,OUT,Lucas Beltrán,River Plate,DEF
+Frosinone,IN,Daniel Bîrligea,Steaua Bucarest,PRE
+Frosinone,IN,Enzo Tchato,Montpellier,DEF
+Frosinone,IN,Aleksa Terzic,Red Bull Salzburg,DEF
+Frosinone,IN,Omar Fayed,Fenerbahçe,DEF
+Frosinone,IN,Florian Grillitsch,Sporting Braga,SVI
+Frosinone,IN,Romano Schmid,Werder Bremen,DEF
+Frosinone,IN,Patrizio Masini,Genoa,PRE
+Frosinone,IN,Kevin Akpoguma,Hoffenheim,SVI
+Frosinone,IN,Luis Hasa,Napoli,DEF
+Frosinone,IN,Alessio Zerbin,Napoli,DEF
+Frosinone,IN,Sebastiano Desplanches,Palermo,PRE
+Frosinone,IN,Anouar El Azzouzi,Fortuna Dusseldorf,SVI
+Frosinone,IN,Giorgio Cittadini,Atalanta,PRE
+Frosinone,IN,Seydou Fini,Genoa,PRE
+Frosinone,IN,Gabriele Calvani,Genoa,PRE
+Frosinone,IN,Antonio Raimondo,Bologna,PRE
+Frosinone,IN,Wisdom Amey,Bologna,PRE
+Frosinone,IN,Giacomo Calò,Cesena,DEF
+Frosinone,OUT,Edoardo Vergani,Perugia,SVI
+Frosinone,OUT,Alejandro Cichero,Paradiso,PRE
+Frosinone,OUT,Ilias Koutsoupias,Anderlecht,DEF
+Frosinone,OUT,Niccolò Corrado,Empoli,PRE
+Frosinone,OUT,Filippo Grosso,Crotone,PRE
+Frosinone,OUT,Jérémy Oyono,Spezia,PRE
+Frosinone,OUT,Sergio Kalaj,,SVI
+Frosinone,OUT,Jacopo Gelli,Cesena,PRE
+Frosinone,OUT,Matteo Toci,,SVI
+Frosinone,OUT,Lorenzo Befani,Torino,PRE
+Frosinone,OUT,Matteo Obleac,Casarano,DEF
+Frosinone,OUT,Abdoulie Ndow,Spezia,DEF
+Frosinone,OUT,Riccardo Marchizza,Vicenza,SVI
+Frosinone,OUT,Lorenzo Gori,Grosseto,PRE
+Frosinone,OUT,Edoardo Masciangelo,,SVI
+Frosinone,OUT,Alessandro Selvini,Pineto,DEF
+Frosinone,OUT,Damar Dixon,Toronto,PRE
+Genoa,IN,Kingsley Ehizibue,Udinese,SVI
+Genoa,IN,Stephan El Shaarawy,Roma,SVI
+Genoa,IN,Cody Drameh,Hull City,DEF
+Genoa,IN,Robinho Junior,Santos,PRE
+Genoa,IN,Dylan Judelson,Orlando,PRE
+Genoa,IN,Milutin Osmajic,Preston,DEF
+Genoa,IN,Nicolò Tondi,Lecco,PRE
+Genoa,IN,Djibril Sow,Sevilla,DEF
+Genoa,IN,Adam Zulevic,Zemplín Michalovce,DEF
+Genoa,IN,Mario Mitaj,Al Ittihad,PRE
+Genoa,IN,Vincenzo Damiano,Atalanta,PRE
+Genoa,IN,Hamed Junior Traorè,Olympique de Marseille,PRE
+Genoa,IN,Fred,Palmeiras,DEF
+Genoa,IN,Elias Havel,TSV Hartberg,DEF
+Genoa,IN,Samuel Wiafe,Modena,DEF
+Genoa,IN,David Puczka,Juventus,DEF
+Genoa,IN,Franz-Ethan Meichtry,Thun,DEF
+Genoa,IN,Marcelo Vaz,Varesina,DEF
+Genoa,OUT,Matteo Barbini,Dolomiti Bellunesi,PRE
+Genoa,OUT,Brooke Norton-Cuffy,Hull City,DEF
+Genoa,OUT,Aaron Martin,Racing Santander,DEF
+Genoa,OUT,Ernestas Lysionok,Dolomiti Bellunesi,PRE
+Genoa,OUT,Alan Matturro,Shakhtar Donetsk,DEF
+Genoa,OUT,Latif Ouedraogo,Rapid Bucuresti,PRE
+Genoa,OUT,Marco Romano,Novara,PRE
+Genoa,OUT,Patrizio Masini,Frosinone,PRE
+Genoa,OUT,Alessandro Vogliacco,Cremonese,DEF
+Genoa,OUT,Hugo Cuenca,Celta Vigo,PRE
+Genoa,OUT,Jacopo Grossi,Trento,PRE
+Genoa,OUT,Simone Calvani,Vado,PRE
+Genoa,OUT,Filippo Carbone,Ostia Mare,PRE
+Genoa,OUT,Daniel Ndulue,Treviso,PRE
+Genoa,OUT,Edoardo Meconi,Gubbio,PRE
+Genoa,OUT,Gianluca Rossi,Treviso,PRE
+Genoa,OUT,Alessandro Debenedetti,Cesena,PRE
+Genoa,OUT,Seydou Fini,Frosinone,PRE
+Genoa,OUT,Gabriele Calvani,Frosinone,PRE
+Genoa,OUT,Nicola Leali,Hellas Verona,SVI
+Genoa,OUT,Jeff Ekhator,Juventus,DEF
+Genoa,OUT,Lorenzo Gagliardi,Team Altamura,PRE
+Genoa,OUT,David Ankeye,Zeljeznicar,DEF
+Genoa,OUT,Martino Odero,Modena,DEF
+Genoa,OUT,Leonardo Consiglio,Modena,DEF
+Genoa,OUT,Caleb Ekuban,,SVI
+Genoa,OUT,Ruslan Malinovskyi,Trabzonspor,SVI
+Inter,IN,Lorenzo Tosto,Empoli,PRE
+Inter,IN,Charlys,Hellas Verona,PRE
+Inter,IN,Curtis Jones,Liverpool,DEF
+Inter,IN,Djed Spence,Tottenham,DEF
+Inter,IN,John Stones,Manchester City,SVI
+Inter,IN,Alessandro Milani,Lazio,DEF
+Inter,IN,Roberts Apsits,Virtus Francavilla,SVI
+Inter,IN,Ivan Provedel,Lazio,DEF
+Inter,IN,Mattia Marello,Udinese,DEF
+Inter,IN,Aleksandar Stankovic,Club Brugge,DEF
+Inter,OUT,Matteo Darmian,Bologna,SVI
+Inter,OUT,Issiaka Kamate,Atlético Madrid,DEF
+Inter,OUT,Lamine Ballo,Albinoleffe,PRE
+Inter,OUT,Yanis Massolin,Cagliari,PRE
+Inter,OUT,Kristjan Asllani,Al-Jazira,PRE
+Inter,OUT,Andrija Vukoje,Roma,DEF
+Inter,OUT,Luka Topalović,Carrarese,PRE
+Inter,OUT,Yvan Maye,Monza,PRE
+Inter,OUT,Manuel Pinotti,Audace Cerignola,PRE
+Inter,OUT,Thomas Berenbruch,Avellino,PRE
+Inter,OUT,Davide Frattesi,Lazio,PRE
+Inter,OUT,Matteo Motta,Pescara,DEF
+Inter,OUT,Daniele Quieto,Cosenza,DEF
+Inter,OUT,Aymen Zouin,Parma,DEF
+Inter,OUT,Dilan Zárate,Cádiz,PRE
+Inter,OUT,Ebenezer Akinsanmiro,Monza,PRE
+Inter,OUT,Roberts Apsits,Campobasso,PRE
+Inter,OUT,Matteo Cocchi,Padova,PRE
+Inter,OUT,Andrea Dorigo,Torino,DEF
+Inter,OUT,Luca Di Maggio,Avellino,DEF
+Inter,OUT,Yann Sommer,Club Brugge,SVI
+Inter,OUT,Matteo Spinaccè,Mantova,PRE
+Inter,OUT,Tommaso Della Mora,Grosseto,DEF
+Inter,OUT,Giacomo Stabile,Südtirol,PRE
+Inter,OUT,Christos Alexiou,AEK,PRE
+Inter,OUT,Giacomo De Pieri,Ascoli,PRE
+Inter,OUT,Denzel Dumfries,Real Madrid,DEF
+Inter,OUT,Franco Carboni,Parma,DEF
+Inter,OUT,Stefan De Vrij,Panathinaikos,SVI
+Inter,OUT,Francesco Acerbi,,SVI
+Juventus,IN,Norberto Neto,Botafogo,SVI
+Juventus,IN,Nick Woltemade,Newcastle,PRE
+Juventus,IN,Pape Matar Sarr,Tottenham,PRE
+Juventus,IN,Ali Camara,Genk,DEF
+Juventus,IN,Kamil Grabara,Wolfsburg,PRE
+Juventus,IN,Guglielmo Vicario,Tottenham,PRE
+Juventus,IN,Jhon Lucumí,Bologna,DEF
+Juventus,IN,Christian Corradi,Hellas Verona,PRE
+Juventus,IN,Randal Kolo Muani,Paris Saint-Germain,DEF
+Juventus,IN,Kerim Alajbegovic,Bayer 04 Leverkusen,DEF
+Juventus,IN,Zeki Celik,Roma,SVI
+Juventus,IN,Ismael Konate,Empoli,DEF
+Juventus,IN,Daniel Okolo,Triestina,SVI
+Juventus,IN,Jeff Ekhator,Genoa,DEF
+Juventus,IN,Giacomo Faticanti,Lecce,DEF
+Juventus,IN,Louis Reynaud,Toulouse,DEF
+Juventus,IN,Jeremie Boga,Nice,DEF
+Juventus,OUT,Jonathan David,Atlético Madrid,PRE
+Juventus,OUT,Lorenzo Anghelè,Südtirol,PRE
+Juventus,OUT,Adin Licina,Cremonese,PRE
+Juventus,OUT,Valdes Ngana,Foggia,PRE
+Juventus,OUT,Fabio Miretti,Besiktas,PRE
+Juventus,OUT,Mattia Perin,Palermo,DEF
+Juventus,OUT,Serigne Deme,Volendam,DEF
+Juventus,OUT,Michele Di Gregorio,Bournemouth,PRE
+Juventus,OUT,Arthur,,SVI
+Juventus,OUT,Emanuele Pecorino,Catanzaro,DEF
+Juventus,OUT,Alex Amadio,Venezia,DEF
+Juventus,OUT,Tommaso Mancini,Livorno,PRE
+Juventus,OUT,Dusan Vlahovic,Besiktas,SVI
+Juventus,OUT,Simone Scaglia,Padova,DEF
+Juventus,OUT,Filip Kostic,PSV Eindhoven,SVI
+Juventus,OUT,Francesco Crapisto,Crotone,PRE
+Juventus,OUT,Leonardo Cerri,Grenoble,DEF
+Juventus,OUT,Vasilije Adzic,Sassuolo,PRE
+Juventus,OUT,João Mário,Fiorentina,PRE
+Juventus,OUT,Pedro Felipe,Racing Santander,DEF
+Juventus,OUT,Jonas Rouhi,Carrarese,PRE
+Juventus,OUT,Loïs Openda,Olympique Lyonnais,PRE
+Juventus,OUT,Alessandro Bassino,Folgore Caratese,PRE
+Juventus,OUT,Alessio Vacca,Folgore Caratese,PRE
+Juventus,OUT,Diego Pugno,Ajax,PRE
+Juventus,OUT,Alessio Marcu,Grosseto,DEF
+Juventus,OUT,Brando Moruzzi,Avellino,PRE
+Juventus,OUT,Giacomo Faticanti,Avellino,PRE
+Juventus,OUT,Alessandro Pietrelli,Vicenza,PRE
+Juventus,OUT,Giovanni Daffara,Parma,DEF
+Juventus,OUT,David Puczka,Genoa,DEF
+Lazio,IN,Diogo Leite,Union Berlin,SVI
+Lazio,IN,Albert Gudmundsson,Fiorentina,PRE
+Lazio,IN,Andrea Pinamonti,Sassuolo,DEF
+Lazio,IN,Josip Sutalo,Ajax,PRE
+Lazio,IN,Jacopo Landi,Empoli,DEF
+Lazio,IN,Cristian Bagordo,Empoli,DEF
+Lazio,IN,Davide Frattesi,Inter,PRE
+Lazio,IN,Danilho Doekhi,Union Berlin,SVI
+Lazio,IN,Bruno Galassi,Real Madrid,DEF
+Lazio,IN,Alfonso Pedraza,Villarreal,SVI
+Lazio,OUT,Pedro,,RIT
+Lazio,OUT,Patric,Al-Ittifaq,SVI
+Lazio,OUT,Alessio Romagnoli,Al Sadd,DEF
+Lazio,OUT,Petar Ratkov,Levante,PRE
+Lazio,OUT,Boulaye Dia,Stade rennais,PRE
+Lazio,OUT,Samuel Gigot,,SVI
+Lazio,OUT,Gabriele Artistico,Padova,DEF
+Lazio,OUT,Saná Fernandes,Juve Stabia,PRE
+Lazio,OUT,Lorenzo Calvani,Milan,DEF
+Lazio,OUT,Alessandro Milani,Inter,DEF
+Lazio,OUT,Antonio Iorio,Audace Cerignola,PRE
+Lazio,OUT,Giacomo Giacomone,Bologna,DEF
+Lazio,OUT,Lorenzo Ferrari,Barletta,SVI
+Lazio,OUT,Mario Gila,Milan,DEF
+Lazio,OUT,Pietro Pinelli,Carrarese,PRE
+Lazio,OUT,Ivan Provedel,Inter,DEF
+Lazio,OUT,Cristian Cuzzarella,Casarano,SVI
+Lazio,OUT,Tommaso Bordoni,Padova,SVI
+Lazio,OUT,Elseid Hysaj,,SVI
+Lazio,OUT,Toma Basic,Venezia,SVI
+Lecce,IN,Alejandro Palomares,Villarreal,DEF
+Lecce,IN,Leonardo Fajardo,Porto,DEF
+Lecce,IN,Joël Monteiro,Young Boys,DEF
+Lecce,IN,Ali Dembélé,Torino,PRE
+Lecce,IN,Ivan Ilić,Torino,PRE
+Lecce,IN,Amar Fatah,Troyes,DEF
+Lecce,IN,Andrej Zovko,GAIS,DEF
+Lecce,IN,Jarne Flies,Anderlecht,DEF
+Lecce,IN,Willem Geubbels,Paris,DEF
+Lecce,IN,Ismael Dabo,Benfica,DEF
+Lecce,IN,Emil Larsen,Esbjerg,DEF
+Lecce,IN,Filip Skorb,Celtic,DEF
+Lecce,IN,Walid El Bouradi,Al Ain,PRE
+Lecce,IN,Milos Jovic,IMT Belgrad,FP
+Lecce,OUT,Milos Jovic,Voždovac,PRE
+Lecce,OUT,Cristian Pehlivanov,Real Jaén,DEF
+Lecce,OUT,Matías Pérez,Deportes La Serena,PRE
+Lecce,OUT,Catalin Burnete,Südtirol,PRE
+Lecce,OUT,Edward Mcjannet,Cosenza,PRE
+Lecce,OUT,Álex Sala,Mallorca,PRE
+Lecce,OUT,Marco Delle Monache,Pineto,PRE
+Lecce,OUT,Filip Marchwinski,Cracovia,PRE
+Lecce,OUT,Giacomo Faticanti,Juventus,DEF
+Lecce,OUT,Ylber Ramadani,Corum,DEF
+Lecce,OUT,Thorir Helgason,Venezia,SVI
+Lecce,OUT,Jason Kodor,Rapid Bucuresti,DEF
+Milan,IN,Omari Hutchinson,Nottingham Forest,PRE
+Milan,IN,Diego Moreira,Racing Strasbourg,DEF
+Milan,IN,Andrej Kostić,Partizan Belgrado,DEF
+Milan,IN,Ilja Pantelin,TSC,DEF
+Milan,IN,Lorenzo Calvani,Lazio,DEF
+Milan,IN,Sankhoun Diawara,Troyes,DEF
+Milan,IN,Edoardo Zanaga,Empoli,DEF
+Milan,IN,Mario Gila,Lazio,DEF
+Milan,IN,Gonçalo Ramos,Paris Saint-Germain,DEF
+Milan,IN,Alphadjo Cissè,Catanzaro,FP
+Milan,IN,Aurelien Guernier,Birmingham City,SVI
+Milan,OUT,Ismaël Bennacer,Al-Gharafa,SVI
+Milan,OUT,Demirel Hodzic,NK Istra,DEF
+Milan,OUT,Youssouf Fofana,Sevilla,PRE
+Milan,OUT,Jacopo Sardo,Pescara,PRE
+Milan,OUT,Kevin Zeroli,Südtirol,PRE
+Milan,OUT,Santiago Gimenez,Porto,PRE
+Milan,OUT,Rafael Leão,Galatasaray,DEF
+Milan,OUT,Samuele Ricci,Como,PRE
+Milan,OUT,Christopher Nkunku,RasenBallsport Leipzig,PRE
+Milan,OUT,Andrej Kostić,Sparta Rotterdam,PRE
+Milan,OUT,David Odogu,Toulouse,PRE
+Milan,OUT,Victor Eletu,Pescara,DEF
+Milan,OUT,Zachary Athekame,Olympique Lyonnais,PRE
+Milan,OUT,Filippo Scotti,Avellino,SVI
+Milan,OUT,Maximilian Ibrahimović,AZ,DEF
+Milan,OUT,Sandro Baldacchino,Alcione Milano,DEF
+Milan,OUT,Alessandro Longoni,Paris Saint-Germain,SVI
+Milan,OUT,Simone Lontani,Parma,SVI
+Milan,OUT,Chaka Traorè,Partizan Belgrado,DEF
+Monza,IN,Saba Goglichidze,Udinese,PRE
+Monza,IN,Exequiel Zeballos,Boca Juniors,DEF
+Monza,IN,Noel Törnqvist,Como,PRE
+Monza,IN,Jan Ziolkowski,Roma,PRE
+Monza,IN,Michael Folorunsho,Napoli,PRE
+Monza,IN,Cyril Ngonge,Napoli,PRE
+Monza,IN,Yvan Maye,Inter,PRE
+Monza,IN,Idrissa Touré,Pisa,DEF
+Monza,IN,Christian Mariani,Roma,DEF
+Monza,IN,Konstantinos Varesis,Fiorentina,DEF
+Monza,IN,Jay Robinson,Southampton,PRE
+Monza,IN,Ebenezer Akinsanmiro,Inter,PRE
+Monza,IN,Gustavo Varela,Benfica,DEF
+Monza,IN,Ricardo Mangas,Sporting Lisbona,PRE
+Monza,IN,Eddy Kouadio,Fiorentina,PRE
+Monza,IN,Foe Ondoa,Estoril,DEF
+Monza,OUT,Solomon Loubao,Catanzaro,PRE
+Monza,OUT,Filippo Delli Carri,Sampdoria,PRE
+Monza,OUT,Nicolas Galazzi,Padova,PRE
+Monza,OUT,Semuel Pizzignacco,Carrarese,PRE
+Monza,OUT,Alessandro Berretta,Pergolettese,PRE
+Monza,OUT,Pedro Obiang,,RIT
+Monza,OUT,Andrea Petagna,Pisa,DEF
+Monza,OUT,Arvid Brorsson,Raków Częstochowa,DEF
+Monza,OUT,Timurs Azarovs,Foggia,DEF
+Monza,OUT,Francesco Reita,Catanzaro,DEF
+Monza,OUT,Luca Ravanelli,Sampdoria,DEF
+Monza,OUT,Samuele Capolupo,Spezia,PRE
+Monza,OUT,Paulo Azzi,Modena,DEF
+Monza,OUT,Hernani,Palermo,DEF
+Monza,OUT,Alessandro Sorrentino,Padova,DEF
+Napoli,IN,Dinis Rodrigues,Sion,DEF
+Napoli,IN,Benoît Badiashile,Chelsea,PRE
+Napoli,IN,Costantino Favasuli,Catanzaro,DEF
+Napoli,IN,Mattia Esposito,Sorrento,DEF
+Napoli,IN,Alisson Santos,Sporting Lisbona,DEF
+Napoli,OUT,Umberto Camelio,Giugliano,PRE
+Napoli,OUT,Dinis Rodrigues,Eldense,PRE
+Napoli,OUT,Jens Cajuste,Málaga,PRE
+Napoli,OUT,Jesper Lindström,Red Bull Salzburg,PRE
+Napoli,OUT,Christian Garofalo,Dolomiti Bellunesi,PRE
+Napoli,OUT,Salvatore Borriello,Latina,SVI
+Napoli,OUT,Pasquale Mazzocchi,Venezia,PRE
+Napoli,OUT,Vincenzo Prisco,Bari,PRE
+Napoli,OUT,Juan Jesus,Venezia,SVI
+Napoli,OUT,Michael Folorunsho,Monza,PRE
+Napoli,OUT,Cyril Ngonge,Monza,PRE
+Napoli,OUT,Lorenzo Russo,Crotone,PRE
+Napoli,OUT,Walid Cheddira,Avellino,DEF
+Napoli,OUT,Nosa Edward Obaretin,Lorient,PRE
+Napoli,OUT,Andrea Smeraldi,Foggia,SVI
+Napoli,OUT,Antonio Cioffi,Latina,DEF
+Napoli,OUT,Giuseppe D'angelo,Lumezzane,PRE
+Napoli,OUT,Romelu Lukaku,Fenerbahçe,DEF
+Napoli,OUT,Gennaro Iaccarino,Arezzo,DEF
+Napoli,OUT,Adam Hasani,Grosseto,DEF
+Napoli,OUT,Vittorio Gambardella,Avellino,SVI
+Napoli,OUT,Lorenzo Sgarbi,Sambenedettese,PRE
+Napoli,OUT,Miguel Gutiérrez,Bayer 04 Leverkusen,DEF
+Napoli,OUT,Mattia Esposito,Bari,PRE
+Napoli,OUT,Coli Saco,Riga,DEF
+Napoli,OUT,Emanuele Rao,Pisa,PRE
+Napoli,OUT,Claudio Turi,Pineto,PRE
+Napoli,OUT,Luis Hasa,Frosinone,DEF
+Napoli,OUT,Alessio Zerbin,Frosinone,DEF
+Napoli,OUT,Giuseppe Ambrosino,Modena,PRE
+Napoli,OUT,Christian Torre,Catania,SVI
+Napoli,OUT,Emmanuele De Chiara,Scafatese,PRE
+Napoli,OUT,Luigi D'avino,Giugliano,PRE
+Napoli,OUT,Gianluca Vigliotti,Pineto,PRE
+Napoli,OUT,Mathias Ferrante,Ospitaletto,PRE
+Napoli,OUT,Antonio Cimmaruta,Giugliano,SVI
+Parma,IN,Vincent Sierro,Al-Shabab,SVI
+Parma,IN,David Gómez,L'Escala,SVI
+Parma,IN,Simone Ghidotti,Sampdoria,DEF
+Parma,IN,Diego Carlos,Fenerbahçe,PRE
+Parma,IN,Giovanni Fabbian,Fiorentina,PRE
+Parma,IN,Thomás De Martis,Lanús,DEF
+Parma,IN,David Romero,Tigre,DEF
+Parma,IN,Aymen Zouin,Inter,DEF
+Parma,IN,El Bilal Touré,Atalanta,PRE
+Parma,IN,Ousmane Diallo,Borussia Dortmund,DEF
+Parma,IN,Abdelaziz Madiq,Biellese,DEF
+Parma,IN,Franco Carboni,Inter,DEF
+Parma,IN,Giovanni Daffara,Juventus,DEF
+Parma,IN,Simone Lontani,Milan,SVI
+Parma,IN,Benja Cremaschi,Inter Miami,DEF
+Parma,OUT,Oliver Sorensen,Celtic,PRE
+Parma,OUT,Peter Amoran,Vasteras SK,DEF
+Parma,OUT,Botond Balogh,Westerlo,DEF
+Parma,OUT,Rachid Kouda,Mantova,PRE
+Parma,OUT,Antoine Joujou,Nantes,DEF
+Parma,OUT,Aymen Zouin,Casa Pia,PRE
+Parma,OUT,Alessandro Circati,Benfica,DEF
+Parma,OUT,Zion Suzuki,Aston Villa,DEF
+Parma,OUT,Jacob Ondrejka,Groningen,PRE
+Parma,OUT,Mateo Pellegrino,Fiorentina,DEF
+Parma,OUT,Daniel Mikolajewski,Luzern,PRE
+Parma,OUT,Adrian Benedyczak,Kasımpaşa,DEF
+Parma,OUT,Filippo Rinaldi,Catania,PRE
+Parma,OUT,Bernardo Conde,AVS,DEF
+Parma,OUT,Nicolas Trabucchi,Dolomiti Bellunesi,PRE
+Parma,OUT,Mateusz Kowalski,Dolomiti Bellunesi,PRE
+Parma,OUT,Anthony Partipilo,Barletta,DEF
+Parma,OUT,Elia Plicco,Sambenedettese,PRE
+Parma,OUT,Alessandro Cardinali,Spezia,PRE
+Parma,OUT,Edoardo Tigani,Ospitaletto,PRE
+Parma,OUT,Giacomo Marconi,Carrarese,PRE
+Parma,OUT,Roberto D'intino,Trento,PRE
+Parma,OUT,Francesco Sartori,Trento,DEF
+Parma,OUT,Marlon Mena Martinez,Arezzo,PRE
+Parma,OUT,Dario Sits,Dordrecht,PRE
+Parma,OUT,Gianluca Astaldi,Pianese,PRE
+Parma,OUT,Nahuel Estévez,Palermo,SVI
+Parma,OUT,Tjas Begic,Sampdoria,DEF
+Roma,IN,Lorenzo Paratici,Fiorentina,DEF
+Roma,IN,Marten De Roon,Atalanta,SVI
+Roma,IN,Leonardo Balerdi,Olympique de Marseille,PRE
+Roma,IN,Andrija Vukoje,Inter,DEF
+Roma,IN,Rodrigo Mora,Porto,DEF
+Roma,IN,Francesco Ballarin,Venezia,DEF
+Roma,IN,Nahuel Molina,Atlético Madrid,DEF
+Roma,IN,Konstantinos Koulierakis,Wolfsburg,DEF
+Roma,IN,Santiago Castro,Bologna,DEF
+Roma,OUT,Anass Salah-Eddine,Panathinaikos,PRE
+Roma,OUT,Stephan El Shaarawy,Genoa,SVI
+Roma,OUT,Robinio Vaz,Hull City,PRE
+Roma,OUT,Neil El Aynaoui,RasenBallsport Leipzig,PRE
+Roma,OUT,Mattia Mannini,Benevento,PRE
+Roma,OUT,Federico Nardin,Pescara,PRE
+Roma,OUT,Jan Ziolkowski,Monza,PRE
+Roma,OUT,Christian Mariani,Monza,DEF
+Roma,OUT,Filippo Reale,Carrarese,PRE
+Roma,OUT,Luigi Cherubini,Benevento,PRE
+Roma,OUT,Mohamed Seck,Foggia,PRE
+Roma,OUT,Radoslaw Zelezny,Perugia,PRE
+Roma,OUT,Marash Kumbulla,Rayo Vallecano,PRE
+Roma,OUT,Angeliño,Deportivo,PRE
+Roma,OUT,Artem Dovbyk,Bologna,PRE
+Roma,OUT,Riccardo Pagano,Cesena,DEF
+Roma,OUT,Mattia Della Rocca,Avellino,SVI
+Roma,OUT,Federico Piermattei,Sampdoria,DEF
+Roma,OUT,Mattia Almaviva,Cosenza,SVI
+Roma,OUT,Marco Litti,Lecco,PRE
+Roma,OUT,Zeki Celik,Juventus,SVI
+Roma,OUT,Manuel Scacchi,Torino,SVI
+Roma,OUT,Jacopo Mirra,Atalanta,SVI
+Roma,OUT,Alessandro Romano,Cagliari,DEF
+Roma,OUT,Buba Sangaré,Elche,DEF
+Roma,OUT,Saud Abdulhamid,Lens,DEF
+Sassuolo,IN,Ibrahim Sulemana,Atalanta,PRE
+Sassuolo,IN,Duje Caleta-Car,Olympique Lyonnais,SVI
+Sassuolo,IN,Ignace Van Der Brempt,Como,PRE
+Sassuolo,IN,Sebastiano Esposito,Cagliari,PRE
+Sassuolo,IN,Fedde Leysen,Union Saint-Gilloise,PRE
+Sassuolo,IN,Rafa Obrador,Benfica,PRE
+Sassuolo,IN,Benjamín Domínguez,Bologna,PRE
+Sassuolo,IN,Vasilije Adzic,Juventus,PRE
+Sassuolo,IN,Kieron Bowie,Hellas Verona,PRE
+Sassuolo,IN,Sebastian Walukiewicz,Torino,DEF
+Sassuolo,IN,Arijanet Murić,Ipswich Town,DEF
+Sassuolo,OUT,Alessandro Di Bitonto,Avellino,PRE
+Sassuolo,OUT,Edoardo Iannoni,Hellas Verona,DEF
+Sassuolo,OUT,Fabrizio Caligara,Catania,DEF
+Sassuolo,OUT,Kevin Miranda,Audace Cerignola,PRE
+Sassuolo,OUT,Filippo Missori,Avellino,PRE
+Sassuolo,OUT,Riccardo Ciervo,Cagliari,PRE
+Sassuolo,OUT,Andrea Pinamonti,Lazio,DEF
+Sassuolo,OUT,Luca Moro,Padova,DEF
+Sassuolo,OUT,Luca D'andrea,Cesena,PRE
+Sassuolo,OUT,Janis Antiste,Górnik Zabrze,PRE
+Sassuolo,OUT,Agustín Álvarez,Talleres,PRE
+Sassuolo,OUT,Flavio Russo,Catania,PRE
+Sassuolo,OUT,Justin Kumi,Juve Stabia,PRE
+Sassuolo,OUT,Gioele Zacchi,Union Brescia,PRE
+Sassuolo,OUT,Kevin Leone,Arezzo,PRE
+Sassuolo,OUT,Gabriele Negri,Pianese,PRE
+Sassuolo,OUT,Samuele Mulattieri,Hellas Verona,PRE
+Sassuolo,OUT,Francesco Corradini,Pineto,PRE
+Sassuolo,OUT,Diego Tampieri,Vado,DEF
+Sassuolo,OUT,Kevin Bruno,Vado,PRE
+Sassuolo,OUT,Borna Knezovic,Casarano,DEF
+Sassuolo,OUT,Tarik Muharemovic,Leeds United,DEF
+Sassuolo,OUT,Alessandro Cardascio,Gubbio,DEF
+Sassuolo,OUT,Amoako Minta,Gubbio,PRE
+Sassuolo,OUT,Luca Barani,Gubbio,PRE
+Sassuolo,OUT,Gabriel Guri,Laçi,PRE
+Sassuolo,OUT,Emerick Lopes,Alcione Milano,DEF
+Sassuolo,OUT,Ruan,Atlético Mineiro,DEF
+Torino,IN,Ricardo Rodríguez,Real Betis,SVI
+Torino,IN,Rolando Mandragora,Fiorentina,DEF
+Torino,IN,Nathan Patterson,Everton,DEF
+Torino,IN,Daniel Bragança,Sporting Lisbona,PRE
+Torino,IN,Niccoló Rossitto,Bologna,PRE
+Torino,IN,Tyron Alexandre,Osnabrück,DEF
+Torino,IN,Rafik Belghali,Hellas Verona,PRE
+Torino,IN,Ousmane Banse,Reggiana,DEF
+Torino,IN,Lucas Perri,Leeds United,PRE
+Torino,IN,Niccolò Fortini,Fiorentina,PRE
+Torino,IN,Lorenzo Befani,Frosinone,PRE
+Torino,IN,Pietro Comuzzo,Fiorentina,PRE
+Torino,IN,Kian Fitz-Jim,Ajax,DEF
+Torino,IN,Eray Cömert,Valencia,SVI
+Torino,IN,Andrea Dorigo,Inter,DEF
+Torino,IN,Diego Mascardi,Spezia,DEF
+Torino,IN,Filippo Conzato,Vicenza,PRE
+Torino,IN,Manuel Scacchi,Roma,SVI
+Torino,IN,Gaetano Oristanio,Venezia,PRE
+Torino,IN,Mattia Pellini,Virtus Entella,DEF
+Torino,OUT,Alberto Paleari,AEK Larnaca,DEF
+Torino,OUT,Tino Anjorin,Göztepe,PRE
+Torino,OUT,Mattia Pellini,Südtirol,PRE
+Torino,OUT,Tommaso Gabellini,Forlì,PRE
+Torino,OUT,Alieu Njie,Fiorentina,PRE
+Torino,OUT,Ali Dembélé,Lecce,PRE
+Torino,OUT,Marcus Pedersen,Olympiakos,DEF
+Torino,OUT,Ivan Ilić,Lecce,PRE
+Torino,OUT,Marco Dalla Vecchia,Cesena,PRE
+Torino,OUT,Aaron Ciammaglichella,Pro Vercelli,PRE
+Torino,OUT,Wisdom Acquah,Modena,PRE
+Torino,OUT,Tommaso Di Marco,Catania,PRE
+Torino,OUT,Saba Sazonov,Getafe,SVI
+Torino,OUT,Alessandro Dellavalle,Padova,PRE
+Torino,OUT,Edoardo Zaia,Pergolettese,PRE
+Torino,OUT,Romeo Sandrucci,Juve Stabia,PRE
+Torino,OUT,Jacopo Antolini,Pergolettese,DEF
+Torino,OUT,Francesco Dell'aquila,Vis Pesaro,DEF
+Torino,OUT,Sergiu Perciun,Ascoli,PRE
+Torino,OUT,Guillermo Maripán,Internacional,SVI
+Torino,OUT,Valentino Lazaro,Al Ain,SVI
+Torino,OUT,Zanos Savva,,SVI
+Torino,OUT,Adrien Tamèze,,SVI
+Torino,OUT,Jonathan Silva,Mantova,PRE
+Torino,OUT,Demba Seck,Partizan Belgrado,DEF
+Torino,OUT,Sebastian Walukiewicz,Sassuolo,DEF
+Udinese,IN,David Alaba,Real Madrid,SVI
+Udinese,IN,Lazar Jovanovic,Stuttgart,DEF
+Udinese,IN,Bartosz Mrozek,Lech Poznan,DEF
+Udinese,IN,Mërgim Vojvoda,Como,DEF
+Udinese,IN,Omar Traoré,Heidenheim,SVI
+Udinese,IN,Unai Gómez,Athletic Club,DEF
+Udinese,IN,Giorgi Chakvetadze,Watford,DEF
+Udinese,IN,Nicolò Zaniolo,Galatasaray,DEF
+Udinese,OUT,Edoardo Piana,Koper,DEF
+Udinese,OUT,David Pejičić,Koper,PRE
+Udinese,OUT,Kingsley Ehizibue,Genoa,SVI
+Udinese,OUT,Saba Goglichidze,Monza,PRE
+Udinese,OUT,Rui Modesto,Vancouver Whitecaps,DEF
+Udinese,OUT,Branimir Mlacic,Watford,PRE
+Udinese,OUT,Adam Buksa,Mallorca,PRE
+Udinese,OUT,Abdoulaye Camara,Ajax,PRE
+Udinese,OUT,Thomas Kristensen,Atalanta,PRE
+Udinese,OUT,Samuel Postorino,Grosseto,DEF
+Udinese,OUT,Jordan Zemura,Watford,PRE
+Udinese,OUT,Martín Payero,Watford,DEF
+Udinese,OUT,Simone Pafundi,Catanzaro,PRE
+Udinese,OUT,Damián Pizarro,Audax Italiano,PRE
+Udinese,OUT,Luca Kjerrumgaard,Watford,DEF
+Udinese,OUT,Iker Bravo,Watford,DEF
+Udinese,OUT,Omar Traoré,Watford,DEF
+Udinese,OUT,Arthur Atta,Fiorentina,DEF
+Udinese,OUT,Mattia Marello,Inter,DEF
+Udinese,OUT,Razvan Sava,Universitatea Craiova,DEF
+Udinese,OUT,Alessandro Nunziante,Arezzo,PRE
+Venezia,IN,Toni Fernández,Barcelona,PRE
+Venezia,IN,Rufai Mohammed,IF Elfsborg,PRE
+Venezia,IN,Pasquale Mazzocchi,Napoli,PRE
+Venezia,IN,Juan Jesus,Napoli,SVI
+Venezia,IN,Alex Amadio,Juventus,DEF
+Venezia,IN,Lorenzo Montipò,Hellas Verona,DEF
+Venezia,IN,Simon Sohm,Fiorentina,PRE
+Venezia,IN,Redouane Halhal,Mechelen,DEF
+Venezia,IN,Matías Moreno,Fiorentina,PRE
+Venezia,IN,Federico Tavernaro,Vis Pesaro,SVI
+Venezia,IN,Akor Adams,Sevilla,DEF
+Venezia,IN,Alessio Pozzi,Vis Pesaro,DEF
+Venezia,IN,Ale Gomes,Real Zaragoza,DEF
+Venezia,IN,Albion Rrahmani,Sparta Praha,DEF
+Venezia,IN,Thierry Correia,Valencia,SVI
+Venezia,IN,Thorir Helgason,Lecce,SVI
+Venezia,IN,Armel Bella-Kotchap,Hellas Verona,DEF
+Venezia,IN,Lorenzo Berardi,Pescara,DEF
+Venezia,IN,Kornel Lisman,Lech Poznan,DEF
+Venezia,IN,Toma Basic,Lazio,SVI
+Venezia,OUT,Saad El Haddad,NK Rudeš,PRE
+Venezia,OUT,Junior Ligue,Rijeka,PRE
+Venezia,OUT,Marko Farji,Heerenveen,DEF
+Venezia,OUT,Emil Bohinen,Cesena,PRE
+Venezia,OUT,Alvin Obinna Okoro,Südtirol,PRE
+Venezia,OUT,Antonio Casas,Sporting Gijón,PRE
+Venezia,OUT,Nunzio Lella,Hellas Verona,DEF
+Venezia,OUT,Giorgio Altare,Pescara,DEF
+Venezia,OUT,Michael Venturi,Avellino,PRE
+Venezia,OUT,Francesco Ballarin,Roma,DEF
+Venezia,OUT,Nicolò Berengo,Vis Pesaro,PRE
+Venezia,OUT,Bjarki Bjarkason,Südtirol,DEF
+Venezia,OUT,Ahmed Sidibé,Vitória,PRE
+Venezia,OUT,Federico Tavernaro,Vis Pesaro,PRE
+Venezia,OUT,Mattia Compagnon,Hellas Verona,PRE
+Venezia,OUT,Cheick Condé,Waasland-Beveren,SVI
+Venezia,OUT,Daniel Fila,Avellino,PRE
+Venezia,OUT,Giovanni Di Renzo,Pineto,DEF
+Venezia,OUT,Kevin Cannavò,Spezia,PRE
+Venezia,OUT,Seid Korac,Hellas Verona,PRE
+Venezia,OUT,Gaetano Oristanio,Torino,PRE
+Venezia,OUT,Alessandro Plizzari,Südtirol,PRE
+Venezia,OUT,Marco Ladisa,Trento,PRE
+Venezia,OUT,Michael Svoboda,Brighton,DEF
+Venezia,OUT,Issa Doumbia,Sporting Lisbona,DEF
