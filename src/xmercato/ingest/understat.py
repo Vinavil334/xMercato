@@ -1,88 +1,69 @@
-"""Match-level xG from understat.com.
+"""Match-level xG from the public archive of Understat shots.
 
-Understat serves a season's matches from ``/getLeagueData/<league>/<season>`` (JSON, needs
-an ``X-Requested-With`` header); older versions of the site embedded the same list in the
-league page as ``var datesData = JSON.parse('...')``. Both are supported.
+The `worldfootballR_data <https://github.com/JaseZiv/worldfootballR_data>`_ repository (now
+archived) publishes every Understat shot of the Big 5 leagues as R data files. Summing the
+xG of each team's shots gives the match xG that Understat shows. For Serie A the archive
+covers 2014/15 to 2023/24 and the first half of 2024/25.
 
-There is no official API and no licence: keep requests few and slow, cache the results,
-and credit understat.com wherever the data is shown.
+Data from understat.com: credit the source wherever it is shown.
 """
 
 from __future__ import annotations
 
-import gzip
-import json
-import re
-import time
-import urllib.request
+from pathlib import Path
 
 import pandas as pd
 
-BASE_URL = "https://understat.com"
-SERIE_A = "Serie_A"
-_USER_AGENT = (
-    "Mozilla/5.0 (X11; Linux x86_64) xMercato/0.1 (+https://github.com/Vinavil334/xMercato)"
+SERIE_A_SHOTS_URL = (
+    "https://raw.githubusercontent.com/JaseZiv/worldfootballR_data/master/"
+    "data/understat_shots/serie_a_shot_data.rds"
 )
 
 
-def _get(url: str, headers: dict[str, str] | None = None, timeout: float = 30) -> str:
-    request = urllib.request.Request(url, headers={"User-Agent": _USER_AGENT, **(headers or {})})
-    with urllib.request.urlopen(request, timeout=timeout) as response:  # noqa: S310 (fixed host)
-        body = response.read()
-        if response.headers.get("Content-Encoding") == "gzip" or body[:2] == b"\x1f\x8b":
-            body = gzip.decompress(body)
-    return body.decode("utf-8")
-
-
-def parse_events(events: list[dict]) -> pd.DataFrame:
-    """Played matches from Understat's list of events, one row per match."""
-    rows = [
-        {
-            "date": pd.Timestamp(e["datetime"]).normalize(),
-            "home": e["h"]["title"],
-            "away": e["a"]["title"],
-            "home_goals": int(e["goals"]["h"]),
-            "away_goals": int(e["goals"]["a"]),
-            "home_xg": float(e["xG"]["h"]),
-            "away_xg": float(e["xG"]["a"]),
-            "understat_id": int(e["id"]),
-        }
-        for e in events
-        if e.get("isResult") in (True, "true")
-    ]
-    columns = ["date", "home", "away", "home_goals", "away_goals", "home_xg", "away_xg"]
-    df = pd.DataFrame(rows, columns=[*columns, "understat_id"])
-    return df.sort_values(["date", "understat_id"], kind="stable").reset_index(drop=True)
-
-
-def parse_league_page(html: str) -> list[dict]:
-    """Events embedded in an old-style league page (``datesData``)."""
-    match = re.search(r"var\s+datesData\s*=\s*JSON\.parse\('(.*?)'\)", html, re.DOTALL)
-    if not match:
-        raise ValueError("datesData not found in the page")
-    return json.loads(match.group(1).encode("utf-8").decode("unicode_escape"))
-
-
-def load_season(season_start: int, league: str = SERIE_A) -> pd.DataFrame:
-    """Played matches of one season (``season_start=2025`` for 2025/26), with xG."""
-    page = f"{BASE_URL}/league/{league}/{season_start}"
+def read_shots(path: str | Path) -> pd.DataFrame:
+    """Read the shots archive (an ``.rds`` file). Needs the optional ``rdata`` package."""
     try:
-        payload = json.loads(
-            _get(
-                f"{BASE_URL}/getLeagueData/{league}/{season_start}",
-                {"X-Requested-With": "XMLHttpRequest", "Referer": page},
-            )
-        )
-        events = payload["dates"]
-    except Exception:  # endpoint changed or refused: fall back to the page
-        events = parse_league_page(_get(page))
-    return parse_events(events).assign(season=season_start)
+        import rdata
+    except ImportError as error:  # pragma: no cover - depends on the environment
+        raise ImportError("Reading the archive needs `uv sync --extra storico`") from error
+    parsed = rdata.parser.parse_file(Path(path))
+    converted = rdata.conversion.convert(parsed, default_encoding="latin1")
+    df = converted if isinstance(converted, pd.DataFrame) else next(iter(converted.values()))
+    df = pd.DataFrame(df)
+    df.columns = [str(c) for c in df.columns]
+    return df
 
 
-def load_seasons(seasons: list[int], league: str = SERIE_A, pause: float = 2.0) -> pd.DataFrame:
-    frames = []
-    for k, season in enumerate(seasons):
-        if k:
-            time.sleep(pause)  # be gentle with a free site
-        frames.append(load_season(season, league))
-    return pd.concat(frames, ignore_index=True)
+def match_xg(shots: pd.DataFrame) -> pd.DataFrame:
+    """One row per match: date, teams, final score and each side's total xG."""
+    required = {"match_id", "season", "date", "home_team", "away_team", "home_goals",
+                "away_goals", "h_a", "xG"}  # fmt: skip
+    missing = required - set(shots.columns)
+    if missing:
+        raise ValueError(f"Not an Understat shots table, missing {sorted(missing)}")
+    side_of_shot = shots["h_a"]
+    if "home_away" in shots.columns:  # the archive switched column from 2022/23 on
+        side_of_shot = side_of_shot.fillna(shots["home_away"])
+    side_of_shot = side_of_shot.astype("string").str.lower().str.slice(0, 1)  # home -> h
+    shots = shots.assign(
+        xG=pd.to_numeric(shots["xG"], errors="coerce").fillna(0.0), h_a=side_of_shot
+    )
+    side = shots.pivot_table(index="match_id", columns="h_a", values="xG", aggfunc="sum")
+    side = side.reindex(columns=["h", "a"], fill_value=0.0).fillna(0.0)
+    info = shots.groupby("match_id")[
+        ["season", "date", "home_team", "away_team", "home_goals", "away_goals"]
+    ].first()
+    out = info.join(side).reset_index()
+    return pd.DataFrame(
+        {
+            "season": out["season"].astype(int),
+            "date": pd.to_datetime(out["date"].astype(str).str.slice(0, 10)),
+            "home": out["home_team"].astype(str),
+            "away": out["away_team"].astype(str),
+            "home_goals": out["home_goals"].astype(int),
+            "away_goals": out["away_goals"].astype(int),
+            "home_xg": out["h"].round(4),
+            "away_xg": out["a"].round(4),
+            "understat_id": out["match_id"].astype(int),
+        }
+    ).sort_values(["date", "understat_id"], kind="stable", ignore_index=True)

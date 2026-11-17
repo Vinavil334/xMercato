@@ -1,8 +1,8 @@
 name: Dati storici
 
-# Builds the historical match table (football-data.co.uk results and odds + Understat xG)
-# and keeps it as a workflow artifact for 30 days. Nothing is committed: the data is
-# rebuilt whenever needed.
+# Builds the historical match table (football-data.co.uk results and odds + xG from the
+# public archive of Understat shots) and keeps it as a workflow artifact for 30 days.
+# Nothing is committed: the data is rebuilt whenever needed.
 
 on:
   workflow_dispatch:
@@ -28,11 +28,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
-      - run: uv sync --locked
+      - run: uv sync --locked --extra storico
+      - name: Scarica l'archivio dei tiri Understat
+        run: |
+          curl -fsSL --retry 3 -o "$RUNNER_TEMP/tiri.rds" \
+            https://raw.githubusercontent.com/JaseZiv/worldfootballR_data/master/data/understat_shots/serie_a_shot_data.rds
       - name: Costruisci la tabella
         run: |
           uv run xmercato storico --da "${{ inputs.da || '2014' }}" --a "${{ inputs.a || '2026' }}" \
-            --out storico/serie_a.csv | tee -a "$GITHUB_STEP_SUMMARY"
+            --tiri "$RUNNER_TEMP/tiri.rds" --out storico/serie_a.csv | tee -a "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
         with:
           name: storico-serie-a

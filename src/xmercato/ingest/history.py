@@ -1,7 +1,8 @@
 """Historical match table: results and odds (football-data.co.uk) joined with xG (Understat).
 
 Within a season every (home, away) pair is played once, so the two sources are joined on
-season, home and away after mapping team names; dates and scores are then used as a check.
+season, home and away after mapping team names; dates are then used as a check. xG is
+available only for the seasons in the Understat archive (see ``ingest.understat``).
 """
 
 from __future__ import annotations
@@ -10,7 +11,7 @@ from collections.abc import Callable, Iterable
 
 import pandas as pd
 
-from xmercato.ingest import football_data, teams, understat
+from xmercato.ingest import football_data, teams
 
 COLUMNS = [
     "season", "date", "home", "away", "home_goals", "away_goals", "home_xg", "away_xg",
@@ -18,43 +19,50 @@ COLUMNS = [
 ]  # fmt: skip
 
 
-def combine(results: pd.DataFrame, xg: pd.DataFrame, season: int) -> pd.DataFrame:
-    """Join one season. Raises if the sources disagree on which matches were played."""
+def combine(results: pd.DataFrame, xg: pd.DataFrame | None, season: int) -> pd.DataFrame:
+    """Join one season. ``xg`` may be empty or cover only part of the season.
+
+    Raises if a club cannot be mapped or if the sources disagree on a match's date.
+    """
+    merged = results.assign(season=season)
+    if xg is None or xg.empty:
+        return merged.assign(home_xg=float("nan"), away_xg=float("nan"))[COLUMNS]
     mapping = teams.map_names(
         set(xg["home"]) | set(xg["away"]), set(results["home"]) | set(results["away"])
     )
     xg = xg.assign(home=xg["home"].map(mapping), away=xg["away"].map(mapping))
-    merged = results.merge(
-        xg[["home", "away", "date", "home_goals", "away_goals", "home_xg", "away_xg"]],
+    merged = merged.merge(
+        xg[["home", "away", "date", "home_xg", "away_xg"]],
         on=["home", "away"],
         how="left",
-        suffixes=("", "_us"),
+        suffixes=("", "_xg"),
         validate="one_to_one",
     )
     found = merged["home_xg"].notna()
-    if (~found).sum() > 2:  # a couple of abandoned or awarded matches are tolerated
-        missing = merged.loc[~found, ["date", "home", "away"]]
-        raise ValueError(f"{season}: {len(missing)} matches without xG, e.g.\n{missing.head()}")
-    days = (merged["date"] - merged["date_us"]).abs().dt.days
+    days = (merged["date"] - merged["date_xg"]).abs().dt.days
     late = found & (days > 3)
     if late.any():
         raise ValueError(f"{season}: dates differ by more than 3 days:\n{merged[late].head()}")
-    # Scores can differ for matches awarded at the table (3-0): keep the official one.
-    merged = merged.assign(season=season)
     return merged[COLUMNS]
 
 
 def build(
     seasons: Iterable[int],
     load_results: Callable[[int], pd.DataFrame] | None = None,
-    load_xg: Callable[[int], pd.DataFrame] | None = None,
+    xg: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
-    """Combined table for several seasons; loaders can be replaced, e.g. in tests."""
+    """Combined table for several seasons.
+
+    ``load_results`` defaults to the football-data.co.uk file of each season. ``xg`` is a
+    match-level xG table for any number of seasons (see :func:`understat.match_xg`).
+    """
     load_results = load_results or (
         lambda s: football_data.load_matches(football_data.serie_a_url(s))
     )
-    load_xg = load_xg or understat.load_season
-    frames = [combine(load_results(s), load_xg(s), s) for s in seasons]
+    frames = []
+    for season in seasons:
+        season_xg = None if xg is None else xg[xg["season"] == season]
+        frames.append(combine(load_results(season), season_xg, season))
     return pd.concat(frames, ignore_index=True).sort_values(["date", "home"], kind="stable")
 
 

@@ -17,6 +17,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff>=0.6"]
+storico = ["rdata>=0.11"]  # reads the Understat shots archive (R data file)
 
 [project.scripts]
 xmercato = "xmercato.cli:main"

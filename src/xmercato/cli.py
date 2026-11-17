@@ -16,7 +16,7 @@ from pathlib import Path
 import pandas as pd
 
 from xmercato import rose, rose_sync
-from xmercato.ingest import football_data, history, transfermarkt
+from xmercato.ingest import football_data, history, transfermarkt, understat
 from xmercato.models import poisson
 from xmercato.sim import season
 
@@ -85,7 +85,9 @@ def _rose_riconcilia(args: argparse.Namespace) -> None:
 
 def _storico(args: argparse.Namespace) -> None:
     seasons = list(range(args.da, args.a + 1))
-    table = history.build(seasons)
+    shots = understat.read_shots(args.tiri) if args.tiri else None
+    xg = understat.match_xg(shots) if shots is not None else None
+    table = history.build(seasons, xg=xg)
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     table.to_csv(out, index=False)
@@ -140,6 +142,7 @@ def main(argv: list[str] | None = None) -> None:
     storico.add_argument("--da", type=int, default=2014, help="First season (start year)")
     storico.add_argument("--a", type=int, required=True, help="Last season (start year)")
     storico.add_argument("--out", default="data/storico/serie_a.csv")
+    storico.add_argument("--tiri", help="Understat shots archive (.rds); without it, no xG")
     storico.set_defaults(func=_storico)
 
     args = parser.parse_args(argv)
