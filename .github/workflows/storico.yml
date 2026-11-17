@@ -2,7 +2,7 @@ name: Dati storici
 
 # Builds the historical match table (football-data.co.uk results and odds + xG from the
 # public archive of Understat shots) and keeps it as a workflow artifact for 30 days.
-# Nothing is committed: the data is rebuilt whenever needed.
+# Nothing is committed: the data is rebuilt whenever needed (about two minutes).
 
 on:
   workflow_dispatch:
