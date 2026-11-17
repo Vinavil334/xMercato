@@ -1,8 +1,9 @@
 name: Dati storici
 
 # Builds the historical match table (football-data.co.uk results and odds + xG from the
-# public archive of Understat shots) and keeps it as a workflow artifact for 30 days.
-# Nothing is committed: the data is rebuilt whenever needed (about two minutes).
+# public archive of Understat shots), keeps it as a workflow artifact for 30 days and runs
+# the backtest of the league table model on it. Nothing is committed: the data is rebuilt
+# whenever needed.
 
 on:
   workflow_dispatch:
@@ -13,10 +14,6 @@ on:
       a:
         description: "Ultima stagione (anno di inizio)"
         default: "2026"
-  # Temporary: first run from the branch that introduces this workflow.
-  push:
-    branches: [classifica-xg]
-    paths: [.github/workflows/storico.yml]
 
 defaults:
   run:
@@ -42,8 +39,11 @@ jobs:
           name: storico-serie-a
           path: storico/serie_a.csv
           retention-days: 30
-      - name: Copia nel log
+      - name: Backtest del modello della classifica
         run: |
-          echo "=====BEGIN storico/serie_a.csv====="
-          cat storico/serie_a.csv
-          echo "=====END storico/serie_a.csv====="
+          {
+            echo '### Backtest (stagioni 2020-2025)'
+            echo '```'
+            uv run xmercato backtest --storico storico/serie_a.csv --da 2020 --a 2025
+            echo '```'
+          } | tee -a "$GITHUB_STEP_SUMMARY"
