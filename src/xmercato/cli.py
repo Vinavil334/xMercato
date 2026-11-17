@@ -1,12 +1,20 @@
-"""Command line entry point: ``xmercato simulate ...``."""
+"""Command line entry point.
+
+xmercato simulate --results ...      league table simulation
+xmercato rose bozza --out ...        squad draft from the Transfermarkt snapshot
+xmercato rose controlla FILE         check a hand-maintained squad file
+"""
 
 from __future__ import annotations
 
 import argparse
+import sys
+from pathlib import Path
 
 import pandas as pd
 
-from xmercato.ingest import football_data
+from xmercato import rose
+from xmercato.ingest import football_data, transfermarkt
 from xmercato.models import poisson
 from xmercato.sim import season
 
@@ -27,6 +35,32 @@ def _simulate(args: argparse.Namespace) -> None:
         print(summary.to_string())
 
 
+def _rose_bozza(args: argparse.Namespace) -> None:
+    tm = transfermarkt.load_all(args.tm)
+    squads, mapping = rose.draft(tm, season=args.stagione)
+
+    print("Club trovati nel dataset Transfermarkt:")
+    print(mapping.to_string(index=False), end="\n\n")
+    out = Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    squads.to_csv(out, index=False, encoding="utf-8")
+    print(f"Bozza scritta in {out}: {len(squads)} giocatori\n")
+    print(rose.summary(squads, args.stagione).to_string())
+
+
+def _rose_controlla(args: argparse.Namespace) -> None:
+    squads = rose.read(args.file)
+    problems = rose.check(squads, season=args.stagione)
+    print(rose.summary(squads, args.stagione).to_string(), end="\n\n")
+    for problem in problems:
+        print(problem)
+    if rose.is_valid(problems):
+        print("\nFile utilizzabile." + (" Ci sono avvisi da guardare." if problems else ""))
+    else:
+        print("\nIl file ha errori da correggere.")
+        sys.exit(1)
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(prog="xmercato")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -38,6 +72,21 @@ def main(argv: list[str] | None = None) -> None:
     sim.add_argument("--shrinkage", type=float, default=2.0)
     sim.add_argument("--seed", type=int, default=None)
     sim.set_defaults(func=_simulate)
+
+    squads = sub.add_parser("rose", help="Squad lists")
+    squads_sub = squads.add_subparsers(dest="rose_command", required=True)
+    seasons = sorted(rose.SERIE_A)
+
+    bozza = squads_sub.add_parser("bozza", help="Draft squads from the Transfermarkt snapshot")
+    bozza.add_argument("--out", required=True, help="Where to write the draft CSV")
+    bozza.add_argument("--tm", help="Folder with the *.csv.gz tables (default: download them)")
+    bozza.add_argument("--stagione", default=seasons[-1], choices=seasons)
+    bozza.set_defaults(func=_rose_bozza)
+
+    controlla = squads_sub.add_parser("controlla", help="Check a squad file")
+    controlla.add_argument("file")
+    controlla.add_argument("--stagione", default=seasons[-1], choices=seasons)
+    controlla.set_defaults(func=_rose_controlla)
 
     args = parser.parse_args(argv)
     args.func(args)

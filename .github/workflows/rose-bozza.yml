@@ -1,0 +1,81 @@
+name: Bozza delle rose
+
+# Builds rose/serie_a_<stagione>.csv from the last Transfermarkt snapshot and commits it.
+# Run it by hand from the Actions tab. It refuses to overwrite an existing squad file
+# unless asked to, so corrections made by hand are never lost by accident.
+
+on:
+  workflow_dispatch:
+    inputs:
+      stagione:
+        description: "Stagione (es. 2026_27)"
+        default: "2026_27"
+        required: true
+      sovrascrivi:
+        description: "Sovrascrivi il file se esiste già (cancella le correzioni a mano)"
+        type: boolean
+        default: false
+  # Temporary: first run from the branch that introduces this workflow.
+  push:
+    branches: [rose-2026-27]
+    paths: [.github/workflows/rose-bozza.yml]
+
+permissions:
+  contents: write
+
+jobs:
+  bozza:
+    runs-on: ubuntu-latest
+    env:
+      STAGIONE: ${{ inputs.stagione || '2026_27' }}
+      SOVRASCRIVI: ${{ inputs.sovrascrivi || false }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --locked
+
+      - name: Scarica le tabelle Transfermarkt
+        run: |
+          mkdir -p "$RUNNER_TEMP/tm"
+          for t in players clubs transfers player_valuations; do
+            curl -fsSL --retry 3 -o "$RUNNER_TEMP/tm/$t.csv.gz" \
+              "https://pub-e682421888d945d684bcae8890b0ec20.r2.dev/data/$t.csv.gz"
+            printf '%-18s %8s  ' "$t" "$(du -h "$RUNNER_TEMP/tm/$t.csv.gz" | cut -f1)"
+            zcat "$RUNNER_TEMP/tm/$t.csv.gz" | head -1
+          done
+
+      - name: Genera la bozza
+        run: |
+          FILE="rose/serie_a_${STAGIONE}.csv"
+          if [ -e "$FILE" ] && [ "$SOVRASCRIVI" != "true" ]; then
+            echo "::error::$FILE esiste già. Rilancia con 'sovrascrivi' se vuoi davvero rigenerarlo."
+            exit 1
+          fi
+          uv run xmercato rose bozza --tm "$RUNNER_TEMP/tm" --stagione "$STAGIONE" --out "$FILE" \
+            | tee "$RUNNER_TEMP/bozza.txt"
+          echo "FILE=$FILE" >> "$GITHUB_ENV"
+
+      - name: Controlla il file
+        run: uv run xmercato rose controlla "$FILE" --stagione "$STAGIONE" | tee "$RUNNER_TEMP/controllo.txt"
+
+      - name: Riepilogo
+        if: always()
+        run: |
+          {
+            echo '### Bozza'; echo '```'; cat "$RUNNER_TEMP/bozza.txt" 2>/dev/null; echo '```'
+            echo '### Controllo'; echo '```'; cat "$RUNNER_TEMP/controllo.txt" 2>/dev/null; echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Committa la bozza
+        run: |
+          BRANCH="${GITHUB_REF_NAME}"
+          if [ "$BRANCH" = "${{ github.event.repository.default_branch }}" ]; then
+            BRANCH="bozza-rose-${STAGIONE}-${GITHUB_RUN_NUMBER}"
+            git switch -c "$BRANCH"
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$FILE"
+          git commit -m "Bozza delle rose ${STAGIONE} dallo snapshot Transfermarkt di luglio 2026"
+          git push origin "HEAD:$BRANCH"
+          echo "Bozza pubblicata sul branch $BRANCH" >> "$GITHUB_STEP_SUMMARY"
