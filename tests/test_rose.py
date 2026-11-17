@@ -91,6 +91,30 @@ def test_club_matching_prefers_serie_a_and_respects_word_boundaries():
     assert mapping.loc["Venezia", "tm_club_id"] == 607
 
 
+@pytest.mark.parametrize(
+    ("inter_name", "milan_name"),
+    [
+        ("Football Club Internazionale Milano S.p.A.", "Associazione Calcio Milan"),
+        ("Inter Milan", "AC Milan"),
+    ],
+)
+def test_inter_and_milan_are_told_apart(inter_name, milan_name):
+    clubs = _tm_snapshot()["clubs"].copy()
+    clubs.loc[clubs["club_id"] == 46, "name"] = inter_name
+    clubs.loc[clubs["club_id"] == 5, "name"] = milan_name
+    mapping = rose.match_clubs(clubs, CLUBS).set_index("club")
+    assert mapping.loc["Inter", "tm_club_id"] == 46
+    assert mapping.loc["Milan", "tm_club_id"] == 5
+
+
+def test_two_clubs_on_one_transfermarkt_club_is_an_error():
+    clubs = _tm_snapshot()["clubs"].copy()
+    clubs.loc[clubs["club_id"] == 5, "name"] = "Roma Milan Club"  # would match both
+    clubs = clubs[clubs["club_id"] != 12]
+    with pytest.raises(ValueError, match="same Transfermarkt club"):
+        rose.match_clubs(clubs, CLUBS)
+
+
 def test_club_matching_fails_loudly():
     clubs = _tm_snapshot()["clubs"]
     with pytest.raises(ValueError, match="Venezia"):

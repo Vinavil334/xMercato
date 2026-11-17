@@ -51,11 +51,12 @@ _TM_NAME_PATTERNS = {
     "Fiorentina": r"\bFiorentina\b",
     "Frosinone": r"\bFrosinone\b",
     "Genoa": r"\bGenoa\b",
-    "Inter": r"\bInternazionale\b",
+    "Inter": r"\bInter(?:nazionale)?\b",
     "Juventus": r"\bJuventus\b",
     "Lazio": r"\bLazio\b",
     "Lecce": r"\bLecce\b",
-    "Milan": r"\bMilan\b",  # word boundary: does not match "Milano" in Inter's name
+    # Not Inter, whose name can be "Inter Milan" or "... Internazionale Milano".
+    "Milan": r"^(?!.*\bInter).*\bMilan\b",
     "Monza": r"\bMonza\b",
     "Napoli": r"\bNapoli\b",
     "Parma": r"\bParma\b",
@@ -105,7 +106,11 @@ def match_clubs(clubs: pd.DataFrame, names: tuple[str, ...]) -> pd.DataFrame:
         )
     if missing:
         raise ValueError(f"No Transfermarkt club found for: {missing}")
-    return pd.DataFrame(rows)
+    out = pd.DataFrame(rows)
+    shared = out[out["tm_club_id"].duplicated(keep=False)]
+    if not shared.empty:
+        raise ValueError(f"Several clubs matched the same Transfermarkt club:\n{shared}")
+    return out
 
 
 def _to_date(values: pd.Series) -> pd.Series:

@@ -23,6 +23,10 @@ on:
 permissions:
   contents: write
 
+defaults:
+  run:
+    shell: bash  # adds pipefail: a failing command piped into tee fails the step
+
 jobs:
   bozza:
     runs-on: ubuntu-latest
@@ -40,9 +44,17 @@ jobs:
           for t in players clubs transfers player_valuations; do
             curl -fsSL --retry 3 -o "$RUNNER_TEMP/tm/$t.csv.gz" \
               "https://pub-e682421888d945d684bcae8890b0ec20.r2.dev/data/$t.csv.gz"
-            printf '%-18s %8s  ' "$t" "$(du -h "$RUNNER_TEMP/tm/$t.csv.gz" | cut -f1)"
-            zcat "$RUNNER_TEMP/tm/$t.csv.gz" | head -1
+            printf '%-18s %8s\n' "$t" "$(du -h "$RUNNER_TEMP/tm/$t.csv.gz" | cut -f1)"
           done
+
+      - name: Club di Serie A nel dataset
+        run: |
+          zcat "$RUNNER_TEMP/tm/clubs.csv.gz" | python3 -c "
+          import csv, sys
+          rows = [r for r in csv.DictReader(sys.stdin) if r['domestic_competition_id'] == 'IT1']
+          for r in sorted(rows, key=lambda r: (r['last_season'], r['name'])):
+              print(r['club_id'].rjust(6), r['last_season'], r['name'])
+          "
 
       - name: Genera la bozza
         run: |
