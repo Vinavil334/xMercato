@@ -83,12 +83,28 @@ def test_combine_partial_xg(tmp_path):
     assert df["home_xg"].notna().sum() == 2  # the third match has no xG in the archive
 
 
-def test_combine_rejects_inconsistent_dates(tmp_path):
+def test_combine_warns_on_one_date_mismatch(tmp_path):
     results = football_data.load_matches(_fd_file(tmp_path))
     xg = understat.match_xg(_shots())
-    xg.loc[0, "date"] = pd.Timestamp("2025-10-01")
+    xg.loc[0, "date"] = pd.Timestamp("2025-10-01")  # e.g. a suspended match completed later
+    with pytest.warns(UserWarning, match="Milan-Verona"):
+        df = history.combine(results, xg, 2025)
+    assert df["home_xg"].notna().sum() == 2
+
+
+def test_combine_rejects_many_date_mismatches(tmp_path):
+    results = football_data.load_matches(_fd_file(tmp_path))
+    xg = understat.match_xg(_shots())
+    many = pd.concat([results] * 1, ignore_index=True)
+    xg = xg.assign(date=pd.Timestamp("2026-01-01"))
+    extra = results.iloc[[0]].assign(home="Roma", away="Lazio")
+    xg_extra = xg.iloc[[0]].assign(home="Roma", away="Lazio")
     with pytest.raises(ValueError, match="dates differ"):
-        history.combine(results, xg, 2025)
+        history.combine(
+            pd.concat([many, extra, extra.assign(home="Napoli")], ignore_index=True),
+            pd.concat([xg, xg_extra, xg_extra.assign(home="Napoli")], ignore_index=True),
+            2025,
+        )
 
 
 def test_build_with_and_without_xg(tmp_path):

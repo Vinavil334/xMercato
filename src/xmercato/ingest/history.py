@@ -7,6 +7,7 @@ available only for the seasons in the Understat archive (see ``ingest.understat`
 
 from __future__ import annotations
 
+import warnings
 from collections.abc import Callable, Iterable
 
 import pandas as pd
@@ -22,7 +23,8 @@ COLUMNS = [
 def combine(results: pd.DataFrame, xg: pd.DataFrame | None, season: int) -> pd.DataFrame:
     """Join one season. ``xg`` may be empty or cover only part of the season.
 
-    Raises if a club cannot be mapped or if the sources disagree on a match's date.
+    Raises if a club cannot be mapped or if many matches are dated differently by the
+    two sources; a few (suspended matches completed later) only raise a warning.
     """
     merged = results.assign(season=season)
     if xg is None or xg.empty:
@@ -41,8 +43,16 @@ def combine(results: pd.DataFrame, xg: pd.DataFrame | None, season: int) -> pd.D
     found = merged["home_xg"].notna()
     days = (merged["date"] - merged["date_xg"]).abs().dt.days
     late = found & (days > 3)
-    if late.any():
+    # A suspended match completed later (e.g. Udinese-Roma, April 2024) is dated differently
+    # by the two sources. A few cases are expected; many mean a wrong join.
+    if late.sum() > 3:
         raise ValueError(f"{season}: dates differ by more than 3 days:\n{merged[late].head()}")
+    for row in merged[late].itertuples():
+        warnings.warn(
+            f"{season} {row.home}-{row.away}: dated {row.date:%Y-%m-%d} in the results, "
+            f"{row.date_xg:%Y-%m-%d} in the xG source",
+            stacklevel=2,
+        )
     return merged[COLUMNS]
 
 
