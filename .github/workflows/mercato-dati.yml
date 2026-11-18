@@ -17,6 +17,7 @@ jobs:
     steps:
       - name: Schema delle tabelle
         run: |
+          set +o pipefail
           for t in appearances game_lineups games competitions player_valuations transfers club_games clubs players game_events; do
             curl -fsSL --retry 3 -o "$t.csv.gz" "https://pub-e682421888d945d684bcae8890b0ec20.r2.dev/data/$t.csv.gz" || { echo "MISSING $t"; continue; }
             echo "=== $t $(stat -c %s $t.csv.gz) bytes, $(zcat $t.csv.gz | wc -l) lines"
