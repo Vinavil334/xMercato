@@ -117,6 +117,35 @@ ricostruita dalle presenze non mostra, acquisti di occasione, giovani presi per 
 prestito. Per questo nell'app la classifica dei fabbisogni è presentata come una lettura della rosa,
 non come una previsione; resta utile per scegliere in quale ruolo guardare i candidati.
 
+**Rendimento della stagione** (`performance.py`, aggiunto il 18/11/2026). Due segnali, entrambi
+misurati contro le attese di inizio stagione:
+
+- *Reparti*, per tutte le squadre e solo dai risultati: gol fatti e subiti finora contro quelli che il
+  modello della classifica (fase 1) si aspettava dalle forze di inizio stagione e dagli avversari
+  incontrati, al netto di quanto si segna in tutto il campionato quest'anno. Un attacco sotto le
+  attese alza l'urgenza di centravanti (pieno), esterni e trequartisti (70%); una difesa sotto le
+  attese quella di centrali (pieno), portiere (70%) e terzini (50%).
+- *Attaccanti titolari*, con i marcatori di football-data.org (gol, assist, partite): gol più assist
+  per partita contro quelli dei giocatori di pari ruolo e valore in Serie A dal 2018 (regressione di
+  Poisson). Un titolare che non compare tra i marcatori conta come zero, su metà delle partite.
+
+Ogni segnale è uno scarto in deviazioni standard (approssimazione di Poisson): da zero a tre sotto le
+attese diventa un'urgenza da 0 a 1. **È l'unico segnale che i club seguono davvero.** A gennaio,
+dal 2019 al 2025, ha comprato un centravanti:
+
+| Attacco a fine dicembre, rispetto alle attese | Squadre | Hanno preso un centravanti |
+|---|---|---|
+| Molto sotto (oltre una deviazione standard) | 32 | **50%** |
+| Poco sotto | 33 | 36% |
+| Poco sopra | 46 | 28% |
+| Molto sopra | 29 | 24% |
+
+Per la difesa è lo stesso: ha preso un centrale il 63% delle squadre con la difesa molto sotto le
+attese, contro il 32–39% delle altre. Aggiunto alla classifica dei fabbisogni di gennaio, sulle finestre
+2023–2025 porta gli acquisti caduti nei due ruoli più urgenti dal 23% al 27% (nel primo ruolo dal 9% al
+15%). I pesi di gennaio sono stati scelti sul 2019–2022: profondità 1, rendimento 1,2, qualità 0,25
+(la qualità peggiorava la previsione, resta come lettura della rosa).
+
 **Cosa manca ancora:** la probabilità di *buon* acquisto (servono le proiezioni dei giocatori, fasi 2-4)
 e i campionati senza statistiche.
 
@@ -217,6 +246,7 @@ Registro delle scelte, con la data. Si cambia idea aggiungendo una riga, non can
 | 16/11/2026 | **Soglia dei minuti** | Non è fissa: dipende dal ruolo per cui il giocatore è stato preso. Un secondo portiere che fa il secondo portiere è un acquisto riuscito |
 | 16/11/2026 | **Acquisti di gennaio** | Stessa definizione, valutata sulla stagione e mezza disponibile |
 | 16/11/2026 | **Simulatore interattivo** | Previsto, in tre livelli crescenti (vedi [ROADMAP.md](ROADMAP.md#simulatore-interattivo)) |
+| 18/11/2026 | **Rendimento nei fabbisogni** | Reparti dai risultati (automatico) e attaccanti dai marcatori di football-data.org (con chiave gratuita). Fantacalcio.it e FBref esclusi: i loro termini vietano estrazione automatica e strumenti pubblici. Aggiornamento automatico ogni martedì |
 | 18/11/2026 | **Mercato di gennaio** | Fabbisogni come lettura della rosa (la verifica mostra che non prevedono gli acquisti); candidati ordinati per probabilità che il club li prenda, con il ruolo previsto. La probabilità di buon acquisto arriva con le fasi 2-4 |
 | 17/11/2026 | **Modello della classifica** | Due stagioni precedenti, metà peso ogni 270 giorni, neopromosse sotto la media, solo gol. Gli xG non migliorano in modo misurabile e non hanno una fonte aggiornata: restano nel backtest, fuori dall'app |
 

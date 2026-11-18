@@ -14,8 +14,10 @@ import pandas as pd
 
 from xmercato import rose
 from xmercato.evaluation import candidates_backtest as cb
+from xmercato.ingest import teams as team_names
 from xmercato.recommend import candidates as cand
 from xmercato.recommend import needs as nd
+from xmercato.recommend import performance
 from xmercato.recommend.data import MarketData, age, current_squad, latest_position
 from xmercato.recommend.slots import LABELS, SLOTS, best_slot
 
@@ -69,6 +71,28 @@ def club_ids(data: MarketData, season: str) -> dict[int, str]:
     return dict(zip(mapping["tm_club_id"], mapping["club"], strict=True))
 
 
+def form_now(
+    squad: pd.DataFrame,
+    usage: pd.DataFrame,
+    data: MarketData,
+    history: pd.DataFrame,
+    season_start: int,
+    scorers: pd.DataFrame | None = None,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame | None]:
+    """(form needs, department table, attacking players table) for this season."""
+    teams = performance.team_form(history, season_start)
+    players = None
+    if scorers is not None and not scorers.empty:
+        names = team_names.map_names(set(scorers["squadra"]), set(squad["club"]))
+        scorers = scorers.assign(squadra=scorers["squadra"].map(names))
+        rates = performance.fit_rates(_with_slots(data))
+        games = teams.set_index("club")["partite"]
+        players = performance.player_form(
+            squad.dropna(subset=["slot"]), usage, scorers, rates, games
+        )
+    return performance.form_needs(teams, players), teams, players
+
+
 def needs_now(
     squads: pd.DataFrame,
     data: MarketData,
@@ -76,11 +100,22 @@ def needs_now(
     last_season: int,
     window: str,
     season: str,
+    history: pd.DataFrame | None = None,
+    scorers: pd.DataFrame | None = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """(needs table, squad with slots) for the current squads."""
+    """(needs table, squad with slots) for the current squads.
+
+    With ``history`` (results, as from ``xmercato storico``) the needs also weigh how each
+    department is doing this season; with ``scorers`` too, how the attacking starters are.
+    """
     squad = current_squad(squads, data, as_of, last_season)
     usage = nd.usage(_with_slots(data), club_ids(data, season), last_season)
-    return nd.needs(squad, usage, window), squad
+    form = None
+    if history is not None:
+        season_start = int(season[:4])
+        if (history["season"] == season_start).any():
+            form, _, _ = form_now(squad, usage, data, history, season_start, scorers)
+    return nd.needs(squad, usage, window, form=form), squad
 
 
 def expected_role(value: pd.Series, starters_value: float) -> pd.Series:

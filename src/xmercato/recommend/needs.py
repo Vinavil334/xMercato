@@ -11,7 +11,9 @@ For every club and slot (see :mod:`xmercato.recommend.slots`) four signals are m
   across the league, because goalkeepers and full-backs are always worth less than forwards;
 - **age**: share of the slot's likely starters aged 31 or more;
 - **expiring**: share of the slot's likely starters whose contract or loan ends by the
-  next 30 June.
+  next 30 June;
+- **form** (optional): how the department and its attacking starters are doing this
+  season against expectation (:mod:`xmercato.recommend.performance`).
 
 The need score is a weighted sum; the weights depend on the window (in January depth and
 quality matter, in summer age and contracts too) and are checked against the slots clubs
@@ -36,11 +38,15 @@ class NeedWeights:
     quality: float = 0.5
     age: float = 0.0
     expiring: float = 0.0
+    form: float = 0.0
 
 
+# January weights checked on 2019-2022 and tested on 2023-2025 (docs/STUDIO.md): form is the
+# only signal that clubs follow; the quality gap does not predict purchases and keeps a low
+# weight as a reading of the squad. Summer weights are not checked yet.
 WEIGHTS = {
-    "gennaio": NeedWeights(depth=1.0, quality=0.5, age=0.0, expiring=0.1),
-    "estate": NeedWeights(depth=1.0, quality=0.5, age=0.3, expiring=0.4),
+    "gennaio": NeedWeights(depth=1.0, quality=0.25, age=0.0, expiring=0.1, form=1.2),
+    "estate": NeedWeights(depth=1.0, quality=0.25, age=0.3, expiring=0.4, form=0.6),
 }
 
 OLD = 31  # age from which a starter counts as ageing
@@ -96,11 +102,13 @@ def needs(
     usage_table: pd.DataFrame,
     window: str = "gennaio",
     weights: NeedWeights | None = None,
+    form: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
     """Need of every club in every slot, ranked within the club (1 = most urgent).
 
     ``squad`` needs ``club``, ``slot``, ``valore`` (millions), ``eta`` (years at the window)
-    and ``in_scadenza`` (contract or loan ends by the next 30 June).
+    and ``in_scadenza`` (contract or loan ends by the next 30 June). ``form``, if given, has
+    ``club``, ``slot``, ``forma`` (0-1) and ``nota_forma``.
     """
     weights = weights or WEIGHTS[window]
     squad = squad.dropna(subset=["slot"]).copy()
@@ -150,8 +158,17 @@ def needs(
     # Quality gap relative to the league: how much weaker than at the other clubs.
     typical = out[out["titolari"] >= 0.25].groupby("slot")["divario_grezzo"].median()
     out["divario"] = (out["divario_grezzo"] - out["slot"].map(typical).fillna(0)).round(2)
+    if form is not None:
+        out = out.merge(
+            form[["club", "slot", "forma", "nota_forma"]], on=["club", "slot"], how="left"
+        )
+    else:
+        out = out.assign(forma=0.0, nota_forma="")
+    out["forma"] = out["forma"].fillna(0.0)
+    out["nota_forma"] = out["nota_forma"].fillna("")
     out["punteggio"] = (
-        weights.depth * out["profondita"]
+        weights.form * out["forma"]
+        + weights.depth * out["profondita"]
         + weights.quality * out["divario"].clip(lower=0) * out["titolari"].clip(upper=1)
         + weights.age * out["anziani"]
         + weights.expiring * out["in_scadenza"]
@@ -182,6 +199,8 @@ def explain(row: pd.Series) -> str:
         parts.append("titolare con 31 anni o più")
     if row["in_scadenza"] > 0:
         parts.append("titolare in scadenza o in prestito fino a giugno")
+    if row.get("forma", 0) > 0.05 and row.get("nota_forma"):
+        parts.append("sotto le attese in questa stagione: " + row["nota_forma"])
     if not parts:
         return "reparto coperto"
     return "; ".join(parts)

@@ -91,6 +91,24 @@ pubblica come artefatto e mette nel riepilogo la verifica dei modelli.
 `mercato/fabbisogni_<finestra>_<anno>.csv` e `mercato/candidati_<finestra>_<anno>.csv`, che l'app legge.
 Questi due file sono nel repository: sono piccoli e derivati da un dataset CC0.
 
+## Rendimento della stagione in corso
+
+Per i fabbisogni di mercato serve sapere come stanno andando squadre e giocatori quest'anno.
+
+| Dato | Fonte | Note |
+|---|---|---|
+| Gol fatti e subiti di ogni squadra | Risultati di football-data.co.uk (`xmercato storico`) | Automatico, nessuna chiave |
+| Gol, assist e partite di chi ha segnato o servito un assist | API gratuita di [football-data.org](https://www.football-data.org) (`xmercato mercato marcatori`) | Serve una chiave personale gratuita nella variabile `FOOTBALL_DATA_TOKEN`; i termini chiedono la dicitura "Football data provided by the Football-Data.org API", che l'app mostra. Una chiave per applicazione |
+
+Fonti valutate e scartate: **Fantacalcio.it** (voti e statistiche ufficiali) e **FBref** vietano nei
+termini d'uso l'estrazione automatica e il loro uso in strumenti pubblici; **Wikipedia** aggiorna le
+presenze delle stagioni dei club con settimane di ritardo; il dataset **Transfermarkt** è fermo a
+luglio 2026; l'archivio di **worldfootballR_data** è stato chiuso a settembre 2025.
+
+Il workflow **Aggiorna mercato** gira ogni martedì: scarica risultati, tabelle Transfermarkt e, se
+nel repository c'è il secret `FOOTBALL_DATA_TOKEN`, i marcatori; poi rigenera `mercato/` e lo salva
+in `main`, così l'app si aggiorna da sola.
+
 ## Rose raccolte a mano
 
 Un file CSV per stagione, versionato nella repo: [`rose/serie_a_2026_27.csv`](../rose/serie_a_2026_27.csv),
