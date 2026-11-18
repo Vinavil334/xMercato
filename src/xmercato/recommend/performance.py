@@ -223,7 +223,7 @@ def _department_note(row: pd.Series, attack: bool) -> str:
 
 def _player_note(row: pd.Series) -> str:
     if row["nei_marcatori"]:
-        made, games, expected = row["gol_assist"], row["partite"], row["attesi"]
+        made, games, expected = row["gol_assist"], int(row["partite"]), row["attesi"]
         return (
             f"{row['giocatore']}: {made} tra gol e assist in {games} partite, attesi {expected:.0f}"
         )

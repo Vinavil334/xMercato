@@ -167,7 +167,7 @@ def needs(
     out["forma"] = out["forma"].fillna(0.0)
     out["nota_forma"] = out["nota_forma"].fillna("")
     out["punteggio"] = (
-        weights.form * out["forma"]
+        weights.form * out["forma"] * out["titolari"].clip(upper=1)
         + weights.depth * out["profondita"]
         + weights.quality * out["divario"].clip(lower=0) * out["titolari"].clip(upper=1)
         + weights.age * out["anziani"]
@@ -199,7 +199,7 @@ def explain(row: pd.Series) -> str:
         parts.append("titolare con 31 anni o più")
     if row["in_scadenza"] > 0:
         parts.append("titolare in scadenza o in prestito fino a giugno")
-    if row.get("forma", 0) > 0.05 and row.get("nota_forma"):
+    if row.get("forma", 0) > 0.05 and row.get("nota_forma") and row["titolari"] >= 0.25:
         parts.append("sotto le attese in questa stagione: " + row["nota_forma"])
     if not parts:
         return "reparto coperto"

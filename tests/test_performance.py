@@ -119,3 +119,15 @@ def test_unlisted_starter_counts_as_no_goals():
     scorers = pd.DataFrame(columns=["giocatore", "squadra", "partite", "gol", "assist"])
     got = perf.player_form(squad, usage, scorers, rates, pd.Series({"A": 12}))
     assert not got.iloc[0]["nei_marcatori"] and got.iloc[0]["gol_assist"] == 0
+
+
+def test_form_ignores_slots_the_club_does_not_use():
+    squad = pd.DataFrame(
+        [{"club": "A", "slot": s, "giocatore": f"{s}{k}", "valore": 10.0, "eta": 26.0,
+          "in_scadenza": False} for s in SLOTS for k in range(4)]
+    )  # fmt: skip
+    usage = pd.DataFrame([{"club": "A", "slot": s, "titolari": 0.0 if s == "ALI" else 1.0}
+                          for s in SLOTS])  # fmt: skip
+    form = pd.DataFrame({"club": ["A"], "slot": ["ALI"], "forma": [1.0], "nota_forma": ["x"]})
+    row = nd.needs(squad, usage, "gennaio", form=form).set_index("slot").loc["ALI"]
+    assert row["punteggio"] == 0 and "sotto le attese" not in row["motivo"]

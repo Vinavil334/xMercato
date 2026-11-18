@@ -2,39 +2,39 @@ club,slot,titolari,giocatori,servono,mancano,valore_titolari,valore_riferimento,
 Atalanta,DC,2.95,6,5,0,23.23,28.0,0.0,0.0,"Giorgio Scalvini, Isak Hien, Odilon Kossounou",0.12,0.71,"difesa: 20 gol subiti in 11 partite, attesi 12",0.882,1,"sotto le attese in questa stagione: difesa: 20 gol subiti in 11 partite, attesi 12",2026-11-08,False
 Atalanta,POR,1.0,3,3,0,30.0,28.0,0.0,0.0,Marco Carnesecchi,-0.53,0.497,"difesa: 20 gol subiti in 11 partite, attesi 12",0.596,2,"sotto le attese in questa stagione: difesa: 20 gol subiti in 11 partite, attesi 12",2026-11-08,False
 Atalanta,TD,1.18,2,2,0,15.0,28.0,0.0,0.0,Raoul Bellanova,0.15,0.355,"difesa: 20 gol subiti in 11 partite, attesi 12",0.463,3,"sotto le attese in questa stagione: difesa: 20 gol subiti in 11 partite, attesi 12",2026-11-08,False
-Atalanta,ATT,0.89,2,2,0,30.0,28.0,0.0,0.0,Nikola Krstović,0.06,0.367,"attacco: 17 gol in 11 partite, attesi 22",0.454,4,"sotto le attese in questa stagione: attacco: 17 gol in 11 partite, attesi 22",2026-11-08,False
-Atalanta,TS,1.08,2,2,0,20.0,28.0,0.0,0.0,Lorenzo Bernasconi,-0.05,0.355,"difesa: 20 gol subiti in 11 partite, attesi 12",0.426,5,"sotto le attese in questa stagione: difesa: 20 gol subiti in 11 partite, attesi 12",2026-11-08,False
+Atalanta,TS,1.08,2,2,0,20.0,28.0,0.0,0.0,Lorenzo Bernasconi,-0.05,0.355,"difesa: 20 gol subiti in 11 partite, attesi 12",0.426,4,"sotto le attese in questa stagione: difesa: 20 gol subiti in 11 partite, attesi 12",2026-11-08,False
+Atalanta,ATT,0.89,2,2,0,30.0,28.0,0.0,0.0,Nikola Krstović,0.06,0.367,"attacco: 17 gol in 11 partite, attesi 22",0.405,5,"sotto le attese in questa stagione: attacco: 17 gol in 11 partite, attesi 22",2026-11-08,False
 Atalanta,TRQ,1.71,5,3,0,25.69,28.0,0.0,0.0,"Charles De Ketelaere, Giacomo Raspadori",0.06,0.257,"attacco: 17 gol in 11 partite, attesi 22",0.323,6,"sotto le attese in questa stagione: attacco: 17 gol in 11 partite, attesi 22",2026-11-08,False
-Atalanta,ALI,0.0,1,0,0,28.0,28.0,0.0,0.0,,0.22,0.257,"attacco: 17 gol in 11 partite, attesi 22",0.308,7,"sotto le attese in questa stagione: attacco: 17 gol in 11 partite, attesi 22",2026-11-08,False
-Atalanta,CC,2.18,5,4,0,23.24,28.0,0.0,0.5,"Éderson, Franck Kessié",0.32,0.0,,0.13,8,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
+Atalanta,CC,2.18,5,4,0,23.24,28.0,0.0,0.5,"Éderson, Franck Kessié",0.32,0.0,,0.13,7,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
+Atalanta,ALI,0.0,1,0,0,28.0,28.0,0.0,0.0,,0.22,0.257,"attacco: 17 gol in 11 partite, attesi 22",0.0,8,reparto coperto,2026-11-08,False
 Bologna,POR,1.0,5,3,0,3.5,14.0,0.0,0.0,Massimo Pessina,1.57,0.0,,0.392,1,"i titolari valgono 3.5 mln contro i 14.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre",2026-11-08,False
-Bologna,ATT,0.97,3,2,0,15.0,14.0,0.0,1.0,Artem Dovbyk,0.06,0.185,"attacco: 16 gol in 11 partite, attesi 18",0.337,2,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: attacco: 16 gol in 11 partite, attesi 18",2026-11-08,False
+Bologna,ATT,0.97,3,2,0,15.0,14.0,0.0,1.0,Artem Dovbyk,0.06,0.185,"attacco: 16 gol in 11 partite, attesi 18",0.33,2,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: attacco: 16 gol in 11 partite, attesi 18",2026-11-08,False
 Bologna,ALI,2.05,4,4,0,14.49,14.0,0.0,0.5,"Riccardo Orsolini, Nicolò Cambiaghi",0.17,0.13,"attacco: 16 gol in 11 partite, attesi 18",0.248,3,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: attacco: 16 gol in 11 partite, attesi 18",2026-11-08,False
-Bologna,TRQ,0.63,1,2,0,12.0,14.0,0.0,0.0,Jens Odgaard,0.16,0.13,"attacco: 16 gol in 11 partite, attesi 18",0.181,4,"sotto le attese in questa stagione: attacco: 16 gol in 11 partite, attesi 18",2026-11-08,False
+Bologna,TRQ,0.63,1,2,0,12.0,14.0,0.0,0.0,Jens Odgaard,0.16,0.13,"attacco: 16 gol in 11 partite, attesi 18",0.123,4,"sotto le attese in questa stagione: attacco: 16 gol in 11 partite, attesi 18",2026-11-08,False
 Bologna,CC,2.32,5,4,0,10.58,14.0,0.0,0.0,"Lewis Ferguson, Tommaso Pobega",0.46,0.0,,0.115,5,reparto coperto,2026-11-08,False
 Bologna,DC,2.03,5,4,0,14.87,14.0,0.0,0.5,"Arthur Theate, Torbjørn Heggem",-0.23,0.0,,0.05,6,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
 Bologna,TD,1.05,4,2,0,10.0,14.0,0.0,0.0,Emil Holm,-0.26,0.0,,0.0,7,reparto coperto,2026-11-08,False
 Bologna,TS,0.95,2,2,0,15.0,14.0,0.0,0.0,Juan Miranda,-0.63,0.0,,0.0,8,reparto coperto,2026-11-08,False
-Cagliari,TRQ,0.95,0,2,0,0.7,7.0,0.0,0.0,,3.26,0.304,"attacco: 10 gol in 11 partite, attesi 15",1.139,1,"i titolari valgono 0.7 mln contro i 7.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; sotto le attese in questa stagione: attacco: 10 gol in 11 partite, attesi 15",2026-11-08,False
-Cagliari,ATT,0.82,5,2,0,9.0,7.0,0.0,1.0,Daniel Maldini,-0.2,0.434,"attacco: 10 gol in 11 partite, attesi 15",0.621,2,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: attacco: 10 gol in 11 partite, attesi 15",2026-11-08,False
-Cagliari,ALI,0.0,2,0,0,7.0,7.0,0.0,0.0,,0.22,0.304,"attacco: 10 gol in 11 partite, attesi 15",0.365,3,"sotto le attese in questa stagione: attacco: 10 gol in 11 partite, attesi 15",2026-11-08,False
-Cagliari,DC,2.84,4,5,0,4.22,7.0,0.33,0.0,"Juan Rodríguez, Zé Pedro, Yerry Mina",0.58,0.0,,0.145,4,"i titolari valgono 4.2 mln contro i 7.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare con 31 anni o più",2026-11-08,False
-Cagliari,TD,0.89,1,2,0,5.5,7.0,0.0,1.0,Yukinari Sugawara,-0.4,0.0,,0.1,5,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
-Cagliari,TS,1.08,6,2,0,8.5,7.0,0.0,1.0,Jacopo Fazzini,-0.82,0.0,,0.1,6,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
-Cagliari,CC,3.42,9,6,0,5.56,7.0,0.0,0.0,"Harry Winks, Michel Adopo, Joseph Liteta",0.39,0.0,,0.098,7,reparto coperto,2026-11-08,False
-Cagliari,POR,1.0,3,3,0,15.0,7.0,0.0,0.0,Elia Caprile,-1.53,0.0,,0.0,8,reparto coperto,2026-11-08,False
-Como,ATT,0.89,2,2,0,32.0,30.0,0.0,0.0,Moise Kean,0.07,0.29,"attacco: 18 gol in 11 partite, attesi 22",0.364,1,"sotto le attese in questa stagione: attacco: 18 gol in 11 partite, attesi 22",2026-11-08,False
+Cagliari,TRQ,0.95,0,2,0,0.7,7.0,0.0,0.0,,3.26,0.304,"attacco: 10 gol in 11 partite, attesi 15",1.121,1,"i titolari valgono 0.7 mln contro i 7.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; sotto le attese in questa stagione: attacco: 10 gol in 11 partite, attesi 15",2026-11-08,False
+Cagliari,ATT,0.82,5,2,0,9.0,7.0,0.0,1.0,Daniel Maldini,-0.2,0.434,"attacco: 10 gol in 11 partite, attesi 15",0.527,2,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: attacco: 10 gol in 11 partite, attesi 15",2026-11-08,False
+Cagliari,DC,2.84,4,5,0,4.22,7.0,0.33,0.0,"Juan Rodríguez, Zé Pedro, Yerry Mina",0.58,0.0,,0.145,3,"i titolari valgono 4.2 mln contro i 7.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare con 31 anni o più",2026-11-08,False
+Cagliari,TD,0.89,1,2,0,5.5,7.0,0.0,1.0,Yukinari Sugawara,-0.4,0.0,,0.1,4,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
+Cagliari,TS,1.08,6,2,0,8.5,7.0,0.0,1.0,Jacopo Fazzini,-0.82,0.0,,0.1,5,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
+Cagliari,CC,3.42,9,6,0,5.56,7.0,0.0,0.0,"Harry Winks, Michel Adopo, Joseph Liteta",0.39,0.0,,0.098,6,reparto coperto,2026-11-08,False
+Cagliari,POR,1.0,3,3,0,15.0,7.0,0.0,0.0,Elia Caprile,-1.53,0.0,,0.0,7,reparto coperto,2026-11-08,False
+Cagliari,ALI,0.0,2,0,0,7.0,7.0,0.0,0.0,,0.22,0.304,"attacco: 10 gol in 11 partite, attesi 15",0.0,8,reparto coperto,2026-11-08,False
+Como,ATT,0.89,2,2,0,32.0,30.0,0.0,0.0,Moise Kean,0.07,0.29,"attacco: 18 gol in 11 partite, attesi 22",0.325,1,"sotto le attese in questa stagione: attacco: 18 gol in 11 partite, attesi 22",2026-11-08,False
 Como,ALI,1.61,4,3,0,30.0,30.0,0.0,0.0,"Martin Baturina, Assane Diao",0.22,0.203,"attacco: 18 gol in 11 partite, attesi 22",0.299,2,"sotto le attese in questa stagione: attacco: 18 gol in 11 partite, attesi 22",2026-11-08,False
-Como,TRQ,0.87,2,2,0,80.0,30.0,0.0,0.0,Nico Paz,-1.48,0.203,"attacco: 18 gol in 11 partite, attesi 22",0.244,3,"sotto le attese in questa stagione: attacco: 18 gol in 11 partite, attesi 22",2026-11-08,False
+Como,TRQ,0.87,2,2,0,80.0,30.0,0.0,0.0,Nico Paz,-1.48,0.203,"attacco: 18 gol in 11 partite, attesi 22",0.212,3,"sotto le attese in questa stagione: attacco: 18 gol in 11 partite, attesi 22",2026-11-08,False
 Como,TS,0.95,1,2,0,12.0,30.0,0.0,0.0,Álex Valle,0.79,0.0,,0.188,4,"i titolari valgono 12.0 mln contro i 30.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre",2026-11-08,False
 Como,TD,1.37,2,3,0,17.0,30.0,0.0,1.0,Yan Couto,0.07,0.0,,0.118,5,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
 Como,POR,1.0,3,3,0,22.0,30.0,0.0,1.0,Robert Sánchez,0.02,0.0,,0.105,6,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
 Como,CC,2.26,7,4,0,27.75,30.0,0.0,0.5,"Máximo Perrone, Samuele Ricci",0.17,0.0,,0.092,7,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
 Como,DC,2.05,7,4,0,34.64,30.0,0.0,0.0,"Trevoh Chalobah, Jacobo Ramón",-0.35,0.0,,0.0,8,reparto coperto,2026-11-08,False
-Fiorentina,TS,0.84,1,2,1,0.08,20.0,0.0,0.0,Víctor Valdepeñas,7.43,0.272,"difesa: 25 gol subiti in 11 partite, attesi 18",2.137,1,"1 giocatore per 2 posti in rosa (titolari per partita: 0.8); i titolari valgono 0.1 mln contro i 20.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; sotto le attese in questa stagione: difesa: 25 gol subiti in 11 partite, attesi 18",2026-11-08,False
+Fiorentina,TS,0.84,1,2,1,0.08,20.0,0.0,0.0,Víctor Valdepeñas,7.43,0.272,"difesa: 25 gol subiti in 11 partite, attesi 18",2.084,1,"1 giocatore per 2 posti in rosa (titolari per partita: 0.8); i titolari valgono 0.1 mln contro i 20.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; sotto le attese in questa stagione: difesa: 25 gol subiti in 11 partite, attesi 18",2026-11-08,False
 Fiorentina,DC,2.5,4,5,1,10.2,20.0,0.0,0.5,"Radu Drăgușin, Marin Pongracic",0.83,0.544,"difesa: 25 gol subiti in 11 partite, attesi 18",1.01,2,"4 giocatori per 5 posti in rosa (titolari per partita: 2.5); i titolari valgono 10.2 mln contro i 20.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: difesa: 25 gol subiti in 11 partite, attesi 18",2026-11-08,False
 Fiorentina,POR,1.0,3,3,0,3.5,20.0,1.0,0.0,David de Gea,2.08,0.38,"difesa: 25 gol subiti in 11 partite, attesi 18",0.976,3,"i titolari valgono 3.5 mln contro i 20.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare con 31 anni o più; sotto le attese in questa stagione: difesa: 25 gol subiti in 11 partite, attesi 18",2026-11-08,False
-Fiorentina,TD,0.97,3,2,0,22.0,20.0,0.0,1.0,Álex Jiménez,-0.89,0.272,"difesa: 25 gol subiti in 11 partite, attesi 18",0.426,4,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: difesa: 25 gol subiti in 11 partite, attesi 18",2026-11-08,False
+Fiorentina,TD,0.97,3,2,0,22.0,20.0,0.0,1.0,Álex Jiménez,-0.89,0.272,"difesa: 25 gol subiti in 11 partite, attesi 18",0.417,4,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: difesa: 25 gol subiti in 11 partite, attesi 18",2026-11-08,False
 Fiorentina,ALI,1.68,5,3,0,33.54,20.0,0.0,1.0,"Franco Mastantuono, Pedro Gonçalves",-0.52,0.0,,0.1,5,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
 Fiorentina,ATT,1.11,3,2,0,18.0,20.0,0.0,0.0,Beto,0.31,0.0,,0.078,6,reparto coperto,2026-11-08,False
 Fiorentina,CC,2.89,5,5,0,22.57,20.0,0.0,0.0,"Arthur Atta, Christ Inao Oulaï, Cher Ndour",-0.12,0.0,,0.0,7,reparto coperto,2026-11-08,False
@@ -48,25 +48,25 @@ Frosinone,TRQ,0.58,1,1,0,15.0,3.0,0.0,0.0,Romano Schmid,-2.38,0.0,,0.0,6,reparto
 Frosinone,ALI,0.81,4,2,0,4.0,3.0,0.0,0.0,Giorgi Kvernadze,-0.19,0.0,,0.0,7,reparto coperto,2026-11-08,False
 Frosinone,ATT,1.21,3,2,0,8.0,3.0,0.0,0.0,Tomas Bobcek,-1.25,0.0,,0.0,8,reparto coperto,2026-11-08,False
 Genoa,ATT,1.92,6,4,0,8.94,10.0,0.0,0.0,"Lorenzo Colombo, Vitinha",0.32,0.303,"attacco: 11 gol in 11 partite, attesi 14",0.444,1,"sotto le attese in questa stagione: attacco: 11 gol in 11 partite, attesi 14",2026-11-08,False
-Genoa,TRQ,0.39,5,1,0,8.5,10.0,0.0,0.0,Tommaso Baldanzi,0.17,0.212,"attacco: 11 gol in 11 partite, attesi 14",0.271,2,"sotto le attese in questa stagione: attacco: 11 gol in 11 partite, attesi 14",2026-11-08,False
-Genoa,ALI,0.05,2,0,0,10.0,10.0,0.0,0.0,,0.22,0.212,"attacco: 11 gol in 11 partite, attesi 14",0.257,3,"sotto le attese in questa stagione: attacco: 11 gol in 11 partite, attesi 14",2026-11-08,False
-Genoa,POR,1.0,3,3,0,4.0,10.0,0.0,0.0,Justin Bijlow,0.89,0.0,,0.222,4,"i titolari valgono 4.0 mln contro i 10.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre",2026-11-08,False
-Genoa,TS,0.68,1,2,0,6.0,10.0,0.0,1.0,Mario Mitaj,0.2,0.0,,0.134,5,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
-Genoa,TD,1.79,5,3,0,5.48,10.0,0.0,0.0,"Mikael Egill Ellertsson, Franz-Ethan Meichtry",0.12,0.0,,0.03,6,reparto coperto,2026-11-08,False
+Genoa,POR,1.0,3,3,0,4.0,10.0,0.0,0.0,Justin Bijlow,0.89,0.0,,0.222,2,"i titolari valgono 4.0 mln contro i 10.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre",2026-11-08,False
+Genoa,TS,0.68,1,2,0,6.0,10.0,0.0,1.0,Mario Mitaj,0.2,0.0,,0.134,3,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
+Genoa,TRQ,0.39,5,1,0,8.5,10.0,0.0,0.0,Tommaso Baldanzi,0.17,0.212,"attacco: 11 gol in 11 partite, attesi 14",0.116,4,"sotto le attese in questa stagione: attacco: 11 gol in 11 partite, attesi 14",2026-11-08,False
+Genoa,TD,1.79,5,3,0,5.48,10.0,0.0,0.0,"Mikael Egill Ellertsson, Franz-Ethan Meichtry",0.12,0.0,,0.03,5,reparto coperto,2026-11-08,False
+Genoa,ALI,0.05,2,0,0,10.0,10.0,0.0,0.0,,0.22,0.212,"attacco: 11 gol in 11 partite, attesi 14",0.015,6,reparto coperto,2026-11-08,False
 Genoa,DC,2.79,7,5,0,12.97,10.0,0.0,0.0,"Alessandro Marcandalli, Leo Østigård, Johan Vásquez",-0.52,0.0,,0.0,7,reparto coperto,2026-11-08,False
 Genoa,CC,2.37,4,4,0,10.61,10.0,0.0,0.0,"Morten Frendrup, Djibril Sow",-0.03,0.0,,0.0,8,reparto coperto,2026-11-08,False
 Inter,POR,1.0,3,3,0,10.0,50.0,0.0,0.0,Josep Martínez,1.89,0.0,,0.472,1,"i titolari valgono 10.0 mln contro i 50.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre",2026-11-08,False
 Inter,ATT,2.0,4,4,0,65.19,50.0,0.0,0.0,"Lautaro Martínez, Marcus Thuram",-0.22,0.115,"attacco: 28 gol in 11 partite, attesi 30",0.138,2,"sotto le attese in questa stagione: attacco: 28 gol in 11 partite, attesi 30",2026-11-08,False
 Inter,TD,1.03,2,2,0,22.0,50.0,0.0,0.0,Luis Henrique,0.44,0.0,,0.11,3,reparto coperto,2026-11-08,False
 Inter,TS,0.79,2,2,0,50.0,50.0,0.0,1.0,Federico Dimarco,-0.54,0.0,,0.1,4,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
-Inter,TRQ,0.0,0,0,0,50.0,50.0,0.0,0.0,,-0.06,0.081,"attacco: 28 gol in 11 partite, attesi 30",0.097,5,"sotto le attese in questa stagione: attacco: 28 gol in 11 partite, attesi 30",2026-11-08,False
-Inter,ALI,0.0,1,0,0,50.0,50.0,0.0,0.0,,0.22,0.081,"attacco: 28 gol in 11 partite, attesi 30",0.097,6,"sotto le attese in questa stagione: attacco: 28 gol in 11 partite, attesi 30",2026-11-08,False
-Inter,CC,2.97,8,5,0,41.21,50.0,0.0,0.0,"Nicolò Barella, Petar Sučić, Curtis Jones",0.33,0.0,,0.082,7,reparto coperto,2026-11-08,False
-Inter,DC,3.21,6,6,0,42.12,50.0,0.0,0.0,"Alessandro Bastoni, Yann Bisseck, Carlos Augusto",0.1,0.0,,0.025,8,reparto coperto,2026-11-08,False
+Inter,CC,2.97,8,5,0,41.21,50.0,0.0,0.0,"Nicolò Barella, Petar Sučić, Curtis Jones",0.33,0.0,,0.082,5,reparto coperto,2026-11-08,False
+Inter,DC,3.21,6,6,0,42.12,50.0,0.0,0.0,"Alessandro Bastoni, Yann Bisseck, Carlos Augusto",0.1,0.0,,0.025,6,reparto coperto,2026-11-08,False
+Inter,TRQ,0.0,0,0,0,50.0,50.0,0.0,0.0,,-0.06,0.081,"attacco: 28 gol in 11 partite, attesi 30",0.0,7,reparto coperto,2026-11-08,False
+Inter,ALI,0.0,1,0,0,50.0,50.0,0.0,0.0,,0.22,0.081,"attacco: 28 gol in 11 partite, attesi 30",0.0,8,reparto coperto,2026-11-08,False
 Juventus,ATT,1.13,4,2,0,55.0,30.0,0.0,1.0,Nick Woltemade,-0.71,0.429,"attacco: 15 gol in 11 partite, attesi 21",0.615,1,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: attacco: 15 gol in 11 partite, attesi 21",2026-11-08,False
-Juventus,TRQ,0.16,0,0,0,30.0,30.0,0.0,0.0,,-0.06,0.3,"attacco: 15 gol in 11 partite, attesi 21",0.36,2,"sotto le attese in questa stagione: attacco: 15 gol in 11 partite, attesi 21",2026-11-08,False
-Juventus,ALI,1.58,6,3,0,47.43,30.0,0.0,0.0,"Kenan Yıldız, Francisco Conceição",-0.44,0.3,"attacco: 15 gol in 11 partite, attesi 21",0.36,3,"sotto le attese in questa stagione: attacco: 15 gol in 11 partite, attesi 21",2026-11-08,False
-Juventus,POR,1.0,4,3,0,18.0,30.0,0.0,1.0,Guglielmo Vicario,0.31,0.0,,0.178,4,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
+Juventus,ALI,1.58,6,3,0,47.43,30.0,0.0,0.0,"Kenan Yıldız, Francisco Conceição",-0.44,0.3,"attacco: 15 gol in 11 partite, attesi 21",0.36,2,"sotto le attese in questa stagione: attacco: 15 gol in 11 partite, attesi 21",2026-11-08,False
+Juventus,POR,1.0,4,3,0,18.0,30.0,0.0,1.0,Guglielmo Vicario,0.31,0.0,,0.178,3,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
+Juventus,TRQ,0.16,0,0,0,30.0,30.0,0.0,0.0,,-0.06,0.3,"attacco: 15 gol in 11 partite, attesi 21",0.058,4,reparto coperto,2026-11-08,False
 Juventus,CC,1.74,4,3,0,33.76,30.0,0.0,0.5,"Khéphren Thuram, Pape Matar Sarr",-0.11,0.0,,0.05,5,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
 Juventus,TS,1.13,2,2,0,20.0,30.0,0.0,0.0,Andrea Cambiaso,0.05,0.0,,0.012,6,reparto coperto,2026-11-08,False
 Juventus,DC,3.37,7,6,0,29.53,30.0,0.0,0.0,"Bremer, Pierre Kalulu, Lloyd Kelly",-0.12,0.0,,0.0,7,reparto coperto,2026-11-08,False
@@ -82,10 +82,10 @@ Lazio,TRQ,0.0,1,0,0,15.0,15.0,0.0,0.0,,-0.06,0.0,,0.0,8,reparto coperto,2026-11-
 Lecce,DC,2.0,7,4,0,8.22,4.0,0.0,0.5,"Tiago Gabriel, Jamil Siebert",-1.19,0.433,"difesa: 22 gol subiti in 11 partite, attesi 17",0.57,1,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: difesa: 22 gol subiti in 11 partite, attesi 17",2026-11-08,False
 Lecce,ALI,1.97,3,4,1,2.45,4.0,0.0,1.0,"Santiago Pierotti, Konan N’Dri",0.93,0.002,,0.46,2,"3 giocatori per 4 posti in rosa (titolari per partita: 2.0); i titolari valgono 2.5 mln contro i 4.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare in scadenza o in prestito fino a giugno",2026-11-08,False
 Lecce,POR,1.0,4,3,0,3.5,4.0,1.0,0.0,Wladimiro Falcone,-0.24,0.303,"difesa: 22 gol subiti in 11 partite, attesi 17",0.364,3,"titolare con 31 anni o più; sotto le attese in questa stagione: difesa: 22 gol subiti in 11 partite, attesi 17",2026-11-08,False
-Lecce,TD,0.97,2,2,0,2.5,4.0,0.0,1.0,Danilo Veiga,-0.07,0.216,"difesa: 22 gol subiti in 11 partite, attesi 17",0.359,4,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: difesa: 22 gol subiti in 11 partite, attesi 17",2026-11-08,False
-Lecce,TS,1.05,4,2,0,3.5,4.0,0.0,1.0,Antonino Gallo,-0.34,0.216,"difesa: 22 gol subiti in 11 partite, attesi 17",0.359,5,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: difesa: 22 gol subiti in 11 partite, attesi 17",2026-11-08,False
+Lecce,TS,1.05,4,2,0,3.5,4.0,0.0,1.0,Antonino Gallo,-0.34,0.216,"difesa: 22 gol subiti in 11 partite, attesi 17",0.359,4,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: difesa: 22 gol subiti in 11 partite, attesi 17",2026-11-08,False
+Lecce,TD,0.97,2,2,0,2.5,4.0,0.0,1.0,Danilo Veiga,-0.07,0.216,"difesa: 22 gol subiti in 11 partite, attesi 17",0.351,5,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: difesa: 22 gol subiti in 11 partite, attesi 17",2026-11-08,False
 Lecce,CC,2.68,10,5,0,4.72,4.0,0.0,0.33,"Ivan Ilić, Medon Berisha, Oumar Ngom",-0.18,0.0,,0.033,6,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
-Lecce,TRQ,0.32,1,1,0,3.0,4.0,0.0,0.0,Omri Gandelman,0.35,0.002,,0.03,7,reparto coperto,2026-11-08,False
+Lecce,TRQ,0.32,1,1,0,3.0,4.0,0.0,0.0,Omri Gandelman,0.35,0.002,,0.029,7,reparto coperto,2026-11-08,False
 Lecce,ATT,1.0,3,2,0,5.0,4.0,0.0,0.0,Willem Geubbels,-0.16,0.004,,0.005,8,reparto coperto,2026-11-08,False
 Milan,CC,3.11,8,6,0,18.47,25.0,0.33,0.0,"Ardon Jashari, Adrien Rabiot, Yunus Musah",0.49,0.0,,0.122,1,titolare con 31 anni o più,2026-11-08,False
 Milan,TRQ,0.47,2,1,0,40.0,25.0,0.0,1.0,Christian Pulisic,-0.74,0.0,,0.1,2,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
@@ -103,19 +103,19 @@ Monza,ALI,0.81,3,2,0,8.0,6.0,0.0,1.0,Jay Robinson,-0.19,0.0,,0.1,5,titolare in s
 Monza,ATT,1.21,4,2,0,7.0,6.0,0.0,1.0,Cyril Ngonge,-0.06,0.0,,0.1,6,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
 Monza,TRQ,0.58,4,1,0,5.0,6.0,0.0,0.0,Dany Mota,0.2,0.0,,0.029,7,reparto coperto,2026-11-08,False
 Monza,TD,1.11,3,2,0,5.0,6.0,0.0,0.0,Idrissa Touré,-0.49,0.0,,0.0,8,reparto coperto,2026-11-08,False
-Napoli,TS,0.97,2,2,0,3.5,22.0,1.0,0.0,Leonardo Spinazzola,2.12,0.04,,0.562,1,"i titolari valgono 3.5 mln contro i 22.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare con 31 anni o più",2026-11-08,False
+Napoli,TS,0.97,2,2,0,3.5,22.0,1.0,0.0,Leonardo Spinazzola,2.12,0.04,,0.561,1,"i titolari valgono 3.5 mln contro i 22.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare con 31 anni o più",2026-11-08,False
 Napoli,TD,1.42,2,3,0,7.5,22.0,1.0,0.0,Giovanni Di Lorenzo,0.8,0.04,,0.248,2,"i titolari valgono 7.5 mln contro i 22.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare con 31 anni o più",2026-11-08,False
 Napoli,ATT,1.0,3,2,0,60.0,22.0,0.0,0.0,Rasmus Højlund,-1.29,0.205,"attacco: 18 gol in 11 partite, attesi 21",0.246,3,"sotto le attese in questa stagione: attacco: 18 gol in 11 partite, attesi 21",2026-11-08,False
-Napoli,ALI,0.45,2,1,0,23.0,22.0,0.0,0.0,David Neres,0.16,0.144,"attacco: 18 gol in 11 partite, attesi 21",0.191,4,"sotto le attese in questa stagione: attacco: 18 gol in 11 partite, attesi 21",2026-11-08,False
-Napoli,TRQ,1.32,3,3,0,28.0,22.0,0.0,0.0,Alisson Santos,-0.41,0.144,"attacco: 18 gol in 11 partite, attesi 21",0.173,5,"sotto le attese in questa stagione: attacco: 18 gol in 11 partite, attesi 21",2026-11-08,False
-Napoli,DC,2.68,7,5,0,21.47,22.0,0.0,0.33,"Alessandro Buongiorno, Sam Beukema, Benoît Badiashile",-0.11,0.079,"difesa: 14 gol subiti in 11 partite, attesi 13",0.128,6,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: difesa: 14 gol subiti in 11 partite, attesi 13",2026-11-08,False
+Napoli,TRQ,1.32,3,3,0,28.0,22.0,0.0,0.0,Alisson Santos,-0.41,0.144,"attacco: 18 gol in 11 partite, attesi 21",0.173,4,"sotto le attese in questa stagione: attacco: 18 gol in 11 partite, attesi 21",2026-11-08,False
+Napoli,DC,2.68,7,5,0,21.47,22.0,0.0,0.33,"Alessandro Buongiorno, Sam Beukema, Benoît Badiashile",-0.11,0.079,"difesa: 14 gol subiti in 11 partite, attesi 13",0.128,5,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: difesa: 14 gol subiti in 11 partite, attesi 13",2026-11-08,False
+Napoli,ALI,0.45,2,1,0,23.0,22.0,0.0,0.0,David Neres,0.16,0.144,"attacco: 18 gol in 11 partite, attesi 21",0.096,6,"sotto le attese in questa stagione: attacco: 18 gol in 11 partite, attesi 21",2026-11-08,False
 Napoli,POR,1.0,3,3,0,20.0,22.0,0.0,0.0,Vanja Milinković-Savić,-0.29,0.055,"difesa: 14 gol subiti in 11 partite, attesi 13",0.066,7,"sotto le attese in questa stagione: difesa: 14 gol subiti in 11 partite, attesi 13",2026-11-08,False
 Napoli,CC,2.16,4,4,0,28.28,22.0,0.0,0.0,"Scott McTominay, Billy Gilmour",-0.31,0.0,,0.0,8,reparto coperto,2026-11-08,False
 Parma,POR,1.0,3,3,0,1.5,10.0,0.0,0.0,Edoardo Corvi,2.31,0.0,,0.578,1,"i titolari valgono 1.5 mln contro i 10.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre",2026-11-08,False
 Parma,ATT,1.39,4,3,0,7.0,10.0,0.0,0.0,Matija Frigan,0.68,0.33,"attacco: 9 gol in 11 partite, attesi 12",0.566,2,"i titolari valgono 7.0 mln contro i 10.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; sotto le attese in questa stagione: attacco: 9 gol in 11 partite, attesi 12",2026-11-08,False
-Parma,TRQ,0.34,1,1,0,10.0,10.0,0.0,1.0,Giovanni Fabbian,-0.06,0.231,"attacco: 9 gol in 11 partite, attesi 12",0.377,3,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: attacco: 9 gol in 11 partite, attesi 12",2026-11-08,False
-Parma,ALI,0.45,1,1,0,13.0,10.0,0.0,1.0,El Bilal Touré,-0.16,0.231,"attacco: 9 gol in 11 partite, attesi 12",0.377,4,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: attacco: 9 gol in 11 partite, attesi 12",2026-11-08,False
-Parma,TS,0.79,2,2,0,3.0,10.0,0.0,0.0,Emanuele Valeri,1.2,0.0,,0.237,5,"i titolari valgono 3.0 mln contro i 10.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre",2026-11-08,False
+Parma,TS,0.79,2,2,0,3.0,10.0,0.0,0.0,Emanuele Valeri,1.2,0.0,,0.237,3,"i titolari valgono 3.0 mln contro i 10.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre",2026-11-08,False
+Parma,ALI,0.45,1,1,0,13.0,10.0,0.0,1.0,El Bilal Touré,-0.16,0.231,"attacco: 9 gol in 11 partite, attesi 12",0.225,4,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: attacco: 9 gol in 11 partite, attesi 12",2026-11-08,False
+Parma,TRQ,0.34,1,1,0,10.0,10.0,0.0,1.0,Giovanni Fabbian,-0.06,0.231,"attacco: 9 gol in 11 partite, attesi 12",0.194,5,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: attacco: 9 gol in 11 partite, attesi 12",2026-11-08,False
 Parma,DC,3.08,6,6,0,7.11,10.0,0.0,0.33,"Mariano Troilo, Abdoulaye Ndiaye, Enrico Delprato",0.34,0.0,,0.118,6,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
 Parma,CC,3.08,7,6,0,12.49,10.0,0.0,0.33,"Mandela Keita, Adrián Bernabé, Christian Ordóñez",-0.27,0.0,,0.033,7,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
 Parma,TD,0.87,4,2,0,10.0,10.0,0.0,0.0,Sascha Britschgi,-0.75,0.0,,0.0,8,reparto coperto,2026-11-08,False
@@ -128,31 +128,31 @@ Roma,TRQ,1.89,4,4,0,36.47,35.0,0.0,0.0,"Rodrigo Mora, Matías Soulé",-0.12,0.0,
 Roma,ALI,0.0,0,0,0,35.0,35.0,0.0,0.0,,0.22,0.0,,0.0,7,reparto coperto,2026-11-08,False
 Roma,ATT,0.89,3,2,0,45.0,35.0,0.0,0.0,Donyell Malen,-0.2,0.0,,0.0,8,reparto coperto,2026-11-08,False
 Sassuolo,DC,1.92,5,4,0,7.0,10.0,0.0,0.5,"Jay Idzes, Fedde Leysen",0.37,0.823,"difesa: 29 gol subiti in 11 partite, attesi 18",1.13,1,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: difesa: 29 gol subiti in 11 partite, attesi 18",2026-11-08,False
-Sassuolo,TS,0.97,4,2,0,5.0,10.0,0.0,1.0,Rafa Obrador,0.46,0.412,"difesa: 29 gol subiti in 11 partite, attesi 18",0.706,2,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: difesa: 29 gol subiti in 11 partite, attesi 18",2026-11-08,False
-Sassuolo,POR,1.0,5,3,0,7.5,10.0,0.0,0.0,Arijanet Murić,-0.02,0.576,"difesa: 29 gol subiti in 11 partite, attesi 18",0.691,3,"sotto le attese in questa stagione: difesa: 29 gol subiti in 11 partite, attesi 18",2026-11-08,False
+Sassuolo,POR,1.0,5,3,0,7.5,10.0,0.0,0.0,Arijanet Murić,-0.02,0.576,"difesa: 29 gol subiti in 11 partite, attesi 18",0.691,2,"sotto le attese in questa stagione: difesa: 29 gol subiti in 11 partite, attesi 18",2026-11-08,False
+Sassuolo,TS,0.97,4,2,0,5.0,10.0,0.0,1.0,Rafa Obrador,0.46,0.412,"difesa: 29 gol subiti in 11 partite, attesi 18",0.691,3,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: difesa: 29 gol subiti in 11 partite, attesi 18",2026-11-08,False
 Sassuolo,TD,1.11,4,2,0,5.0,10.0,0.0,0.0,Sebastian Walukiewicz,0.25,0.412,"difesa: 29 gol subiti in 11 partite, attesi 18",0.557,4,"sotto le attese in questa stagione: difesa: 29 gol subiti in 11 partite, attesi 18",2026-11-08,False
 Sassuolo,ATT,1.0,3,2,0,7.0,10.0,0.0,1.0,Kieron Bowie,0.68,0.058,"attacco: 16 gol in 11 partite, attesi 17",0.34,5,"i titolari valgono 7.0 mln contro i 10.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: attacco: 16 gol in 11 partite, attesi 17",2026-11-08,False
-Sassuolo,TRQ,0.0,2,0,0,10.0,10.0,0.0,0.0,,-0.06,0.04,,0.048,6,reparto coperto,2026-11-08,False
-Sassuolo,ALI,2.03,6,4,0,13.78,10.0,0.0,0.0,"Armand Laurienté, Cristian Volpato",-0.24,0.04,,0.048,7,reparto coperto,2026-11-08,False
-Sassuolo,CC,2.97,7,5,0,13.1,10.0,0.0,0.33,"Ismaël Koné, Kristian Thorstvedt, Luca Lipani",-0.33,0.0,,0.033,8,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
+Sassuolo,ALI,2.03,6,4,0,13.78,10.0,0.0,0.0,"Armand Laurienté, Cristian Volpato",-0.24,0.04,,0.048,6,reparto coperto,2026-11-08,False
+Sassuolo,CC,2.97,7,5,0,13.1,10.0,0.0,0.33,"Ismaël Koné, Kristian Thorstvedt, Luca Lipani",-0.33,0.0,,0.033,7,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
+Sassuolo,TRQ,0.0,2,0,0,10.0,10.0,0.0,0.0,,-0.06,0.04,,0.0,8,reparto coperto,2026-11-08,False
 Torino,ATT,1.92,5,4,0,5.92,10.0,0.5,0.5,"Giovanni Simeone, Ché Adams",0.92,0.133,"attacco: 15 gol in 11 partite, attesi 17",0.44,1,"i titolari valgono 5.9 mln contro i 10.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare con 31 anni o più; titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: attacco: 15 gol in 11 partite, attesi 17",2026-11-08,False
-Torino,TRQ,0.0,0,0,0,10.0,10.0,0.0,0.0,,-0.06,0.093,"attacco: 15 gol in 11 partite, attesi 17",0.112,2,"sotto le attese in questa stagione: attacco: 15 gol in 11 partite, attesi 17",2026-11-08,False
-Torino,ALI,0.0,2,0,0,10.0,10.0,0.0,0.0,,0.22,0.093,"attacco: 15 gol in 11 partite, attesi 17",0.112,3,"sotto le attese in questa stagione: attacco: 15 gol in 11 partite, attesi 17",2026-11-08,False
-Torino,POR,1.0,4,3,0,10.0,10.0,0.0,1.0,Lucas Perri,-0.43,0.0,,0.1,4,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
-Torino,TS,0.74,5,2,0,10.0,10.0,0.0,1.0,Niccolò Fortini,-0.54,0.0,,0.1,5,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
-Torino,DC,2.97,4,5,0,8.77,10.0,0.0,0.67,"Pietro Comuzzo, Saúl Coco, Ardian Ismajli",0.04,0.0,,0.077,6,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
-Torino,CC,3.08,8,6,0,12.16,10.0,0.0,0.67,"Cesare Casadei, Daniel Bragança, Nikola Vlašić",-0.23,0.0,,0.067,7,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
-Torino,TD,1.29,2,3,0,10.0,10.0,0.0,0.0,Nathan Patterson,-0.75,0.0,,0.0,8,reparto coperto,2026-11-08,False
+Torino,POR,1.0,4,3,0,10.0,10.0,0.0,1.0,Lucas Perri,-0.43,0.0,,0.1,2,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
+Torino,TS,0.74,5,2,0,10.0,10.0,0.0,1.0,Niccolò Fortini,-0.54,0.0,,0.1,3,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
+Torino,DC,2.97,4,5,0,8.77,10.0,0.0,0.67,"Pietro Comuzzo, Saúl Coco, Ardian Ismajli",0.04,0.0,,0.077,4,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
+Torino,CC,3.08,8,6,0,12.16,10.0,0.0,0.67,"Cesare Casadei, Daniel Bragança, Nikola Vlašić",-0.23,0.0,,0.067,5,titolare in scadenza o in prestito fino a giugno,2026-11-08,False
+Torino,TD,1.29,2,3,0,10.0,10.0,0.0,0.0,Nathan Patterson,-0.75,0.0,,0.0,6,reparto coperto,2026-11-08,False
+Torino,TRQ,0.0,0,0,0,10.0,10.0,0.0,0.0,,-0.06,0.093,"attacco: 15 gol in 11 partite, attesi 17",0.0,7,reparto coperto,2026-11-08,False
+Torino,ALI,0.0,2,0,0,10.0,10.0,0.0,0.0,,0.22,0.093,"attacco: 15 gol in 11 partite, attesi 17",0.0,8,reparto coperto,2026-11-08,False
 Udinese,DC,3.03,7,5,0,9.3,10.0,0.0,0.33,"Oumar Solet, Nicolò Bertola, Matteo Palma",-0.04,0.634,"difesa: 25 gol subiti in 11 partite, attesi 17",0.794,1,"titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: difesa: 25 gol subiti in 11 partite, attesi 17",2026-11-08,False
-Udinese,TS,0.92,1,2,0,3.0,10.0,1.0,1.0,Hassane Kamara,1.2,0.317,"difesa: 25 gol subiti in 11 partite, attesi 17",0.756,2,"i titolari valgono 3.0 mln contro i 10.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare con 31 anni o più; titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: difesa: 25 gol subiti in 11 partite, attesi 17",2026-11-08,False
+Udinese,TS,0.92,1,2,0,3.0,10.0,1.0,1.0,Hassane Kamara,1.2,0.317,"difesa: 25 gol subiti in 11 partite, attesi 17",0.726,2,"i titolari valgono 3.0 mln contro i 10.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare con 31 anni o più; titolare in scadenza o in prestito fino a giugno; sotto le attese in questa stagione: difesa: 25 gol subiti in 11 partite, attesi 17",2026-11-08,False
 Udinese,POR,1.0,3,3,0,10.0,10.0,0.0,0.0,Maduka Okoye,-0.43,0.444,"difesa: 25 gol subiti in 11 partite, attesi 17",0.533,3,"sotto le attese in questa stagione: difesa: 25 gol subiti in 11 partite, attesi 17",2026-11-08,False
-Udinese,TD,0.97,3,2,0,4.5,10.0,0.0,0.0,Alessandro Zanoli,0.4,0.317,"difesa: 25 gol subiti in 11 partite, attesi 17",0.477,4,"sotto le attese in questa stagione: difesa: 25 gol subiti in 11 partite, attesi 17",2026-11-08,False
+Udinese,TD,0.97,3,2,0,4.5,10.0,0.0,0.0,Alessandro Zanoli,0.4,0.317,"difesa: 25 gol subiti in 11 partite, attesi 17",0.466,4,"sotto le attese in questa stagione: difesa: 25 gol subiti in 11 partite, attesi 17",2026-11-08,False
 Udinese,ATT,1.08,4,2,0,10.0,10.0,0.0,0.0,Keinan Davis,0.16,0.355,"attacco: 12 gol in 11 partite, attesi 16",0.466,5,"sotto le attese in questa stagione: attacco: 12 gol in 11 partite, attesi 16",2026-11-08,False
-Udinese,TRQ,0.74,3,2,0,15.0,10.0,0.0,0.0,Nicolò Zaniolo,-0.65,0.249,"attacco: 12 gol in 11 partite, attesi 16",0.299,6,"sotto le attese in questa stagione: attacco: 12 gol in 11 partite, attesi 16",2026-11-08,False
-Udinese,ALI,0.0,1,0,0,10.0,10.0,0.0,0.0,,0.22,0.249,"attacco: 12 gol in 11 partite, attesi 16",0.299,7,"sotto le attese in questa stagione: attacco: 12 gol in 11 partite, attesi 16",2026-11-08,False
-Udinese,CC,3.26,6,6,0,7.66,10.0,0.0,0.0,"Jurgen Ekkelenkamp, Lennon Miller, Jakub Piotrowski",0.44,0.0,,0.11,8,reparto coperto,2026-11-08,False
-Venezia,ALI,0.81,1,2,0,0.6,5.5,0.0,0.0,Kornel Lisman,3.42,0.195,"attacco: 8 gol in 11 partite, attesi 11",0.927,1,"i titolari valgono 0.6 mln contro i 5.5 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; sotto le attese in questa stagione: attacco: 8 gol in 11 partite, attesi 11",2026-11-08,False
-Venezia,TRQ,0.58,2,1,0,1.8,5.5,0.0,0.0,Thórir Jóhann Helgason,1.55,0.195,"attacco: 8 gol in 11 partite, attesi 11",0.459,2,"i titolari valgono 1.8 mln contro i 5.5 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; sotto le attese in questa stagione: attacco: 8 gol in 11 partite, attesi 11",2026-11-08,False
+Udinese,TRQ,0.74,3,2,0,15.0,10.0,0.0,0.0,Nicolò Zaniolo,-0.65,0.249,"attacco: 12 gol in 11 partite, attesi 16",0.221,6,"sotto le attese in questa stagione: attacco: 12 gol in 11 partite, attesi 16",2026-11-08,False
+Udinese,CC,3.26,6,6,0,7.66,10.0,0.0,0.0,"Jurgen Ekkelenkamp, Lennon Miller, Jakub Piotrowski",0.44,0.0,,0.11,7,reparto coperto,2026-11-08,False
+Udinese,ALI,0.0,1,0,0,10.0,10.0,0.0,0.0,,0.22,0.249,"attacco: 12 gol in 11 partite, attesi 16",0.0,8,reparto coperto,2026-11-08,False
+Venezia,ALI,0.81,1,2,0,0.6,5.5,0.0,0.0,Kornel Lisman,3.42,0.195,"attacco: 8 gol in 11 partite, attesi 11",0.882,1,"i titolari valgono 0.6 mln contro i 5.5 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; sotto le attese in questa stagione: attacco: 8 gol in 11 partite, attesi 11",2026-11-08,False
+Venezia,TRQ,0.58,2,1,0,1.8,5.5,0.0,0.0,Thórir Jóhann Helgason,1.55,0.195,"attacco: 8 gol in 11 partite, attesi 11",0.36,2,"i titolari valgono 1.8 mln contro i 5.5 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; sotto le attese in questa stagione: attacco: 8 gol in 11 partite, attesi 11",2026-11-08,False
 Venezia,TS,0.95,2,2,0,1.4,5.5,0.0,0.0,Bartol Franjic,1.44,0.0,,0.342,3,"i titolari valgono 1.4 mln contro i 5.5 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre",2026-11-08,False
 Venezia,ATT,1.21,5,2,0,15.0,5.5,0.0,0.0,Akor Adams,-1.29,0.279,"attacco: 8 gol in 11 partite, attesi 11",0.335,4,"sotto le attese in questa stagione: attacco: 8 gol in 11 partite, attesi 11",2026-11-08,False
 Venezia,TD,1.11,4,2,0,2.5,5.5,0.0,0.0,Thierry Correia,0.39,0.0,,0.098,5,reparto coperto,2026-11-08,False
