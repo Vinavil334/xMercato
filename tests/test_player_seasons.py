@@ -34,13 +34,15 @@ def tables():
     )
     lineups = pd.DataFrame(
         {
-            "game_id": [1, 2, 3, 1],
-            "player_id": [7, 7, 7, 8],
-            "club_id": [10, 10, 10, 20],
-            "type": ["starting_lineup", "substitutes", "starting_lineup", "starting_lineup"],
-            "position": ["Centre-Forward", "Left Winger", "Centre-Forward", "Goalkeeper"],
+            "game_id": [1, 2, 3, 1, 1],
+            "player_id": [7, 7, 7, 8, 9],
+            "club_id": [10, 10, 10, 20, 20],
+            "type": ["starting_lineup", "substitutes", "starting_lineup", "starting_lineup",
+                     "substitutes"],
+            "position": ["Centre-Forward", "Left Winger", "Centre-Forward", "Goalkeeper",
+                         "Goalkeeper"],
         }
-    )
+    )  # fmt: skip
     valuations = pd.DataFrame(
         {
             "player_id": [7, 7, 7, 8],
@@ -56,6 +58,7 @@ def test_build(tables):
     row = table.set_index("player_id").loc[7]
     # Cup games are left out; the second half starts on 1 January.
     assert (row.partite, row.titolare, row.minuti, row.gol, row.assist) == (3, 2, 210, 3, 1)
+    assert row.convocazioni == 3
     assert (row.partite_h1, row.titolare_h1, row.minuti_h1) == (2, 1, 120)
     assert (row.partite_club, row.partite_club_h1) == (3, 2)
     assert row.posizione == "Centre-Forward"
@@ -63,6 +66,10 @@ def test_build(tables):
     keeper = table.set_index("player_id").loc[8]
     assert pd.isna(keeper.valore_inizio) and keeper.valore_fine == 3e5
     assert list(table.columns) == player_seasons.COLUMNS
+    # A third goalkeeper who only sat on the bench is in the table, with no minutes.
+    third = table.set_index("player_id").loc[9]
+    assert (third.convocazioni, third.partite, third.minuti) == (1, 0, 0)
+    assert pd.isna(third.posizione)
 
 
 def test_first_season_filter(tables):

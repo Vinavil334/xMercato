@@ -1,13 +1,14 @@
 """Player-season table from the Transfermarkt match data.
 
 One row per player, season and club, for the first-tier domestic leagues of the dataset:
-matches, starts, minutes, goals, assists, cards, the position he usually started in and
-his market value at three dates (start of season, 1 January, end of season). The same
-numbers are kept for the first half of the season alone, so that a January window can be
-studied with only what was known on 1 January.
+matchday squads (bench included, so that third goalkeepers are counted), matches, starts,
+minutes, goals, assists, cards, the position he usually started in and his market value
+at three dates (start of season, 1 January, end of season). The same numbers are kept for
+the first half of the season alone, so that a January window can be studied with only
+what was known on 1 January.
 
 Seasons are named by their start year (2025 = 2025/26), as in the dataset. Leagues that
-play within a calendar year (MLS, Scandinavia, Japan...) follow the dataset's own labels.
+play within a calendar year follow the dataset's own labels.
 """
 
 from __future__ import annotations
@@ -19,6 +20,7 @@ COLUMNS = [
     "season",
     "club_id",
     "competition_id",
+    "convocazioni",
     "partite",
     "titolare",
     "minuti",
@@ -27,6 +29,7 @@ COLUMNS = [
     "gialli",
     "rossi",
     "partite_club",
+    "convocazioni_h1",
     "partite_h1",
     "titolare_h1",
     "minuti_h1",
@@ -90,17 +93,26 @@ def build(
     info = league[["game_id", "competition_id", "season", "h1"]]
 
     apps = appearances.drop(columns=["competition_id"], errors="ignore").merge(info, on="game_id")
-    apps = apps.rename(columns={"player_club_id": "club_id"})
-    starts = lineups.loc[lineups["type"] == "starting_lineup", ["game_id", "player_id", "position"]]
-    apps = apps.merge(starts.assign(start=1), on=["game_id", "player_id"], how="left")
-    apps["start"] = apps["start"].fillna(0).astype(int)
+    apps = apps.rename(columns={"player_club_id": "club_id"}).assign(played=1)
+    squads = lineups[["game_id", "player_id", "club_id", "type", "position"]].merge(
+        info, on="game_id"
+    )
+    squads["start"] = (squads["type"] == "starting_lineup").astype(int)
+    squads.loc[squads["start"] == 0, "position"] = None  # the usual position is where he starts
+    # Everyone named in a matchday squad, plus anyone who played without a lineup record.
+    apps = squads.drop(columns="type").merge(
+        apps, on=["game_id", "player_id", "club_id", "competition_id", "season", "h1"], how="outer"
+    )
+    stats = ["played", "start", "minutes_played", "goals", "assists", "yellow_cards", "red_cards"]
+    apps[stats] = apps[stats].fillna(0)
 
     keys = ["player_id", "season", "club_id", "competition_id"]
     first_half = apps[apps["h1"]]
     table = (
         apps.groupby(keys)
         .agg(
-            partite=("game_id", "size"),
+            convocazioni=("game_id", "size"),
+            partite=("played", "sum"),
             titolare=("start", "sum"),
             minuti=("minutes_played", "sum"),
             gol=("goals", "sum"),
@@ -110,12 +122,13 @@ def build(
         )
         .join(
             first_half.groupby(keys).agg(
-                partite_h1=("game_id", "size"),
+                convocazioni_h1=("game_id", "size"),
+                partite_h1=("played", "sum"),
                 titolare_h1=("start", "sum"),
                 minuti_h1=("minutes_played", "sum"),
             )
         )
-        .fillna({"partite_h1": 0, "titolare_h1": 0, "minuti_h1": 0})
+        .fillna({"convocazioni_h1": 0, "partite_h1": 0, "titolare_h1": 0, "minuti_h1": 0})
         .reset_index()
     )
     position = (
