@@ -1,0 +1,31 @@
+name: Dati mercato
+
+on:
+  workflow_dispatch:
+  # Temporary: runs from the branch that introduces this workflow.
+  push:
+    branches: [mercato-gennaio]
+    paths: [.github/workflows/mercato-dati.yml]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  schema:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Schema delle tabelle
+        run: |
+          for t in appearances game_lineups games competitions player_valuations transfers club_games clubs players game_events; do
+            curl -fsSL --retry 3 -o "$t.csv.gz" "https://pub-e682421888d945d684bcae8890b0ec20.r2.dev/data/$t.csv.gz" || { echo "MISSING $t"; continue; }
+            echo "=== $t $(stat -c %s $t.csv.gz) bytes, $(zcat $t.csv.gz | wc -l) lines"
+            zcat "$t.csv.gz" | head -4
+          done
+          echo "=== competitions"; zcat competitions.csv.gz
+          echo "=== lineup positions"; zcat game_lineups.csv.gz | python3 -c "
+          import csv,sys,collections
+          r=csv.DictReader(sys.stdin); c=collections.Counter((x['type'],x['position']) for x in r); print(c.most_common(40))"
+          echo "=== seasons in games"; zcat games.csv.gz | python3 -c "
+          import csv,sys,collections
+          r=csv.DictReader(sys.stdin); c=collections.Counter((x['competition_id'],x['season']) for x in r if x['competition_id']=='IT1'); print(sorted(c.items()))"
