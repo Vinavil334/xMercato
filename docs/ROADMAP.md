@@ -26,7 +26,7 @@ lista dei candidati, non la verifica della classifica.
 | **0. Fondamenta** | Repo, CI, struttura dati, caricamento risultati, simulatore di base | 1-2 sett. | *Fatta.* Caricatori Transfermarkt, football-data (con le quote) e archivio Understat; rose 2026/27 verificate |
 | **1. Classifica** | Forza da xG, peso alle partite recenti, Dixon-Coles, stima pre-stagionale dal valore della rosa | 2-3 sett. | *Prima parte fatta:* stagioni precedenti, peso alle partite recenti, neopromosse, xG provati; verifica su 2020–2025 contro i bookmaker in [STUDIO.md](STUDIO.md#verifica-sul-passato-backtest). Restano Dixon-Coles e la stima dalla rosa (che ha bisogno della fase 3) |
 | **1b. Simulatore, livello 1** | App Streamlit: classifica simulata, cursori sulla forza delle squadre, risultati forzati | 1-2 sett. | *Costruito e provato in locale.* Manca la pubblicazione online, e la prova con i dati della stagione in corso |
-| **G. Mercato di gennaio** | Fabbisogno per ruolo dalle rose a mano; candidati per somiglianza statistica, età e costo | 2-3 sett. | Una pagina per club. *Traguardo di gennaio* |
+| **G. Mercato di gennaio** | Fabbisogno per ruolo dalle rose a mano; candidati per somiglianza statistica, età e costo | 2-3 sett. | *Fatta:* pagina Mercato con fabbisogni e candidati per ogni club, verificata sulle finestre 2023–2025 ([STUDIO.md](STUDIO.md#versione-di-gennaio-2027-fase-g)). *Traguardo di gennaio* |
 | **2. Anagrafica e proiezioni** | Collegamento degli ID tra le fonti; tabella giocatore-stagione; Marcel; modello dei minuti; coefficienti di campionato | 4-5 sett. | Almeno il 95% dei minuti di Serie A collegato tra Understat e Transfermarkt; errore inferiore a "uguale all'anno scorso" |
 | **3. Valore** | Valore equo oggi e valore a 12 mesi | 2-3 sett. | Errore per fasce di valore, confrontato con "resta uguale, corretto per l'età" |
 | **4. Mercato** | Plausibilità, probabilità di buon acquisto, incertezza per i campionati con pochi dati, lista per club | 5-6 sett. | Verifica su un'estate passata; curva di calibrazione pubblicata |
@@ -66,6 +66,6 @@ codice: budget iniziali, mercato libero o ad asta, quanto pesa il caso, cosa suc
 
 ## Prossimi tre passi
 
-1. **Pubblicare il simulatore** su Streamlit Community Cloud e controllare che scarichi la stagione in corso.
-2. **Rose di gennaio 2027**: a fine mercato invernale, aggiornare l'elenco delle fonti e rilanciare `xmercato rose riconcilia` (procedura in [DATI.md](DATI.md#aggiornamento-automatico-da-una-lista-delle-rose-attuali)).
-3. **Mercato di gennaio (fase G)**: fabbisogno per ruolo dalle rose verificate e primi candidati.
+1. **Pubblicare l'app** su Streamlit Community Cloud (classifica e mercato) e controllare che scarichi la stagione in corso.
+2. **Aggiornare a fine gennaio 2027**: rose dopo il mercato invernale (`xmercato rose riconcilia`, procedura in [DATI.md](DATI.md#aggiornamento-automatico-da-una-lista-delle-rose-attuali)), poi `xmercato mercato suggerisci --finestra estate`.
+3. **Fase 2, anagrafica e proiezioni**: è la base della probabilità di buon acquisto, che oggi manca ai candidati.

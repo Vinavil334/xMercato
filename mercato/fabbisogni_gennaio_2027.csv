@@ -1,0 +1,161 @@
+club,slot,titolari,giocatori,servono,mancano,valore_titolari,valore_riferimento,anziani,in_scadenza,titolari_nomi,divario,punteggio,rango,motivo
+Atalanta,CC,2.18,5,4,0,23.24,28.0,0.0,0.5,"Éderson, Franck Kessié",0.32,0.21,1,titolare in scadenza o in prestito fino a giugno
+Atalanta,TD,1.18,2,2,0,15.0,28.0,0.0,0.0,Raoul Bellanova,0.15,0.075,2,reparto coperto
+Atalanta,DC,2.95,6,5,0,23.23,28.0,0.0,0.0,"Giorgio Scalvini, Isak Hien, Odilon Kossounou",0.12,0.06,3,reparto coperto
+Atalanta,TRQ,1.71,5,3,0,25.69,28.0,0.0,0.0,"Charles De Ketelaere, Giacomo Raspadori",0.06,0.03,4,reparto coperto
+Atalanta,ATT,0.89,2,2,0,30.0,28.0,0.0,0.0,Nikola Krstović,0.06,0.027,5,reparto coperto
+Atalanta,POR,1.0,3,3,0,30.0,28.0,0.0,0.0,Marco Carnesecchi,-0.53,0.0,6,reparto coperto
+Atalanta,TS,1.08,2,2,0,20.0,28.0,0.0,0.0,Lorenzo Bernasconi,-0.05,0.0,7,reparto coperto
+Atalanta,ALI,0.0,1,0,0,28.0,28.0,0.0,0.0,,0.22,0.0,8,reparto coperto
+Bologna,POR,1.0,5,3,0,3.5,14.0,0.0,0.0,Massimo Pessina,1.57,0.785,1,"i titolari valgono 3.5 mln contro i 14.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre"
+Bologna,CC,2.32,5,4,0,10.58,14.0,0.0,0.0,"Lewis Ferguson, Tommaso Pobega",0.46,0.23,2,reparto coperto
+Bologna,ALI,2.05,4,4,0,14.49,14.0,0.0,0.5,"Riccardo Orsolini, Nicolò Cambiaghi",0.17,0.135,3,titolare in scadenza o in prestito fino a giugno
+Bologna,ATT,0.97,3,2,0,15.0,14.0,0.0,1.0,Artem Dovbyk,0.06,0.129,4,titolare in scadenza o in prestito fino a giugno
+Bologna,DC,2.03,5,4,0,14.87,14.0,0.0,0.5,"Arthur Theate, Torbjørn Heggem",-0.23,0.05,5,titolare in scadenza o in prestito fino a giugno
+Bologna,TRQ,0.63,1,2,0,12.0,14.0,0.0,0.0,Jens Odgaard,0.16,0.05,6,reparto coperto
+Bologna,TD,1.05,4,2,0,10.0,14.0,0.0,0.0,Emil Holm,-0.26,0.0,7,reparto coperto
+Bologna,TS,0.95,2,2,0,15.0,14.0,0.0,0.0,Juan Miranda,-0.63,0.0,8,reparto coperto
+Cagliari,TRQ,0.95,0,2,0,0.7,7.0,0.0,0.0,,3.26,1.548,1,"i titolari valgono 0.7 mln contro i 7.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre"
+Cagliari,DC,2.84,4,5,0,4.22,7.0,0.33,0.0,"Juan Rodríguez, Zé Pedro, Yerry Mina",0.58,0.29,2,"i titolari valgono 4.2 mln contro i 7.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare con 31 anni o più"
+Cagliari,CC,3.42,9,6,0,5.56,7.0,0.0,0.0,"Harry Winks, Michel Adopo, Joseph Liteta",0.39,0.195,3,reparto coperto
+Cagliari,TD,0.89,1,2,0,5.5,7.0,0.0,1.0,Yukinari Sugawara,-0.4,0.1,4,titolare in scadenza o in prestito fino a giugno
+Cagliari,TS,1.08,6,2,0,8.5,7.0,0.0,1.0,Jacopo Fazzini,-0.82,0.1,5,titolare in scadenza o in prestito fino a giugno
+Cagliari,ATT,0.82,5,2,0,9.0,7.0,0.0,1.0,Daniel Maldini,-0.2,0.1,6,titolare in scadenza o in prestito fino a giugno
+Cagliari,POR,1.0,3,3,0,15.0,7.0,0.0,0.0,Elia Caprile,-1.53,0.0,7,reparto coperto
+Cagliari,ALI,0.0,2,0,0,7.0,7.0,0.0,0.0,,0.22,0.0,8,reparto coperto
+Como,TS,0.95,1,2,0,12.0,30.0,0.0,0.0,Álex Valle,0.79,0.375,1,"i titolari valgono 12.0 mln contro i 30.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre"
+Como,TD,1.37,2,3,0,17.0,30.0,0.0,1.0,Yan Couto,0.07,0.135,2,titolare in scadenza o in prestito fino a giugno
+Como,CC,2.26,7,4,0,27.75,30.0,0.0,0.5,"Máximo Perrone, Samuele Ricci",0.17,0.135,3,titolare in scadenza o in prestito fino a giugno
+Como,POR,1.0,3,3,0,22.0,30.0,0.0,1.0,Robert Sánchez,0.02,0.11,4,titolare in scadenza o in prestito fino a giugno
+Como,ALI,1.61,4,3,0,30.0,30.0,0.0,0.0,"Martin Baturina, Assane Diao",0.22,0.11,5,reparto coperto
+Como,ATT,0.89,2,2,0,32.0,30.0,0.0,0.0,Moise Kean,0.07,0.031,6,reparto coperto
+Como,DC,2.05,7,4,0,34.64,30.0,0.0,0.0,"Trevoh Chalobah, Jacobo Ramón",-0.35,0.0,7,reparto coperto
+Como,TRQ,0.87,2,2,0,80.0,30.0,0.0,0.0,Nico Paz,-1.48,0.0,8,reparto coperto
+Fiorentina,TS,0.84,1,2,1,0.08,20.0,0.0,0.0,Víctor Valdepeñas,7.43,3.371,1,"1 giocatore per 2 posti in rosa (titolari per partita: 0.8); i titolari valgono 0.1 mln contro i 20.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre"
+Fiorentina,POR,1.0,3,3,0,3.5,20.0,1.0,0.0,David de Gea,2.08,1.04,2,"i titolari valgono 3.5 mln contro i 20.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare con 31 anni o più"
+Fiorentina,DC,2.5,4,5,1,10.2,20.0,0.0,0.5,"Radu Drăgușin, Marin Pongracic",0.83,0.565,3,"4 giocatori per 5 posti in rosa (titolari per partita: 2.5); i titolari valgono 10.2 mln contro i 20.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare in scadenza o in prestito fino a giugno"
+Fiorentina,ATT,1.11,3,2,0,18.0,20.0,0.0,0.0,Beto,0.31,0.155,4,reparto coperto
+Fiorentina,TD,0.97,3,2,0,22.0,20.0,0.0,1.0,Álex Jiménez,-0.89,0.1,5,titolare in scadenza o in prestito fino a giugno
+Fiorentina,ALI,1.68,5,3,0,33.54,20.0,0.0,1.0,"Franco Mastantuono, Pedro Gonçalves",-0.52,0.1,6,titolare in scadenza o in prestito fino a giugno
+Fiorentina,CC,2.89,5,5,0,22.57,20.0,0.0,0.0,"Arthur Atta, Christ Inao Oulaï, Cher Ndour",-0.12,0.0,7,reparto coperto
+Fiorentina,TRQ,0.0,1,0,0,20.0,20.0,0.0,0.0,,-0.06,0.0,8,reparto coperto
+Frosinone,POR,1.0,4,3,0,1.3,3.0,0.0,1.0,Sebastiano Desplanches,0.78,0.49,1,"i titolari valgono 1.3 mln contro i 3.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare in scadenza o in prestito fino a giugno"
+Frosinone,DC,2.65,7,5,0,2.16,3.0,0.33,0.33,"Ilario Monterisi, Giorgio Cittadini, Kevin Akpoguma",0.33,0.198,2,titolare con 31 anni o più; titolare in scadenza o in prestito fino a giugno
+Frosinone,CC,2.69,7,5,0,2.76,3.0,0.33,0.33,"Patrizio Masini, Florian Grillitsch, Luis Hasa",0.18,0.123,3,titolare con 31 anni o più; titolare in scadenza o in prestito fino a giugno
+Frosinone,TD,1.11,3,2,0,2.0,3.0,0.0,0.0,Anthony Oyono,-0.16,0.0,4,reparto coperto
+Frosinone,TS,0.95,1,2,0,2.5,3.0,0.0,0.0,Aleksa Terzic,-0.27,0.0,5,reparto coperto
+Frosinone,TRQ,0.58,1,1,0,15.0,3.0,0.0,0.0,Romano Schmid,-2.38,0.0,6,reparto coperto
+Frosinone,ALI,0.81,4,2,0,4.0,3.0,0.0,0.0,Giorgi Kvernadze,-0.19,0.0,7,reparto coperto
+Frosinone,ATT,1.21,3,2,0,8.0,3.0,0.0,0.0,Tomas Bobcek,-1.25,0.0,8,reparto coperto
+Genoa,POR,1.0,3,3,0,4.0,10.0,0.0,0.0,Justin Bijlow,0.89,0.445,1,"i titolari valgono 4.0 mln contro i 10.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre"
+Genoa,TS,0.68,1,2,0,6.0,10.0,0.0,1.0,Mario Mitaj,0.2,0.168,2,titolare in scadenza o in prestito fino a giugno
+Genoa,ATT,1.92,6,4,0,8.94,10.0,0.0,0.0,"Lorenzo Colombo, Vitinha",0.32,0.16,3,reparto coperto
+Genoa,TD,1.79,5,3,0,5.48,10.0,0.0,0.0,"Mikael Egill Ellertsson, Franz-Ethan Meichtry",0.12,0.06,4,reparto coperto
+Genoa,TRQ,0.39,5,1,0,8.5,10.0,0.0,0.0,Tommaso Baldanzi,0.17,0.033,5,reparto coperto
+Genoa,ALI,0.05,2,0,0,10.0,10.0,0.0,0.0,,0.22,0.006,6,reparto coperto
+Genoa,DC,2.79,7,5,0,12.97,10.0,0.0,0.0,"Alessandro Marcandalli, Leo Østigård, Johan Vásquez",-0.52,0.0,7,reparto coperto
+Genoa,CC,2.37,4,4,0,10.61,10.0,0.0,0.0,"Morten Frendrup, Djibril Sow",-0.03,0.0,8,reparto coperto
+Inter,POR,1.0,3,3,0,10.0,50.0,0.0,0.0,Josep Martínez,1.89,0.945,1,"i titolari valgono 10.0 mln contro i 50.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre"
+Inter,TD,1.03,2,2,0,22.0,50.0,0.0,0.0,Luis Henrique,0.44,0.22,2,reparto coperto
+Inter,CC,2.97,8,5,0,41.21,50.0,0.0,0.0,"Nicolò Barella, Petar Sučić, Curtis Jones",0.33,0.165,3,reparto coperto
+Inter,TS,0.79,2,2,0,50.0,50.0,0.0,1.0,Federico Dimarco,-0.54,0.1,4,titolare in scadenza o in prestito fino a giugno
+Inter,DC,3.21,6,6,0,42.12,50.0,0.0,0.0,"Alessandro Bastoni, Yann Bisseck, Carlos Augusto",0.1,0.05,5,reparto coperto
+Inter,TRQ,0.0,0,0,0,50.0,50.0,0.0,0.0,,-0.06,0.0,6,reparto coperto
+Inter,ALI,0.0,1,0,0,50.0,50.0,0.0,0.0,,0.22,0.0,7,reparto coperto
+Inter,ATT,2.0,4,4,0,65.19,50.0,0.0,0.0,"Lautaro Martínez, Marcus Thuram",-0.22,0.0,8,reparto coperto
+Juventus,POR,1.0,4,3,0,18.0,30.0,0.0,1.0,Guglielmo Vicario,0.31,0.255,1,titolare in scadenza o in prestito fino a giugno
+Juventus,ATT,1.13,4,2,0,55.0,30.0,0.0,1.0,Nick Woltemade,-0.71,0.1,2,titolare in scadenza o in prestito fino a giugno
+Juventus,CC,1.74,4,3,0,33.76,30.0,0.0,0.5,"Khéphren Thuram, Pape Matar Sarr",-0.11,0.05,3,titolare in scadenza o in prestito fino a giugno
+Juventus,TS,1.13,2,2,0,20.0,30.0,0.0,0.0,Andrea Cambiaso,0.05,0.025,4,reparto coperto
+Juventus,DC,3.37,7,6,0,29.53,30.0,0.0,0.0,"Bremer, Pierre Kalulu, Lloyd Kelly",-0.12,0.0,5,reparto coperto
+Juventus,TD,0.89,2,2,0,30.0,30.0,0.0,0.0,Weston McKennie,-0.75,0.0,6,reparto coperto
+Juventus,TRQ,0.16,0,0,0,30.0,30.0,0.0,0.0,,-0.06,0.0,7,reparto coperto
+Juventus,ALI,1.58,6,3,0,47.43,30.0,0.0,0.0,"Kenan Yıldız, Francisco Conceição",-0.44,0.0,8,reparto coperto
+Lazio,TD,1.11,2,2,0,2.5,15.0,1.0,0.0,Adam Marusic,1.84,0.92,1,"i titolari valgono 2.5 mln contro i 15.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare con 31 anni o più"
+Lazio,POR,1.0,4,3,0,8.0,15.0,0.0,0.0,Christos Mandas,0.48,0.24,2,reparto coperto
+Lazio,ALI,1.95,4,4,0,13.42,15.0,0.0,0.5,"Gustav Isaksen, Albert Gudmundsson",0.38,0.24,3,titolare in scadenza o in prestito fino a giugno
+Lazio,ATT,1.11,3,2,0,15.0,15.0,0.0,0.0,Andrea Pinamonti,0.16,0.08,4,reparto coperto
+Lazio,CC,2.97,9,5,0,23.3,15.0,0.0,0.33,"Kenneth Taylor, Nicolò Rovella, Davide Frattesi",-0.58,0.033,5,titolare in scadenza o in prestito fino a giugno
+Lazio,DC,1.97,4,4,0,14.42,15.0,0.0,0.0,"Oliver Provstgaard, Danilho Doekhi",-0.09,0.0,6,reparto coperto
+Lazio,TS,0.89,5,2,0,12.0,15.0,0.0,0.0,Nuno Tavares,-0.21,0.0,7,reparto coperto
+Lazio,TRQ,0.0,1,0,0,15.0,15.0,0.0,0.0,,-0.06,0.0,8,reparto coperto
+Lecce,ALI,1.97,3,4,1,2.45,4.0,0.0,1.0,"Santiago Pierotti, Konan N’Dri",0.93,0.69,1,"3 giocatori per 4 posti in rosa (titolari per partita: 2.0); i titolari valgono 2.5 mln contro i 4.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare in scadenza o in prestito fino a giugno"
+Lecce,TD,0.97,2,2,0,2.5,4.0,0.0,1.0,Danilo Veiga,-0.07,0.1,2,titolare in scadenza o in prestito fino a giugno
+Lecce,TS,1.05,4,2,0,3.5,4.0,0.0,1.0,Antonino Gallo,-0.34,0.1,3,titolare in scadenza o in prestito fino a giugno
+Lecce,TRQ,0.32,1,1,0,3.0,4.0,0.0,0.0,Omri Gandelman,0.35,0.056,4,reparto coperto
+Lecce,DC,2.0,7,4,0,8.22,4.0,0.0,0.5,"Tiago Gabriel, Jamil Siebert",-1.19,0.05,5,titolare in scadenza o in prestito fino a giugno
+Lecce,CC,2.68,10,5,0,4.72,4.0,0.0,0.33,"Ivan Ilić, Medon Berisha, Oumar Ngom",-0.18,0.033,6,titolare in scadenza o in prestito fino a giugno
+Lecce,POR,1.0,4,3,0,3.5,4.0,1.0,0.0,Wladimiro Falcone,-0.24,0.0,7,titolare con 31 anni o più
+Lecce,ATT,1.0,3,2,0,5.0,4.0,0.0,0.0,Willem Geubbels,-0.16,0.0,8,reparto coperto
+Milan,CC,3.11,8,6,0,18.47,25.0,0.33,0.0,"Ardon Jashari, Adrien Rabiot, Yunus Musah",0.49,0.245,1,titolare con 31 anni o più
+Milan,TRQ,0.47,2,1,0,40.0,25.0,0.0,1.0,Christian Pulisic,-0.74,0.1,2,titolare in scadenza o in prestito fino a giugno
+Milan,POR,1.0,4,3,0,20.0,25.0,1.0,0.0,Mike Maignan,-0.11,0.0,3,titolare con 31 anni o più
+Milan,DC,2.92,8,5,0,30.22,25.0,0.0,0.0,"Strahinja Pavlović, Mario Gila, Koni De Winter",-0.42,0.0,4,reparto coperto
+Milan,TD,1.08,1,2,0,20.0,25.0,0.0,0.0,Alexis Saelemaekers,-0.43,0.0,5,reparto coperto
+Milan,TS,1.05,2,2,0,22.0,25.0,0.0,0.0,Davide Bartesaghi,-0.35,0.0,6,reparto coperto
+Milan,ALI,0.0,3,0,0,25.0,25.0,0.0,0.0,,0.22,0.0,7,reparto coperto
+Milan,ATT,1.37,2,3,0,30.0,25.0,0.0,0.0,Gonçalo Ramos,-0.1,0.0,8,reparto coperto
+Monza,POR,1.0,3,3,0,2.0,6.0,0.0,1.0,Noel Törnqvist,1.15,0.675,1,"i titolari valgono 2.0 mln contro i 6.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare in scadenza o in prestito fino a giugno"
+Monza,TS,0.95,1,2,0,2.0,6.0,0.0,1.0,Ricardo Mangas,1.05,0.599,2,"i titolari valgono 2.0 mln contro i 6.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare in scadenza o in prestito fino a giugno"
+Monza,DC,2.65,8,5,0,4.72,6.0,0.0,0.67,"Jan Ziolkowski, Saba Goglichidze, Andrea Carboni",0.2,0.167,3,titolare in scadenza o in prestito fino a giugno
+Monza,CC,2.69,5,5,0,5.59,6.0,0.0,0.67,"Ebenezer Akinsanmiro, Matteo Pessina, Michael Folorunsho",0.16,0.147,4,titolare in scadenza o in prestito fino a giugno
+Monza,ALI,0.81,3,2,0,8.0,6.0,0.0,1.0,Jay Robinson,-0.19,0.1,5,titolare in scadenza o in prestito fino a giugno
+Monza,ATT,1.21,4,2,0,7.0,6.0,0.0,1.0,Cyril Ngonge,-0.06,0.1,6,titolare in scadenza o in prestito fino a giugno
+Monza,TRQ,0.58,4,1,0,5.0,6.0,0.0,0.0,Dany Mota,0.2,0.058,7,reparto coperto
+Monza,TD,1.11,3,2,0,5.0,6.0,0.0,0.0,Idrissa Touré,-0.49,0.0,8,reparto coperto
+Napoli,TS,0.97,2,2,0,3.5,22.0,1.0,0.0,Leonardo Spinazzola,2.12,1.028,1,"i titolari valgono 3.5 mln contro i 22.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare con 31 anni o più"
+Napoli,TD,1.42,2,3,0,7.5,22.0,1.0,0.0,Giovanni Di Lorenzo,0.8,0.4,2,"i titolari valgono 7.5 mln contro i 22.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare con 31 anni o più"
+Napoli,ALI,0.45,2,1,0,23.0,22.0,0.0,0.0,David Neres,0.16,0.036,3,reparto coperto
+Napoli,DC,2.68,7,5,0,21.47,22.0,0.0,0.33,"Alessandro Buongiorno, Sam Beukema, Benoît Badiashile",-0.11,0.033,4,titolare in scadenza o in prestito fino a giugno
+Napoli,POR,1.0,3,3,0,20.0,22.0,0.0,0.0,Vanja Milinković-Savić,-0.29,0.0,5,reparto coperto
+Napoli,CC,2.16,4,4,0,28.28,22.0,0.0,0.0,"Scott McTominay, Billy Gilmour",-0.31,0.0,6,reparto coperto
+Napoli,TRQ,1.32,3,3,0,28.0,22.0,0.0,0.0,Alisson Santos,-0.41,0.0,7,reparto coperto
+Napoli,ATT,1.0,3,2,0,60.0,22.0,0.0,0.0,Rasmus Højlund,-1.29,0.0,8,reparto coperto
+Parma,POR,1.0,3,3,0,1.5,10.0,0.0,0.0,Edoardo Corvi,2.31,1.155,1,"i titolari valgono 1.5 mln contro i 10.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre"
+Parma,TS,0.79,2,2,0,3.0,10.0,0.0,0.0,Emanuele Valeri,1.2,0.474,2,"i titolari valgono 3.0 mln contro i 10.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre"
+Parma,ATT,1.39,4,3,0,7.0,10.0,0.0,0.0,Matija Frigan,0.68,0.34,3,"i titolari valgono 7.0 mln contro i 10.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre"
+Parma,DC,3.08,6,6,0,7.11,10.0,0.0,0.33,"Mariano Troilo, Abdoulaye Ndiaye, Enrico Delprato",0.34,0.203,4,titolare in scadenza o in prestito fino a giugno
+Parma,TRQ,0.34,1,1,0,10.0,10.0,0.0,1.0,Giovanni Fabbian,-0.06,0.1,5,titolare in scadenza o in prestito fino a giugno
+Parma,ALI,0.45,1,1,0,13.0,10.0,0.0,1.0,El Bilal Touré,-0.16,0.1,6,titolare in scadenza o in prestito fino a giugno
+Parma,CC,3.08,7,6,0,12.49,10.0,0.0,0.33,"Mandela Keita, Adrián Bernabé, Christian Ordóñez",-0.27,0.033,7,titolare in scadenza o in prestito fino a giugno
+Parma,TD,0.87,4,2,0,10.0,10.0,0.0,0.0,Sascha Britschgi,-0.75,0.0,8,reparto coperto
+Roma,DC,2.79,6,5,0,25.07,35.0,0.0,0.33,"Evan Ndicka, Konstantinos Koulierakis, Leonardo Balerdi",0.33,0.198,1,titolare in scadenza o in prestito fino a giugno
+Roma,TD,0.84,2,2,0,15.0,35.0,0.0,0.0,Nahuel Molina,0.47,0.197,2,reparto coperto
+Roma,TS,1.34,2,3,1,40.0,35.0,0.0,0.0,Wesley,-0.73,0.167,3,2 giocatori per 3 posti in rosa (titolari per partita: 1.3)
+Roma,POR,1.0,4,3,0,35.0,35.0,0.0,0.0,Mile Svilar,-0.43,0.0,4,reparto coperto
+Roma,CC,2.24,4,4,0,38.73,35.0,0.0,0.0,"Manu Koné, Niccolò Pisilli",-0.09,0.0,5,reparto coperto
+Roma,TRQ,1.89,4,4,0,36.47,35.0,0.0,0.0,"Rodrigo Mora, Matías Soulé",-0.12,0.0,6,reparto coperto
+Roma,ALI,0.0,0,0,0,35.0,35.0,0.0,0.0,,0.22,0.0,7,reparto coperto
+Roma,ATT,0.89,3,2,0,45.0,35.0,0.0,0.0,Donyell Malen,-0.2,0.0,8,reparto coperto
+Sassuolo,ATT,1.0,3,2,0,7.0,10.0,0.0,1.0,Kieron Bowie,0.68,0.44,1,"i titolari valgono 7.0 mln contro i 10.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare in scadenza o in prestito fino a giugno"
+Sassuolo,TS,0.97,4,2,0,5.0,10.0,0.0,1.0,Rafa Obrador,0.46,0.323,2,titolare in scadenza o in prestito fino a giugno
+Sassuolo,DC,1.92,5,4,0,7.0,10.0,0.0,0.5,"Jay Idzes, Fedde Leysen",0.37,0.235,3,titolare in scadenza o in prestito fino a giugno
+Sassuolo,TD,1.11,4,2,0,5.0,10.0,0.0,0.0,Sebastian Walukiewicz,0.25,0.125,4,reparto coperto
+Sassuolo,CC,2.97,7,5,0,13.1,10.0,0.0,0.33,"Ismaël Koné, Kristian Thorstvedt, Luca Lipani",-0.33,0.033,5,titolare in scadenza o in prestito fino a giugno
+Sassuolo,POR,1.0,5,3,0,7.5,10.0,0.0,0.0,Arijanet Murić,-0.02,0.0,6,reparto coperto
+Sassuolo,TRQ,0.0,2,0,0,10.0,10.0,0.0,0.0,,-0.06,0.0,7,reparto coperto
+Sassuolo,ALI,2.03,6,4,0,13.78,10.0,0.0,0.0,"Armand Laurienté, Cristian Volpato",-0.24,0.0,8,reparto coperto
+Torino,ATT,1.92,5,4,0,5.92,10.0,0.5,0.5,"Giovanni Simeone, Ché Adams",0.92,0.51,1,"i titolari valgono 5.9 mln contro i 10.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare con 31 anni o più; titolare in scadenza o in prestito fino a giugno"
+Torino,POR,1.0,4,3,0,10.0,10.0,0.0,1.0,Lucas Perri,-0.43,0.1,2,titolare in scadenza o in prestito fino a giugno
+Torino,TS,0.74,5,2,0,10.0,10.0,0.0,1.0,Niccolò Fortini,-0.54,0.1,3,titolare in scadenza o in prestito fino a giugno
+Torino,DC,2.97,4,5,0,8.77,10.0,0.0,0.67,"Pietro Comuzzo, Saúl Coco, Ardian Ismajli",0.04,0.087,4,titolare in scadenza o in prestito fino a giugno
+Torino,CC,3.08,8,6,0,12.16,10.0,0.0,0.67,"Cesare Casadei, Daniel Bragança, Nikola Vlašić",-0.23,0.067,5,titolare in scadenza o in prestito fino a giugno
+Torino,TD,1.29,2,3,0,10.0,10.0,0.0,0.0,Nathan Patterson,-0.75,0.0,6,reparto coperto
+Torino,TRQ,0.0,0,0,0,10.0,10.0,0.0,0.0,,-0.06,0.0,7,reparto coperto
+Torino,ALI,0.0,2,0,0,10.0,10.0,0.0,0.0,,0.22,0.0,8,reparto coperto
+Udinese,TS,0.92,1,2,0,3.0,10.0,1.0,1.0,Hassane Kamara,1.2,0.652,1,"i titolari valgono 3.0 mln contro i 10.0 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre; titolare con 31 anni o più; titolare in scadenza o in prestito fino a giugno"
+Udinese,CC,3.26,6,6,0,7.66,10.0,0.0,0.0,"Jurgen Ekkelenkamp, Lennon Miller, Jakub Piotrowski",0.44,0.22,2,reparto coperto
+Udinese,TD,0.97,3,2,0,4.5,10.0,0.0,0.0,Alessandro Zanoli,0.4,0.194,3,reparto coperto
+Udinese,ATT,1.08,4,2,0,10.0,10.0,0.0,0.0,Keinan Davis,0.16,0.08,4,reparto coperto
+Udinese,DC,3.03,7,5,0,9.3,10.0,0.0,0.33,"Oumar Solet, Nicolò Bertola, Matteo Palma",-0.04,0.033,5,titolare in scadenza o in prestito fino a giugno
+Udinese,POR,1.0,3,3,0,10.0,10.0,0.0,0.0,Maduka Okoye,-0.43,0.0,6,reparto coperto
+Udinese,TRQ,0.74,3,2,0,15.0,10.0,0.0,0.0,Nicolò Zaniolo,-0.65,0.0,7,reparto coperto
+Udinese,ALI,0.0,1,0,0,10.0,10.0,0.0,0.0,,0.22,0.0,8,reparto coperto
+Venezia,ALI,0.81,1,2,0,0.6,5.5,0.0,0.0,Kornel Lisman,3.42,1.385,1,"i titolari valgono 0.6 mln contro i 5.5 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre"
+Venezia,TS,0.95,2,2,0,1.4,5.5,0.0,0.0,Bartol Franjic,1.44,0.684,2,"i titolari valgono 1.4 mln contro i 5.5 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre"
+Venezia,TRQ,0.58,2,1,0,1.8,5.5,0.0,0.0,Thórir Jóhann Helgason,1.55,0.449,3,"i titolari valgono 1.8 mln contro i 5.5 di un titolare tipico della squadra, un distacco più ampio che nelle altre squadre"
+Venezia,TD,1.11,4,2,0,2.5,5.5,0.0,0.0,Thierry Correia,0.39,0.195,4,reparto coperto
+Venezia,CC,2.69,7,5,0,5.6,5.5,0.33,0.33,"Simon Sohm, Gianluca Busio, Alfred Duncan",0.03,0.048,5,titolare con 31 anni o più; titolare in scadenza o in prestito fino a giugno
+Venezia,DC,2.65,7,5,0,5.94,5.5,0.0,0.33,"Armel Bella-Kotchap, Matías Moreno, Redouane Halhal",-0.26,0.033,6,titolare in scadenza o in prestito fino a giugno
+Venezia,POR,1.0,4,3,0,5.0,5.5,0.0,0.0,Filip Stanković,-0.29,0.0,7,reparto coperto
+Venezia,ATT,1.21,5,2,0,15.0,5.5,0.0,0.0,Akor Adams,-1.29,0.0,8,reparto coperto

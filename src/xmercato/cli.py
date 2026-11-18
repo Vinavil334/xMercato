@@ -7,6 +7,8 @@ xmercato rose riconcilia --lista ... apply a list of current squads to the squad
 xmercato storico --da 2014 --a 2026  results, odds and xG for several seasons
 xmercato backtest --da 2020 --a 2025 how the models would have done, against the bookmakers
 xmercato mercato dati --out DIR      player-season table from the Transfermarkt match data
+xmercato mercato suggerisci          needs and candidates of every club for a window
+xmercato mercato verifica            backtest of needs and candidates on past windows
 """
 
 from __future__ import annotations
@@ -15,13 +17,16 @@ import argparse
 import sys
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 from xmercato import rose, rose_sync
-from xmercato.evaluation import backtest
+from xmercato.evaluation import backtest, candidates_backtest, needs_backtest
 from xmercato.features import player_seasons
 from xmercato.ingest import football_data, history, transfermarkt, understat
 from xmercato.models import forecast
+from xmercato.recommend import data as market_data
+from xmercato.recommend import market
 from xmercato.sim import season
 
 
@@ -189,6 +194,76 @@ def _mercato_dati(args: argparse.Namespace) -> None:
     print(f"Scritti in {out}/")
 
 
+def _mercato_suggerisci(args: argparse.Namespace) -> None:
+    data = market_data.load(args.dati)
+    as_of = pd.Timestamp(args.data)
+    model = market.train(data, range(args.da, args.ultima + 1))
+    print("Modello di plausibilità (effetto di una deviazione standard sul log-odds):")
+    print(model.coefficients().to_string(), end="\n\n")
+    squads = rose.read(args.rose)
+    needs, squad = market.needs_now(squads, data, as_of, args.ultima, args.finestra, args.stagione)
+    candidates = market.candidates_now(
+        squad, needs, data, model, as_of, args.ultima, args.per_ruolo, args.stagione
+    )
+    out = Path(args.out)
+    out.mkdir(parents=True, exist_ok=True)
+    tag = f"{args.finestra}_{as_of.year}"
+    needs.drop(columns=["profondita", "divario_grezzo"]).to_csv(
+        out / f"fabbisogni_{tag}.csv", index=False
+    )
+    candidates.to_csv(out / f"candidati_{tag}.csv", index=False)
+    top = needs[needs["rango"] <= 2][["club", "slot", "punteggio", "motivo"]]
+    with pd.option_context("display.width", 200, "display.max_colwidth", 120):
+        print(top.to_string(index=False), end="\n\n")
+    print(f"Scritti {out}/fabbisogni_{tag}.csv e {out}/candidati_{tag}.csv")
+
+
+def _mercato_verifica(args: argparse.Namespace) -> None:
+    data = market_data.load(args.dati)
+    ps, players, transfers = data.player_seasons, data.players, data.transfers
+    train_seasons = range(args.da, args.prova)
+    test_seasons = range(args.prova, args.a + 1)
+    rows = []
+    for window in ("gennaio", "estate"):
+        result = needs_backtest.evaluate(ps, players, transfers, range(args.da, args.a + 1), window)
+        train, test = result[result["season"] < args.prova], result[result["season"] >= args.prova]
+        rows.append(
+            {"finestra": window, "metodo": "fabbisogni", **needs_backtest.summary(test["rango"])}
+        )
+        base = needs_backtest.baseline_ranks(test, train)
+        rows.append(
+            {"finestra": window, "metodo": "ruoli più comprati", **needs_backtest.summary(base)}
+        )
+    print("Fabbisogni: in quale posizione della classifica dei fabbisogni cadono gli acquisti veri")
+    print("(a caso: primo 12,5%, primi 2 25%, primi 3 37,5%)")
+    with pd.option_context("display.width", 160, "display.float_format", "{:.3f}".format):
+        print(pd.DataFrame(rows).to_string(index=False), end="\n\n")
+
+    train = candidates_backtest.window_frames(ps, players, transfers, train_seasons)
+    test = candidates_backtest.window_frames(ps, players, transfers, test_seasons, negatives=None)
+    model = market.fit(train)
+    rng = np.random.default_rng(0)
+    methods = {
+        "modello": model.score(test),
+        "valore vicino al club": -test["rel_valore"].abs().to_numpy(),
+        "a caso": rng.random(len(test)),
+    }
+    rows = []
+    for name, score in methods.items():
+        ranks = candidates_backtest.ranks(test, score)
+        rows.append({"metodo": name, **candidates_backtest.summary(ranks)})
+    pool = sum(len(needs_backtest.arrivals(transfers, needs_backtest.clubs_of_season(ps, s), s, w))
+               for s in test_seasons for w in ("gennaio", "estate"))  # fmt: skip
+    print(
+        f"Candidati: rango degli acquisti veri tra i candidati dello stesso ruolo, {test_seasons}"
+    )
+    print(f"(acquisti da campionati coperti: {int(test['firmato'].sum())} su {pool})")
+    with pd.option_context("display.width", 160, "display.float_format", "{:.3f}".format):
+        print(pd.DataFrame(rows).to_string(index=False))
+    expected = model.probability(test).sum()
+    print(f"\nAcquisti attesi dal modello {expected:.0f}, veri {int(test['firmato'].sum())}")
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(prog="xmercato")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -257,6 +332,25 @@ def main(argv: list[str] | None = None) -> None:
     dati.add_argument("--tm", help="Folder with the *.csv.gz tables (default: download them)")
     dati.add_argument("--da", type=int, default=2018, help="First season (start year)")
     dati.set_defaults(func=_mercato_dati)
+
+    sug = mercato_sub.add_parser("suggerisci", help="Needs and candidates for a window")
+    sug.add_argument("--dati", default="data/mercato", help="Output of `xmercato mercato dati`")
+    sug.add_argument("--rose", default="rose/serie_a_2026_27.csv")
+    sug.add_argument("--stagione", default="2026_27", choices=sorted(rose.SERIE_A))
+    sug.add_argument("--finestra", default="gennaio", choices=["gennaio", "estate"])
+    sug.add_argument("--data", default="2027-01-02", help="Opening date of the window")
+    sug.add_argument("--da", type=int, default=2019, help="First season used for training")
+    sug.add_argument("--ultima", type=int, default=2025, help="Last season with match data")
+    sug.add_argument("--per-ruolo", type=int, default=40, help="Candidates per club and slot")
+    sug.add_argument("--out", default="mercato")
+    sug.set_defaults(func=_mercato_suggerisci)
+
+    ver = mercato_sub.add_parser("verifica", help="Backtest of needs and candidates")
+    ver.add_argument("--dati", default="data/mercato")
+    ver.add_argument("--da", type=int, default=2019, help="First season")
+    ver.add_argument("--prova", type=int, default=2023, help="First test season")
+    ver.add_argument("--a", type=int, default=2025, help="Last season")
+    ver.set_defaults(func=_mercato_verifica)
 
     args = parser.parse_args(argv)
     args.func(args)

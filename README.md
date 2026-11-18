@@ -11,10 +11,11 @@ xMercato vuole rispondere a tre domande collegate:
 I tre pezzi si alimentano a vicenda: le proiezioni dei giocatori cambiano la forza di una rosa, e la forza
 della rosa guida la classifica simulata. Così ogni acquisto suggerito si può valutare in punti attesi.
 
-> **Stato: agli inizi.** Il simulatore interattivo della classifica funziona. Il resto è progettato ma non
-> ancora costruito. Vedi la [roadmap](docs/ROADMAP.md).
+> **Stato: prima versione.** Funzionano il simulatore della classifica e la pagina del mercato di gennaio
+> (fabbisogni e candidati, senza ancora la probabilità di *buon* acquisto). Le proiezioni dei giocatori
+> sono il prossimo passo. Vedi la [roadmap](docs/ROADMAP.md).
 
-## Il simulatore
+## L'app
 
 ```bash
 git clone https://github.com/Vinavil334/xMercato.git
@@ -23,7 +24,7 @@ uv sync --extra dev
 uv run streamlit run app/streamlit_app.py
 ```
 
-Nell'app si può:
+Ha due pagine, **Classifica** e **Mercato** (sotto). Nella classifica si può:
 
 - scegliere fino a che data usare i risultati, per rivedere il campionato com'era in quel momento;
 - rendere una squadra più o meno forte (gol fatti e gol subiti) e vedere come cambiano punti attesi e
@@ -76,6 +77,19 @@ uv run xmercato backtest --da 2020 --a 2025
 Risultati del backtest in [docs/STUDIO.md](docs/STUDIO.md#verifica-sul-passato-backtest): con le
 stagioni precedenti il modello recupera più di metà della distanza dai bookmaker.
 
+## Il mercato
+
+La pagina **Mercato** dell'app mostra, per ogni squadra, dove la rosa è più debole e i candidati per
+ogni ruolo, ordinati per probabilità che il club li prenda a gennaio 2027. Sulle finestre 2023–2025 il
+43% degli acquisti veri era tra i primi 50 candidati del suo ruolo (su circa 1.200). Come funziona e
+cosa non fa: [docs/STUDIO.md](docs/STUDIO.md#versione-di-gennaio-2027-fase-g).
+
+```bash
+uv run xmercato mercato dati          # tabelle da Transfermarkt (o dal workflow "Dati mercato")
+uv run xmercato mercato suggerisci    # fabbisogni e candidati in mercato/
+uv run xmercato mercato verifica      # verifica sulle finestre passate
+```
+
 ## Le rose
 
 Le rose 2026/27 delle 20 squadre sono in [`rose/serie_a_2026_27.csv`](rose/serie_a_2026_27.csv): 588
@@ -111,7 +125,8 @@ Il codice è rilasciato con [licenza MIT](LICENSE). Di dati di terze parti, la r
 - un file di risultati di pubblico dominio, usato dai test e come riserva dall'app
   (da [datasets/football-datasets](https://github.com/datasets/football-datasets), fonte football-data.co.uk);
 - le rose in `rose/`, partite dal dataset [transfermarkt-datasets](https://github.com/dcaribou/transfermarkt-datasets)
-  (fonte Transfermarkt) e aggiornate con le fonti elencate in `rose/fonti/`.
+  (fonte Transfermarkt) e aggiornate con le fonti elencate in `rose/fonti/`;
+- i fabbisogni e i candidati in `mercato/`, calcolati dallo stesso dataset (licenza CC0).
 Ogni fonte mantiene le proprie condizioni d'uso: vedi [docs/DATI.md](docs/DATI.md).
 
 È un progetto personale e non commerciale. I risultati sono stime, non consigli per scommesse o investimenti.

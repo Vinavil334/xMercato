@@ -72,6 +72,54 @@ variazione dei punti attesi (dal modello D).
   Prestiti con diritto o obbligo di riscatto, molto usati in Serie A, complicano il costo.
   Volontà del giocatore, procuratori e stipendi non si osservano.
 
+#### Versione di gennaio 2027 (fase G)
+
+Prima versione, costruita con quello che c'è oggi: rose verificate a mano, minuti e formazioni dal
+dataset Transfermarkt (14 campionati europei, fino al 2025/26), valori di luglio 2026. Codice in
+`src/xmercato/recommend/`, risultati in `mercato/`, pagina **Mercato** nell'app.
+
+- **Fabbisogni** (`needs.py`). Otto ruoli (portiere, centrale, terzino o esterno destro e sinistro,
+  centrocampista centrale, trequartista o seconda punta, esterno d'attacco, centravanti). Per ognuno:
+  quanti giocatori ci sono contro quanti ne servono col modulo usato l'anno scorso (un ricambio per
+  titolare, tre portieri; i giocatori in più di un ruolo vicino contano mezzo); quanto valgono i
+  titolari rispetto a un titolare tipico della squadra, al netto del distacco che c'è di solito in quel
+  ruolo; età e contratti in scadenza.
+- **Candidati** (`candidates.py`). Tutti i giocatori visti nel 2025/26 nei 14 campionati. Un modello
+  logistico, addestrato sugli acquisti dei club di Serie A dal 2019 contro un campione dei non
+  acquistati, stima la probabilità che *quel* club prenda *quel* giocatore nella finestra. Conta
+  soprattutto il prezzo rispetto al livello del club (né troppo caro né troppo poco), poi età,
+  esperienza in Serie A, minuti giocati, nazionalità e rapporti precedenti tra i due club.
+- **Ruolo previsto.** Titolare se il candidato vale almeno quanto i titolari attuali del ruolo,
+  rotazione se almeno la metà, altrimenti riserva: è il ruolo con cui verrà giudicato il "buon acquisto".
+
+**Verifica** (`uv run xmercato mercato verifica`): addestramento sulle finestre 2019–2022, prova sulle
+2023–2025, ricostruendo ogni volta la rosa e il mercato con quello che si sapeva prima della finestra.
+
+| Candidati: dove cadeva l'acquisto vero tra i circa 1.200 candidati del suo ruolo | Primi 10 | Primi 50 | Rango mediano |
+|---|---|---|---|
+| Modello | **18%** | **43%** | **73** |
+| Giocatori col valore più vicino a quello della squadra | 5% | 24% | 125 |
+| A caso | 0,2% | 4% | 570 |
+
+Le probabilità sono calibrate: sulle finestre di prova il modello si aspettava 407 acquisti dai
+campionati coperti, ce ne sono stati 468. Due acquisti su tre arrivano da questi campionati; il terzo
+da Serie B, Sudamerica e campionati senza statistiche nel dataset, che la lista non vede.
+
+| Fabbisogni: acquisti veri caduti nei due ruoli più "urgenti" | Gennaio | Estate |
+|---|---|---|
+| Classifica dei fabbisogni | 23% | 24% |
+| Ruoli comprati più spesso (centrocampo e difesa centrale) | 38% | 37% |
+| A caso | 25% | 25% |
+
+**I fabbisogni non prevedono dove compra un club.** Nemmeno la profondità da sola: i reparti corti
+non vengono rinforzati più spesso degli altri. Le cause probabili: partenze e infortuni che una rosa
+ricostruita dalle presenze non mostra, acquisti di occasione, giovani presi per essere girati in
+prestito. Per questo nell'app la classifica dei fabbisogni è presentata come una lettura della rosa,
+non come una previsione; resta utile per scegliere in quale ruolo guardare i candidati.
+
+**Cosa manca ancora:** la probabilità di *buon* acquisto (servono le proiezioni dei giocatori, fasi 2-4)
+e i campionati senza statistiche.
+
 ### D. Classifica
 
 - **Modello attuale.** Forza in attacco e in difesa di ogni squadra con un modello di Poisson, poi
@@ -169,6 +217,7 @@ Registro delle scelte, con la data. Si cambia idea aggiungendo una riga, non can
 | 16/11/2026 | **Soglia dei minuti** | Non è fissa: dipende dal ruolo per cui il giocatore è stato preso. Un secondo portiere che fa il secondo portiere è un acquisto riuscito |
 | 16/11/2026 | **Acquisti di gennaio** | Stessa definizione, valutata sulla stagione e mezza disponibile |
 | 16/11/2026 | **Simulatore interattivo** | Previsto, in tre livelli crescenti (vedi [ROADMAP.md](ROADMAP.md#simulatore-interattivo)) |
+| 18/11/2026 | **Mercato di gennaio** | Fabbisogni come lettura della rosa (la verifica mostra che non prevedono gli acquisti); candidati ordinati per probabilità che il club li prenda, con il ruolo previsto. La probabilità di buon acquisto arriva con le fasi 2-4 |
 | 17/11/2026 | **Modello della classifica** | Due stagioni precedenti, metà peso ogni 270 giorni, neopromosse sotto la media, solo gol. Gli xG non migliorano in modo misurabile e non hanno una fonte aggiornata: restano nel backtest, fuori dall'app |
 
 ### Come si applica la definizione di "buon acquisto"

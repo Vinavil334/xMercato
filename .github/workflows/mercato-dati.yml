@@ -1,8 +1,8 @@
 name: Dati mercato
 
 # Builds the player-season table (minutes, starts, positions, goals, values) from the public
-# Transfermarkt dataset and keeps it as a workflow artifact for 30 days. Nothing is committed
-# (about five minutes).
+# Transfermarkt dataset, keeps it as a workflow artifact for 30 days and puts the backtest of
+# needs and candidates in the run summary. Nothing is committed (about five minutes).
 
 on:
   workflow_dispatch:
@@ -10,10 +10,6 @@ on:
       da:
         description: "Prima stagione (anno di inizio)"
         default: "2018"
-  # Temporary: runs from the branch that introduces this workflow.
-  push:
-    branches: [mercato-gennaio]
-    paths: [.github/workflows/mercato-dati.yml]
 
 defaults:
   run:
@@ -43,9 +39,11 @@ jobs:
           name: dati-mercato
           path: mercato/
           retention-days: 30
-      - name: Copia nel log
+      - name: Verifica di fabbisogni e candidati
         run: |
-          tar czf - -C mercato . | base64 -w 0 > dump.b64
-          echo "=====BEGIN mercato.tar.gz.b64====="
-          cat dump.b64; echo
-          echo "=====END mercato.tar.gz.b64====="
+          {
+            echo '### Verifica sulle finestre passate'
+            echo '```'
+            uv run xmercato mercato verifica --dati mercato
+            echo '```'
+          } | tee -a "$GITHUB_STEP_SUMMARY"
