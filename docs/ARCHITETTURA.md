@@ -61,7 +61,7 @@ senza dati grezzi delle fonti.
 
 ```
 src/xmercato/
-├── ingest/       # un modulo per fonte            (football_data: fatto)
+├── ingest/       # un modulo per fonte            (football_data, transfermarkt: fatti)
 ├── features/     # tabelle giocatore-stagione e club-stagione
 ├── models/       # poisson (fatto), proiezioni, valore, successo acquisti
 ├── recommend/    # fabbisogno, plausibilità, lista per club
@@ -69,7 +69,7 @@ src/xmercato/
 ├── samples/      # una stagione completa per test ed esempi
 └── cli.py        # xmercato simulate ...          (fatto)
 app/              # Streamlit: simulatore di livello 1 (fatto)
-rose/             # rose compilate a mano, un CSV per stagione
+rose/             # rose compilate a mano, un CSV per stagione (formato e controllo: xmercato.rose)
 tests/            # ogni modello ha un test su dati sintetici a parametri noti
 docs/             # questi documenti
 ```

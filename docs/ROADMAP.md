@@ -23,7 +23,7 @@ lista dei candidati, non la verifica della classifica.
 
 | Fase | Contenuto | Durata | Finita quando |
 |---|---|---|---|
-| **0. Fondamenta** | Repo, CI, struttura dati, caricamento risultati, simulatore di base | 1-2 sett. | *In buona parte fatta.* Mancano i caricatori Transfermarkt e Understat e le rose a mano |
+| **0. Fondamenta** | Repo, CI, struttura dati, caricamento risultati, simulatore di base | 1-2 sett. | *In buona parte fatta.* Caricatore Transfermarkt e rose 2026/27 verificate; manca il caricatore Understat |
 | **1. Classifica** | Forza da xG, peso alle partite recenti, Dixon-Coles, stima pre-stagionale dal valore della rosa | 2-3 sett. | Verifica su 10 stagioni: log-loss per partita confrontata con le quote dei bookmaker; errore sui punti finali |
 | **1b. Simulatore, livello 1** | App Streamlit: classifica simulata, cursori sulla forza delle squadre, risultati forzati | 1-2 sett. | *Costruito e provato in locale.* Manca la pubblicazione online, e la prova con i dati della stagione in corso |
 | **G. Mercato di gennaio** | Fabbisogno per ruolo dalle rose a mano; candidati per somiglianza statistica, età e costo | 2-3 sett. | Una pagina per club. *Traguardo di gennaio* |
@@ -67,5 +67,5 @@ codice: budget iniziali, mercato libero o ad asta, quanto pesa il caso, cosa suc
 ## Prossimi tre passi
 
 1. **Pubblicare il simulatore** su Streamlit Community Cloud e controllare che scarichi la stagione in corso.
-2. **Rose 2026/27**: creare `rose/serie_a_2026_27.csv` nel formato descritto in [DATI.md](DATI.md#rose-raccolte-a-mano).
+2. **Rose di gennaio 2027**: a fine mercato invernale, aggiornare l'elenco delle fonti e rilanciare `xmercato rose riconcilia` (procedura in [DATI.md](DATI.md#aggiornamento-automatico-da-una-lista-delle-rose-attuali)).
 3. **Caricatore Understat** per la Serie A (xG per partita) e confronto gol contro xG nel modello della classifica.

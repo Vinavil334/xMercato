@@ -63,6 +63,18 @@ Il modello è volutamente semplice: forza in attacco e in difesa di ogni squadra
 un modello di Poisson penalizzato, poi simulazione Monte Carlo delle partite rimanenti. A parità di punti
 decide la differenza reti, non gli scontri diretti come nel regolamento della Serie A.
 
+## Le rose
+
+Le rose 2026/27 delle 20 squadre sono in [`rose/serie_a_2026_27.csv`](rose/serie_a_2026_27.csv): 588
+giocatori, verificati incrociando l'ultimo snapshot Transfermarkt, le voci Wikipedia dei club e il
+riepilogo dei trasferimenti di Tuttomercatoweb. Per controllare il file:
+
+```bash
+uv run xmercato rose controlla rose/serie_a_2026_27.csv
+```
+
+Formato e procedura di aggiornamento sono in [docs/DATI.md](docs/DATI.md#rose-raccolte-a-mano).
+
 ## Documentazione
 
 | Documento | Contenuto |
@@ -81,9 +93,12 @@ make app     # avvia il simulatore in locale
 
 ## Dati e licenza
 
-Il codice è rilasciato con [licenza MIT](LICENSE). La repo non contiene dati di terze parti, a parte un
-piccolo file di risultati di pubblico dominio usato dai test e come riserva dall'app
-(da [datasets/football-datasets](https://github.com/datasets/football-datasets), fonte football-data.co.uk).
+Il codice è rilasciato con [licenza MIT](LICENSE). Di dati di terze parti, la repo contiene solo:
+
+- un file di risultati di pubblico dominio, usato dai test e come riserva dall'app
+  (da [datasets/football-datasets](https://github.com/datasets/football-datasets), fonte football-data.co.uk);
+- le rose in `rose/`, partite dal dataset [transfermarkt-datasets](https://github.com/dcaribou/transfermarkt-datasets)
+  (fonte Transfermarkt) e aggiornate con le fonti elencate in `rose/fonti/`.
 Ogni fonte mantiene le proprie condizioni d'uso: vedi [docs/DATI.md](docs/DATI.md).
 
 È un progetto personale e non commerciale. I risultati sono stime, non consigli per scommesse o investimenti.
