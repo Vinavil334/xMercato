@@ -9,6 +9,10 @@ on:
   schedule:
     - cron: "17 5 * * 2"
   workflow_dispatch:
+  # Temporary: first run from the branch that introduces this workflow (does not commit).
+  push:
+    branches: [rendimento-stagione]
+    paths: [.github/workflows/aggiorna-mercato.yml]
 
 permissions:
   contents: write
@@ -57,7 +61,12 @@ jobs:
         run: |
           uv run xmercato mercato suggerisci --storico data/storico/serie_a.csv $SCORERS \
             | tail -n 45 | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Controllo
+        run: |
+          [ -f data/rendimento/marcatori.csv ] && head -3 data/rendimento/marcatori.csv && wc -l data/rendimento/marcatori.csv
+          grep -E "^(Juventus|Atalanta|Inter)," mercato/fabbisogni_gennaio_2027.csv | head -24 | cut -c1-400
       - name: Salva in main
+        if: github.ref == 'refs/heads/main'
         run: |
           if git diff --quiet -- mercato/; then
             echo "Nessuna novità."; exit 0
