@@ -66,6 +66,6 @@ codice: budget iniziali, mercato libero o ad asta, quanto pesa il caso, cosa suc
 
 ## Prossimi tre passi
 
-1. **Pubblicare l'app** su Streamlit Community Cloud (classifica e mercato) e controllare che scarichi la stagione in corso.
+1. ~~Pubblicare l'app~~: fatto, [xmercato.streamlit.app](https://xmercato.streamlit.app) (scarica da sola la stagione in corso).
 2. **Aggiornare a fine gennaio 2027**: rose dopo il mercato invernale (`xmercato rose riconcilia`, procedura in [DATI.md](DATI.md#aggiornamento-automatico-da-una-lista-delle-rose-attuali)), poi `xmercato mercato suggerisci --finestra estate`.
 3. **Fase 2, anagrafica e proiezioni**: è la base della probabilità di buon acquisto, che oggi manca ai candidati.

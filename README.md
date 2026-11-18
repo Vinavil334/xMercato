@@ -17,6 +17,9 @@ della rosa guida la classifica simulata. Così ogni acquisto suggerito si può v
 
 ## L'app
 
+**Online: [xmercato.streamlit.app](https://xmercato.streamlit.app)** (Streamlit Community Cloud, si
+aggiorna a ogni modifica di `main`). Per farla girare in locale:
+
 ```bash
 git clone https://github.com/Vinavil334/xMercato.git
 cd xMercato
