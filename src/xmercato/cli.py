@@ -6,6 +6,7 @@ xmercato rose controlla FILE         check a hand-maintained squad file
 xmercato rose riconcilia --lista ... apply a list of current squads to the squad file
 xmercato storico --da 2014 --a 2026  results, odds and xG for several seasons
 xmercato backtest --da 2020 --a 2025 how the models would have done, against the bookmakers
+xmercato mercato dati --out DIR      player-season table from the Transfermarkt match data
 """
 
 from __future__ import annotations
@@ -18,6 +19,7 @@ import pandas as pd
 
 from xmercato import rose, rose_sync
 from xmercato.evaluation import backtest
+from xmercato.features import player_seasons
 from xmercato.ingest import football_data, history, transfermarkt, understat
 from xmercato.models import forecast
 from xmercato.sim import season
@@ -140,6 +142,53 @@ def _backtest(args: argparse.Namespace) -> None:
         print(f"\nDettagli in {out}/")
 
 
+def _mercato_dati(args: argparse.Namespace) -> None:
+    def load(table: str) -> pd.DataFrame:
+        print(f"Leggo {table}…", flush=True)
+        return transfermarkt.load_table(table, args.tm)
+
+    competitions = load("competitions")
+    clubs = load("clubs")
+    table = player_seasons.build(
+        load("appearances"),
+        load("game_lineups"),
+        load("games"),
+        competitions,
+        load("player_valuations"),
+        first_season=args.da,
+    )
+    players = load("players")
+    transfers = load("transfers")
+
+    out = Path(args.out)
+    out.mkdir(parents=True, exist_ok=True)
+    table.to_csv(out / "giocatori_stagioni.csv.gz", index=False)
+    keep = set(table["player_id"]) | set(transfers["player_id"])
+    players = players[players["player_id"].isin(keep)]
+    players.drop(
+        columns=["image_url", "url", "player_code", "city_of_birth"], errors="ignore"
+    ).to_csv(out / "giocatori.csv.gz", index=False)
+    italian = set(clubs.loc[clubs["domestic_competition_id"] == "IT1", "club_id"])
+    italian |= set(table.loc[table["competition_id"] == "IT1", "club_id"])
+    date = pd.to_datetime(transfers["transfer_date"], errors="coerce")
+    moves = transfers[
+        (date >= f"{args.da}-01-01")
+        & (transfers["to_club_id"].isin(italian) | transfers["from_club_id"].isin(italian))
+    ]
+    moves.to_csv(out / "trasferimenti_serie_a.csv.gz", index=False)
+    clubs.drop(columns=["filename", "url"], errors="ignore").to_csv(
+        out / "club.csv.gz", index=False
+    )
+    competitions.to_csv(out / "campionati.csv.gz", index=False)
+
+    counts = table.groupby(["competition_id", "season"]).size().unstack(fill_value=0)
+    with pd.option_context("display.width", 200, "display.max_rows", 100):
+        print(counts.to_string(), end="\n\n")
+    print(f"{len(table)} righe giocatore-stagione, {len(players)} giocatori, ", end="")
+    print(f"{len(moves)} trasferimenti")
+    print(f"Scritti in {out}/")
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(prog="xmercato")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -200,6 +249,14 @@ def main(argv: list[str] | None = None) -> None:
     bt.add_argument("--n-sims", type=int, default=2000)
     bt.add_argument("--out", help="Folder for per-match and per-table details")
     bt.set_defaults(func=_backtest)
+
+    mercato = sub.add_parser("mercato", help="Transfer market")
+    mercato_sub = mercato.add_subparsers(dest="mercato_command", required=True)
+    dati = mercato_sub.add_parser("dati", help="Player-season table from Transfermarkt match data")
+    dati.add_argument("--out", default="data/mercato")
+    dati.add_argument("--tm", help="Folder with the *.csv.gz tables (default: download them)")
+    dati.add_argument("--da", type=int, default=2018, help="First season (start year)")
+    dati.set_defaults(func=_mercato_dati)
 
     args = parser.parse_args(argv)
     args.func(args)

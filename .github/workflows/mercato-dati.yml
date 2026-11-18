@@ -1,7 +1,14 @@
 name: Dati mercato
 
+# Builds the player-season table (minutes, starts, positions, goals, values) from the public
+# Transfermarkt dataset and keeps it as a workflow artifact for 30 days. Nothing is committed.
+
 on:
   workflow_dispatch:
+    inputs:
+      da:
+        description: "Prima stagione (anno di inizio)"
+        default: "2018"
   # Temporary: runs from the branch that introduces this workflow.
   push:
     branches: [mercato-gennaio]
@@ -12,21 +19,32 @@ defaults:
     shell: bash
 
 jobs:
-  schema:
+  mercato:
     runs-on: ubuntu-latest
     steps:
-      - name: Schema delle tabelle
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --locked
+      - name: Scarica le tabelle Transfermarkt
         run: |
-          set +o pipefail
-          for t in appearances game_lineups games competitions player_valuations transfers club_games clubs players game_events; do
-            curl -fsSL --retry 3 -o "$t.csv.gz" "https://pub-e682421888d945d684bcae8890b0ec20.r2.dev/data/$t.csv.gz" || { echo "MISSING $t"; continue; }
-            echo "=== $t $(stat -c %s $t.csv.gz) bytes, $(zcat $t.csv.gz | wc -l) lines"
-            zcat "$t.csv.gz" | head -4
+          mkdir -p "$RUNNER_TEMP/tm"
+          for t in appearances game_lineups games competitions player_valuations players clubs transfers; do
+            curl -fsSL --retry 3 -o "$RUNNER_TEMP/tm/$t.csv.gz" \
+              "https://pub-e682421888d945d684bcae8890b0ec20.r2.dev/data/$t.csv.gz"
           done
-          echo "=== competitions"; zcat competitions.csv.gz
-          echo "=== lineup positions"; zcat game_lineups.csv.gz | python3 -c "
-          import csv,sys,collections
-          r=csv.DictReader(sys.stdin); c=collections.Counter((x['type'],x['position']) for x in r); print(c.most_common(40))"
-          echo "=== seasons in games"; zcat games.csv.gz | python3 -c "
-          import csv,sys,collections
-          r=csv.DictReader(sys.stdin); c=collections.Counter((x['competition_id'],x['season']) for x in r if x['competition_id']=='IT1'); print(sorted(c.items()))"
+          ls -la "$RUNNER_TEMP/tm"
+      - name: Costruisci le tabelle
+        run: |
+          uv run xmercato mercato dati --tm "$RUNNER_TEMP/tm" --out mercato --da "${{ inputs.da || '2018' }}" \
+            | tee -a "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dati-mercato
+          path: mercato/
+          retention-days: 30
+      - name: Copia nel log
+        run: |
+          tar czf - -C mercato . | base64 -w 0 > dump.b64
+          echo "=====BEGIN mercato.tar.gz.b64====="
+          cat dump.b64; echo
+          echo "=====END mercato.tar.gz.b64====="
