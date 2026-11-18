@@ -1,7 +1,8 @@
 name: Dati mercato
 
 # Builds the player-season table (minutes, starts, positions, goals, values) from the public
-# Transfermarkt dataset and keeps it as a workflow artifact for 30 days. Nothing is committed.
+# Transfermarkt dataset and keeps it as a workflow artifact for 30 days. Nothing is committed
+# (about five minutes).
 
 on:
   workflow_dispatch:
