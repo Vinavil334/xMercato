@@ -47,6 +47,28 @@ Stato verificato il **16 novembre 2026**. Le fonti gratuite di dati calcistici c
    cartellino stimato e abitudini di spesa del club.
 4. **Difensori e portieri.** Le statistiche pubbliche misurano bene chi tira e chi rifinisce, male gli altri.
 
+## Storico per la classifica
+
+`uv run xmercato storico --a 2026 --tiri serie_a_shot_data.rds` costruisce `data/storico/serie_a.csv`:
+una riga per partita di Serie A dal 2014/15, con risultato, xG delle due squadre e quote di chiusura.
+Su GitHub lo stesso comando gira nel workflow **Dati storici** (avvio a mano dalla scheda Actions), che
+pubblica la tabella come artefatto.
+
+| Pezzo | Fonte | Copertura |
+|---|---|---|
+| Risultati e quote 1X2 | football-data.co.uk. Quote di chiusura Pinnacle (`PSC*`) quando ci sono, altrimenti la media di chiusura del mercato (`AvgC*`) | Tutte le stagioni, compresa quella in corso |
+| xG per partita | Somma degli xG dei tiri nell'archivio Understat di [worldfootballR_data](https://github.com/JaseZiv/worldfootballR_data) (`understat_shots/serie_a_shot_data.rds`, letto con il pacchetto `rdata`: `uv sync --extra storico`) | Complete dal 2014/15 al 2023/24; 181 partite su 380 nel 2024/25; niente dopo |
+
+I nomi delle squadre delle due fonti vengono allineati (`src/xmercato/ingest/teams.py`); le partite si
+abbinano per squadre e stagione, e una data diversa di più di tre giorni (per esempio una partita
+sospesa e ripresa) produce un avviso.
+
+**Il buco: xG della stagione in corso.** L'archivio è fermo e il sito di Understat non è stato toccato
+dal progetto. Per la classifica non è un problema, perché il backtest mostra che gli xG migliorano le
+previsioni di poco (vedi [STUDIO.md](STUDIO.md#verifica-sul-passato-backtest)) e il modello in uso
+lavora sui soli gol. Torneranno necessari per le proiezioni dei giocatori (fase 2): allora andrà scelta
+una fonte aggiornata, valutandone i termini d'uso.
+
 ## Rose raccolte a mano
 
 Un file CSV per stagione, versionato nella repo: [`rose/serie_a_2026_27.csv`](../rose/serie_a_2026_27.csv),

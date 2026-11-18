@@ -20,6 +20,7 @@ from dataclasses import dataclass, replace
 import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
+from scipy.stats import poisson as poisson_dist
 
 
 @dataclass(frozen=True)
@@ -71,12 +72,20 @@ def fit(
     results: pd.DataFrame,
     teams: list[str] | None = None,
     shrinkage: float = 2.0,
+    weights: np.ndarray | None = None,
+    target: tuple[str, str] = ("home_goals", "away_goals"),
+    prior: dict[str, tuple[float, float]] | None = None,
 ) -> TeamStrengths:
     """Fit team strengths by penalised maximum likelihood.
 
-    ``results`` needs columns ``home, away, home_goals, away_goals``.
-    ``teams`` lets the caller include sides with no matches yet: they get league-average
-    strength. ``shrinkage`` is the L2 penalty weight; 0 gives the plain Maher model.
+    ``results`` needs columns ``home``, ``away`` and the two ``target`` columns: goals by
+    default, but any non-negative rate works (xG, or a mix of goals and xG).
+    ``teams`` lets the caller include sides with no matches yet.
+    ``shrinkage`` is the L2 penalty weight; 0 gives the plain Maher model.
+    ``weights`` (one per match) down-weights old matches.
+    ``prior`` maps a team to the (attack, defence) values its parameters are shrunk
+    towards; other teams are shrunk towards 0, the league average. It lets a promoted
+    side start below average instead of at it.
     """
     if teams is None:
         teams = sorted(set(results["home"]) | set(results["away"]))
@@ -86,10 +95,18 @@ def fit(
 
     index = {team: k for k, team in enumerate(teams)}
     n = len(teams)
-    h = results["home"].map(index).to_numpy()
-    a = results["away"].map(index).to_numpy()
-    gh = results["home_goals"].to_numpy(dtype=float)
-    ga = results["away_goals"].to_numpy(dtype=float)
+    h = results["home"].map(index).to_numpy(dtype=int)
+    a = results["away"].map(index).to_numpy(dtype=int)
+    gh = results[target[0]].to_numpy(dtype=float)
+    ga = results[target[1]].to_numpy(dtype=float)
+    w = np.ones(len(results)) if weights is None else np.asarray(weights, dtype=float)
+    if len(w) != len(results) or (w < 0).any():
+        raise ValueError("`weights` needs one non-negative value per match")
+    att0 = np.zeros(n)
+    dfn0 = np.zeros(n)
+    for team, (att_prior, dfn_prior) in (prior or {}).items():
+        if team in index:
+            att0[index[team]], dfn0[index[team]] = att_prior, dfn_prior
 
     def unpack(x: np.ndarray) -> tuple[np.ndarray, np.ndarray, float, float]:
         return x[:n], x[n : 2 * n], x[2 * n], x[2 * n + 1]
@@ -99,18 +116,19 @@ def fit(
         log_h = mu + home + att[h] - dfn[a]
         log_a = mu + att[a] - dfn[h]
         lam_h, lam_a = np.exp(log_h), np.exp(log_a)
-        nll = np.sum(lam_h - gh * log_h) + np.sum(lam_a - ga * log_a)
-        nll += 0.5 * shrinkage * (att @ att + dfn @ dfn)
+        d_att, d_dfn = att - att0, dfn - dfn0
+        nll = w @ (lam_h - gh * log_h) + w @ (lam_a - ga * log_a)
+        nll += 0.5 * shrinkage * (d_att @ d_att + d_dfn @ d_dfn)
 
-        res_h, res_a = lam_h - gh, lam_a - ga
-        g_att = np.bincount(h, res_h, n) + np.bincount(a, res_a, n) + shrinkage * att
-        g_dfn = -np.bincount(a, res_h, n) - np.bincount(h, res_a, n) + shrinkage * dfn
+        res_h, res_a = w * (lam_h - gh), w * (lam_a - ga)
+        g_att = np.bincount(h, res_h, n) + np.bincount(a, res_a, n) + shrinkage * d_att
+        g_dfn = -np.bincount(a, res_h, n) - np.bincount(h, res_a, n) + shrinkage * d_dfn
         grad = np.concatenate([g_att, g_dfn, [res_h.sum() + res_a.sum(), res_h.sum()]])
         return float(nll), grad
 
-    x0 = np.zeros(2 * n + 2)
-    if len(results):
-        x0[2 * n] = np.log(max((gh.sum() + ga.sum()) / (2 * len(results)), 0.1))
+    x0 = np.concatenate([att0, dfn0, [0.0, 0.0]])
+    if len(results) and w.sum() > 0:
+        x0[2 * n] = np.log(max((w @ gh + w @ ga) / (2 * w.sum()), 0.1))
     opt = minimize(objective, x0, jac=True, method="L-BFGS-B")
     if not opt.success:
         raise RuntimeError(f"Poisson fit did not converge: {opt.message}")
@@ -125,3 +143,29 @@ def fit(
         mu=float(mu + shift_att - shift_dfn),
         home_adv=float(home),
     )
+
+
+def decay_weights(dates: pd.Series, as_of: pd.Timestamp, half_life_days: float) -> np.ndarray:
+    """Weight 1 for a match played on ``as_of``, halving every ``half_life_days`` before."""
+    age = (pd.Timestamp(as_of) - pd.to_datetime(dates)).dt.days.to_numpy(dtype=float)
+    return 0.5 ** (np.clip(age, 0, None) / half_life_days)
+
+
+def outcome_probabilities(
+    lam_home: np.ndarray, lam_away: np.ndarray, max_goals: int = 15
+) -> np.ndarray:
+    """Home win, draw, away win probabilities for independent Poisson scores.
+
+    Returns an array of shape (n_matches, 3).
+    """
+    lam_home, lam_away = np.atleast_1d(lam_home), np.atleast_1d(lam_away)
+    goals = np.arange(max_goals + 1)
+    ph = poisson_dist.pmf(goals[None, :], lam_home[:, None])  # (n, g)
+    pa = poisson_dist.pmf(goals[None, :], lam_away[:, None])
+    joint = ph[:, :, None] * pa[:, None, :]  # (n, home goals, away goals)
+    home_win = np.tril(np.ones((len(goals), len(goals))), -1)  # home goals > away goals
+    p_home = (joint * home_win).sum(axis=(1, 2))
+    p_draw = np.trace(joint, axis1=1, axis2=2)
+    p_away = (joint * home_win.T).sum(axis=(1, 2))
+    probs = np.stack([p_home, p_draw, p_away], axis=1)
+    return probs / probs.sum(axis=1, keepdims=True)

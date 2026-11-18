@@ -23,8 +23,8 @@ lista dei candidati, non la verifica della classifica.
 
 | Fase | Contenuto | Durata | Finita quando |
 |---|---|---|---|
-| **0. Fondamenta** | Repo, CI, struttura dati, caricamento risultati, simulatore di base | 1-2 sett. | *In buona parte fatta.* Caricatore Transfermarkt e rose 2026/27 verificate; manca il caricatore Understat |
-| **1. Classifica** | Forza da xG, peso alle partite recenti, Dixon-Coles, stima pre-stagionale dal valore della rosa | 2-3 sett. | Verifica su 10 stagioni: log-loss per partita confrontata con le quote dei bookmaker; errore sui punti finali |
+| **0. Fondamenta** | Repo, CI, struttura dati, caricamento risultati, simulatore di base | 1-2 sett. | *Fatta.* Caricatori Transfermarkt, football-data (con le quote) e archivio Understat; rose 2026/27 verificate |
+| **1. Classifica** | Forza da xG, peso alle partite recenti, Dixon-Coles, stima pre-stagionale dal valore della rosa | 2-3 sett. | *Prima parte fatta:* stagioni precedenti, peso alle partite recenti, neopromosse, xG provati; verifica su 2020–2025 contro i bookmaker in [STUDIO.md](STUDIO.md#verifica-sul-passato-backtest). Restano Dixon-Coles e la stima dalla rosa (che ha bisogno della fase 3) |
 | **1b. Simulatore, livello 1** | App Streamlit: classifica simulata, cursori sulla forza delle squadre, risultati forzati | 1-2 sett. | *Costruito e provato in locale.* Manca la pubblicazione online, e la prova con i dati della stagione in corso |
 | **G. Mercato di gennaio** | Fabbisogno per ruolo dalle rose a mano; candidati per somiglianza statistica, età e costo | 2-3 sett. | Una pagina per club. *Traguardo di gennaio* |
 | **2. Anagrafica e proiezioni** | Collegamento degli ID tra le fonti; tabella giocatore-stagione; Marcel; modello dei minuti; coefficienti di campionato | 4-5 sett. | Almeno il 95% dei minuti di Serie A collegato tra Understat e Transfermarkt; errore inferiore a "uguale all'anno scorso" |
@@ -59,7 +59,7 @@ codice: budget iniziali, mercato libero o ad asta, quanto pesa il caso, cosa suc
 |---|---|---|
 | Il traguardo di gennaio salta | Alta | Si pubblica quello che c'è (classifica interattiva) e il resto slitta alla versione estiva |
 | Il dataset Transfermarkt resta fermo | Media | Rose a mano, già previste; per i campionati esteri resta il buco dei trasferimenti dell'estate 2026 |
-| Understat cambia formato o chiude | Media | Copia locale di tutto lo scaricato; i modelli continuano a funzionare con l'ultimo dato disponibile |
+| Understat cambia formato o chiude | Media | Copia locale di tutto lo scaricato. Per la classifica il rischio è già basso: il modello in uso non ha bisogno degli xG |
 | Collegare gli ID richiede più del previsto | Alta | File di correzioni manuali; partire dalla sola Serie A e allargare dopo |
 | I modelli non battono i riferimenti semplici | Media | È un risultato onesto e pubblicabile: si mostra il riferimento e si spiega perché |
 | Il progetto si allarga troppo | Alta | Niente fase nuova finché la precedente non ha la sua verifica |
@@ -68,4 +68,4 @@ codice: budget iniziali, mercato libero o ad asta, quanto pesa il caso, cosa suc
 
 1. **Pubblicare il simulatore** su Streamlit Community Cloud e controllare che scarichi la stagione in corso.
 2. **Rose di gennaio 2027**: a fine mercato invernale, aggiornare l'elenco delle fonti e rilanciare `xmercato rose riconcilia` (procedura in [DATI.md](DATI.md#aggiornamento-automatico-da-una-lista-delle-rose-attuali)).
-3. **Caricatore Understat** per la Serie A (xG per partita) e confronto gol contro xG nel modello della classifica.
+3. **Mercato di gennaio (fase G)**: fabbisogno per ruolo dalle rose verificate e primi candidati.

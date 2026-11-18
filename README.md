@@ -44,6 +44,7 @@ uv run xmercato simulate --results src/xmercato/samples/serie_a_2025_26.csv --as
 ```
 
 ```
+Modello: solo stagione, gol
 179 matches played, 201 simulated x 10000 seasons
 
             played  points  exp_points  p_title  p_top4  p_relegation
@@ -62,6 +63,18 @@ Per la stagione in corso basta passare a `--results` il file di football-data.co
 Il modello è volutamente semplice: forza in attacco e in difesa di ogni squadra stimata dai risultati con
 un modello di Poisson penalizzato, poi simulazione Monte Carlo delle partite rimanenti. A parità di punti
 decide la differenza reti, non gli scontri diretti come nel regolamento della Serie A.
+
+Con lo storico (`xmercato storico`, vedi [docs/DATI.md](docs/DATI.md#storico-per-la-classifica)) il
+modello usa anche le due stagioni precedenti, come fa l'app:
+
+```bash
+uv run xmercato simulate --storico data/storico/serie_a.csv --modello gol
+# Quanto avrebbero previsto bene i modelli sulle stagioni 2020-2025, contro le quote dei bookmaker
+uv run xmercato backtest --da 2020 --a 2025
+```
+
+Risultati del backtest in [docs/STUDIO.md](docs/STUDIO.md#verifica-sul-passato-backtest): con le
+stagioni precedenti il modello recupera più di metà della distanza dai bookmaker.
 
 ## Le rose
 

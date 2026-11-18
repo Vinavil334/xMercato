@@ -5,14 +5,30 @@ from pathlib import Path
 import pytest
 
 pytest.importorskip("streamlit")
+import streamlit as st  # noqa: E402
 from streamlit.testing.v1 import AppTest  # noqa: E402
+
+from xmercato.ingest import football_data  # noqa: E402
 
 APP = str(Path(__file__).resolve().parents[1] / "app" / "streamlit_app.py")
 SAMPLE = "2025/26 (completa, inclusa nell'app)"
 
 
+def _offline(source):
+    if str(source).startswith("http"):
+        raise ConnectionError("no network in tests")
+    return ORIGINAL_LOAD(source)
+
+
+ORIGINAL_LOAD = football_data.load_results
+
+
 @pytest.fixture
-def app():
+def app(monkeypatch):
+    # The app downloads seasons from football-data.co.uk: in tests every download fails,
+    # so the app falls back to the bundled season and to the one-season model.
+    monkeypatch.setattr(football_data, "load_results", _offline)
+    st.cache_data.clear()
     at = AppTest.from_file(APP, default_timeout=60)
     at.run()
     # Work on the bundled season so the tests never touch the network.
@@ -66,3 +82,21 @@ def test_fixed_result_and_reset(app):
     assert not app.exception
     assert app.session_state["fixed"] == {}
     assert "Cosa cambia" not in [h.value for h in app.subheader]
+
+
+def test_uses_the_previous_seasons_when_available(monkeypatch):
+    # Pretend the two previous seasons are online (the bundled one stands in for both).
+    monkeypatch.setattr(
+        football_data, "load_results", lambda source: ORIGINAL_LOAD(football_data.SAMPLE_SEASON)
+    )
+    st.cache_data.clear()
+    at = AppTest.from_file(APP, default_timeout=60)
+    at.run()
+    at.sidebar.radio[0].set_value(SAMPLE).run()
+    assert not at.exception
+    assert not [w.value for w in at.warning if "stagioni precedenti" in w.value]
+    assert len(_table(at, "Classifica finale prevista")) == 20
+
+
+def test_falls_back_to_one_season(app):
+    assert [w.value for w in app.warning if "stagioni precedenti" in w.value]

@@ -21,11 +21,16 @@ import pandas as pd
 import streamlit as st
 
 from xmercato.ingest import football_data
-from xmercato.models import poisson
+from xmercato.models import forecast
 from xmercato.sim import season
 
 SEED = 2026
 SAMPLE_LABEL = "2025/26 (completa, inclusa nell'app)"
+SAMPLE_START = 2025
+MODELS = {
+    "Anche le due stagioni precedenti (consigliato)": "gol",
+    "Solo la stagione scelta": "base",
+}
 
 # One-hue sequential ramp, light to dark. On a dark page it is reversed, so that
 # "close to zero" always recedes into the background.
@@ -51,9 +56,20 @@ def load_sample() -> pd.DataFrame:
     return football_data.load_results(football_data.SAMPLE_SEASON)
 
 
+def load_previous(season_start: int, n: int) -> dict[int, pd.DataFrame]:
+    """The ``n`` seasons before ``season_start``; empty if they cannot be downloaded."""
+    try:
+        return {s: load_online(s) for s in range(season_start - n, season_start)}
+    except Exception:  # network down or file moved: the model falls back to one season
+        return {}
+
+
 @st.cache_data(show_spinner="Simulo il campionato…")
 def run(
     results: pd.DataFrame,
+    previous: tuple[tuple[int, pd.DataFrame], ...],
+    season_start: int,
+    model: str,
     teams: tuple[str, ...],
     goals_for: tuple[tuple[str, float], ...],
     goals_against: tuple[tuple[str, float], ...],
@@ -61,7 +77,9 @@ def run(
     n_sims: int,
 ) -> pd.DataFrame:
     """Fit on the real results, apply the scenario, simulate. Cached on every input."""
-    strengths = poisson.fit(results, teams=list(teams))
+    past = forecast.stack({**dict(previous), season_start: results})
+    as_of = results["date"].max() + pd.Timedelta(days=1) if len(results) else past["date"].max()
+    strengths = forecast.fit_as_of(past, season_start, as_of, forecast.CONFIGS[model], teams)
     strengths = strengths.scaled(goals_for=dict(goals_for), goals_against=dict(goals_against))
     fixed_df = pd.DataFrame(fixed, columns=["home", "away", "home_goals", "away_goals"])
     return season.simulate(strengths, results, n_sims=n_sims, seed=SEED, fixed=fixed_df)
@@ -284,7 +302,7 @@ def main() -> None:
     with st.sidebar:
         st.header("Dati")
         choice = st.radio("Stagione", [live_label, SAMPLE_LABEL])
-        results = None
+        results, season_start = None, SAMPLE_START
         if choice == live_label:
             try:
                 results = load_online(live_start)
@@ -293,8 +311,10 @@ def main() -> None:
                     "Non riesco a scaricare la stagione in corso da football-data.co.uk "
                     f"({type(error).__name__}). Uso la stagione 2025/26 inclusa nell'app."
                 )
+            else:
+                season_start = live_start
         if results is None or results.empty:
-            results = load_sample()
+            results, season_start = load_sample(), SAMPLE_START
 
         teams = sorted(set(results["home"]) | set(results["away"]))
         first, last = results["date"].min().date(), results["date"].max().date()
@@ -306,6 +326,17 @@ def main() -> None:
             help="Sposta indietro la data per vedere come appariva il campionato in quel momento.",
         )  # fmt: skip
         n_sims = st.select_slider("Stagioni simulate", [2_000, 10_000, 20_000], value=10_000)
+        model_label = st.radio(
+            "Da quali partite stimare la forza",
+            list(MODELS),
+            help="Con le stagioni precedenti le previsioni sono più precise, soprattutto nelle "
+            "prime giornate: vedi il backtest in docs/STUDIO.md.",
+        )
+        model = MODELS[model_label]
+        previous = load_previous(season_start, forecast.CONFIGS[model].history_seasons)
+        if forecast.CONFIGS[model].history_seasons and not previous:
+            st.warning("Non riesco a scaricare le stagioni precedenti: uso solo quella scelta.")
+            model = "base"
 
     played = results[results["date"].dt.date <= as_of].reset_index(drop=True)
     todo = season.remaining_fixtures(played, teams)
@@ -328,7 +359,7 @@ def main() -> None:
         with right:
             fixed = fixed_controls(todo)
 
-    args = (played, tuple(teams))
+    args = (played, tuple(sorted(previous.items())), season_start, model, tuple(teams))
     scenario = (
         tuple(sorted(goals_for.items())),
         tuple(sorted(goals_against.items())),
@@ -355,15 +386,20 @@ def main() -> None:
     with st.expander("Come funziona, e cosa non fa"):
         st.markdown(
             """
-- **Modello.** La forza in attacco e in difesa di ogni squadra è stimata dai risultati fino alla data
-  scelta, con un modello di Poisson. Le partite rimanenti vengono giocate migliaia di volte.
+- **Modello.** La forza in attacco e in difesa di ogni squadra è stimata con un modello di Poisson
+  dai risultati fino alla data scelta e, se lo lasci attivo, da quelli delle due stagioni precedenti:
+  le partite più vecchie contano meno (metà peso ogni 9 mesi circa) e le neopromosse partono sotto la
+  media. Le partite rimanenti vengono giocate migliaia di volte.
+- **Quanto è preciso.** Provato sulle stagioni 2020–2025 partita per partita, questo modello resta
+  dietro alle quote dei bookmaker, ma recupera circa il 60% della distanza rispetto al modello con la
+  sola stagione in corso. Dettagli in `docs/STUDIO.md` nel repository.
 - **Scenario.** Le modifiche alla forza valgono per tutte le partite rimanenti della squadra. I risultati
   fissati entrano nella classifica finale ma non cambiano la stima della forza.
 - **Confronto pulito.** Scenario e simulazione di base usano gli stessi numeri casuali: cambiano solo le
   partite toccate dalle tue modifiche, quindi le differenze non sono rumore.
 - **Limiti.** A pari punti decide la differenza reti, non gli scontri diretti. Il modello guarda solo i
-  gol di questa stagione: niente xG, infortuni, mercato o calendario delle coppe. A inizio stagione le
-  stime sono molto incerte.
+  gol: gli xG migliorano poco le previsioni e non c'è una fonte gratuita aggiornata per la stagione in
+  corso. Niente infortuni, mercato o calendario delle coppe. A inizio stagione le stime restano incerte.
 """
         )
     st.caption(

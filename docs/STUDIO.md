@@ -74,15 +74,55 @@ variazione dei punti attesi (dal modello D).
 
 ### D. Classifica
 
-- **Punto di partenza (già nel codice):** forza in attacco e in difesa di ogni squadra stimata dai
-  risultati con un modello di Poisson, poi 10.000 simulazioni delle partite rimanenti.
-- **Passi successivi:** xG al posto dei gol, peso maggiore alle partite recenti, correzione
-  Dixon-Coles per i punteggi bassi, e soprattutto una **stima pre-stagionale** dalla rosa
-  (valore di mercato e proiezioni A), indispensabile per le neopromosse e per collegare il mercato alla classifica.
-- **Come si valuta:** per partita, log-loss e RPS contro le quote di chiusura dei bookmaker;
-  per la classifica, errore sui punti finali su dieci stagioni.
+- **Modello attuale.** Forza in attacco e in difesa di ogni squadra con un modello di Poisson, poi
+  migliaia di simulazioni delle partite rimanenti. La forza si stima dalla stagione in corso **e dalle
+  due precedenti**, con le partite più vecchie che pesano meno (metà peso ogni 270 giorni) e le
+  neopromosse che partono sotto la media (`src/xmercato/models/forecast.py`).
+- **Passi successivi:** correzione Dixon-Coles per i punteggi bassi e soprattutto una **stima
+  pre-stagionale dalla rosa** (valore di mercato e proiezioni A): è il pezzo che collega il mercato alla
+  classifica, e il punto in cui il modello perde di più contro i bookmaker (inizio stagione, squadre
+  che cambiano molto in estate).
 - **Dubbi:** battere i bookmaker non è un obiettivo realistico; avvicinarsi sì.
   380 partite a stagione sono poche: molta differenza tra modelli è rumore.
+
+#### Verifica sul passato (backtest)
+
+Ogni settimana di una stagione il modello viene stimato **solo sulle partite già giocate** e prevede
+quelle della settimana. Le probabilità 1X2 si confrontano con i risultati e con le quote di chiusura dei
+bookmaker (Pinnacle quando c'è, altrimenti la media del mercato, margine tolto). Le impostazioni sono
+state scelte sulle stagioni **2015–2019** (circa 300 combinazioni) e poi misurate, senza più toccarle,
+sulle **2020–2025**: 2.280 partite. Si rifà con `uv run xmercato backtest`.
+
+| Modello (prove 2020–2025) | Log loss | RPS | Brier |
+|---|---|---|---|
+| Quote dei bookmaker | **0,962** | **0,189** | **0,573** |
+| Due stagioni precedenti, gol + xG a metà | 0,984 | 0,195 | 0,586 |
+| Due stagioni precedenti, solo gol (**usato nell'app**) | 0,985 | 0,196 | 0,587 |
+| Solo la stagione in corso, gol (modello di partenza) | 1,015 | 0,205 | 0,607 |
+| Riferimento: 1/3 a ogni esito | 1,099 | | |
+
+Più basso è meglio. Cosa se ne ricava:
+
+- **Le stagioni precedenti contano davvero.** Il modello nuovo recupera circa il **57%** della
+  distanza tra il modello di partenza e i bookmaker (differenza di 0,030 ± 0,011 per partita, ben oltre
+  il rumore). Quasi tutto il guadagno è nelle prime dieci giornate (log loss 1,064 → 0,981), quando la
+  sola stagione in corso dice pochissimo.
+- **Gli xG aiutano poco.** Mescolare a metà gol e xG migliora di 0,002 ± 0,0025: dentro il rumore.
+  Usare solo gli xG va peggio che usare solo i gol. Per questo l'app usa il modello con i soli gol, che
+  non ha bisogno di una fonte di xG per la stagione in corso (vedi [DATI.md](DATI.md#storico-per-la-classifica)).
+- **I bookmaker restano avanti** di 0,021 ± 0,007 per partita, soprattutto a inizio stagione: sanno del
+  mercato estivo, degli infortuni e degli allenatori nuovi, il modello no.
+
+Errore medio sui punti finali (per squadra), simulando il resto della stagione da una certa giornata:
+
+| Simulando da… | Inizio | Giornata 10 | Giornata 19 | Giornata 28 |
+|---|---|---|---|---|
+| Due stagioni precedenti, solo gol | 8,9 | **6,4** | 4,7 | 3,1 |
+| Solo la stagione in corso | — | 7,8 | **4,6** | **3,0** |
+| Media punti attuale proiettata | — | 9,1 | 5,6 | 3,3 |
+
+Prima del via il modello sbaglia di quasi 9 punti a squadra: senza il mercato estivo non può fare di
+meglio. Dalla metà stagione in poi i due modelli si equivalgono.
 
 ## Pro
 
@@ -129,6 +169,7 @@ Registro delle scelte, con la data. Si cambia idea aggiungendo una riga, non can
 | 16/11/2026 | **Soglia dei minuti** | Non è fissa: dipende dal ruolo per cui il giocatore è stato preso. Un secondo portiere che fa il secondo portiere è un acquisto riuscito |
 | 16/11/2026 | **Acquisti di gennaio** | Stessa definizione, valutata sulla stagione e mezza disponibile |
 | 16/11/2026 | **Simulatore interattivo** | Previsto, in tre livelli crescenti (vedi [ROADMAP.md](ROADMAP.md#simulatore-interattivo)) |
+| 17/11/2026 | **Modello della classifica** | Due stagioni precedenti, metà peso ogni 270 giorni, neopromosse sotto la media, solo gol. Gli xG non migliorano in modo misurabile e non hanno una fonte aggiornata: restano nel backtest, fuori dall'app |
 
 ### Come si applica la definizione di "buon acquisto"
 
