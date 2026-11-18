@@ -69,6 +69,28 @@ previsioni di poco (vedi [STUDIO.md](STUDIO.md#verifica-sul-passato-backtest)) e
 lavora sui soli gol. Torneranno necessari per le proiezioni dei giocatori (fase 2): allora andrà scelta
 una fonte aggiornata, valutandone i termini d'uso.
 
+## Tabelle per il mercato
+
+`uv run xmercato mercato dati` legge le tabelle delle partite del dataset Transfermarkt (presenze,
+formazioni, partite, valori, trasferimenti) e scrive in `data/mercato/`:
+
+| File | Contenuto |
+|---|---|
+| `giocatori_stagioni.csv.gz` | Una riga per giocatore, stagione e club, dal 2018/19: convocazioni (panchina compresa), presenze, partite da titolare, minuti, gol, assist, cartellini, posizione in cui partiva più spesso, valore a inizio stagione, al 1° gennaio e a fine stagione. Le stesse cifre per il solo girone d'andata |
+| `giocatori.csv.gz` | Anagrafica: nascita, cittadinanza, posizione, contratto, club e valore a luglio 2026 |
+| `trasferimenti_serie_a.csv.gz` | Trasferimenti da e verso club italiani dal 2018 |
+| `club.csv.gz`, `campionati.csv.gz` | Club e campionati del dataset |
+
+Copertura delle statistiche: 14 campionati (Serie A, Premier League, Liga, Bundesliga, Ligue 1,
+Portogallo, Olanda, Belgio, Turchia, Russia, Scozia, Grecia, Ucraina, Danimarca), stagioni 2018/19–2025/26.
+Mancano Serie B e Sudamerica. Le tabelle originali pesano qualche centinaio di MB e si scaricano solo
+da GitHub: il workflow **Dati mercato** (avvio a mano dalla scheda Actions) costruisce le tabelle, le
+pubblica come artefatto e mette nel riepilogo la verifica dei modelli.
+
+`uv run xmercato mercato suggerisci` usa queste tabelle e le rose verificate per scrivere
+`mercato/fabbisogni_<finestra>_<anno>.csv` e `mercato/candidati_<finestra>_<anno>.csv`, che l'app legge.
+Questi due file sono nel repository: sono piccoli e derivati da un dataset CC0.
+
 ## Rose raccolte a mano
 
 Un file CSV per stagione, versionato nella repo: [`rose/serie_a_2026_27.csv`](../rose/serie_a_2026_27.csv),

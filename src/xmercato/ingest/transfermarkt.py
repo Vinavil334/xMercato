@@ -28,7 +28,18 @@ REQUIRED_COLUMNS = {
     "clubs": ["club_id", "name", "domestic_competition_id", "last_season"],
     "transfers": ["player_id", "transfer_date", "to_club_id"],
     "player_valuations": ["player_id", "date", "market_value_in_eur"],
-}
+    # Match tables, only needed to build the player-season table (`xmercato mercato dati`).
+    "appearances": [
+        "game_id", "player_id", "player_club_id", "minutes_played",
+        "goals", "assists", "yellow_cards", "red_cards",
+    ],
+    "game_lineups": ["game_id", "player_id", "club_id", "type", "position"],
+    "games": ["game_id", "competition_id", "season", "date", "home_club_id", "away_club_id"],
+    "competitions": ["competition_id", "type", "country_name"],
+}  # fmt: skip
+
+# Tables read in full; the others only with the columns above (some are large).
+_FULL = {"players", "clubs", "transfers", "competitions"}
 
 
 def table_url(table: str) -> str:
@@ -40,8 +51,13 @@ def load_table(table: str, source_dir: str | Path | None = None) -> pd.DataFrame
     if table not in REQUIRED_COLUMNS:
         raise ValueError(f"Unknown table {table!r}; known: {sorted(REQUIRED_COLUMNS)}")
     source = Path(source_dir) / f"{table}.csv.gz" if source_dir else table_url(table)
-    df = pd.read_csv(source, low_memory=False)
-    missing = [c for c in REQUIRED_COLUMNS[table] if c not in df.columns]
+    wanted = REQUIRED_COLUMNS[table]
+    if table in _FULL:
+        df = pd.read_csv(source, low_memory=False)
+    else:
+        header = pd.read_csv(source, nrows=0).columns
+        df = pd.read_csv(source, usecols=[c for c in wanted if c in header], low_memory=False)
+    missing = [c for c in wanted if c not in df.columns]
     if missing:
         raise ValueError(
             f"Table {table!r} lacks columns {missing}. The upstream schema may have changed; "
@@ -50,5 +66,8 @@ def load_table(table: str, source_dir: str | Path | None = None) -> pd.DataFrame
     return df
 
 
-def load_all(source_dir: str | Path | None = None) -> dict[str, pd.DataFrame]:
-    return {table: load_table(table, source_dir) for table in REQUIRED_COLUMNS}
+def load_all(
+    source_dir: str | Path | None = None,
+    tables: tuple[str, ...] = ("players", "clubs", "transfers", "player_valuations"),
+) -> dict[str, pd.DataFrame]:
+    return {table: load_table(table, source_dir) for table in tables}

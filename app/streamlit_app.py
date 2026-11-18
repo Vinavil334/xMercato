@@ -1,4 +1,4 @@
-"""xMercato: interactive league table simulator (level 1).
+"""xMercato: league table simulator (level 1) and January market page.
 
 Run with ``uv run streamlit run app/streamlit_app.py``.
 
@@ -292,8 +292,7 @@ def position_heatmap(table: pd.DataFrame) -> alt.Chart:
 # ----------------------------------------------------------------------------- page
 
 
-def main() -> None:
-    st.set_page_config(page_title="xMercato · Simulatore", page_icon="⚽", layout="wide")
+def classifica() -> None:
     st.title("Simulatore della classifica")
 
     live_start = current_season_start(date.today())
@@ -407,6 +406,20 @@ def main() -> None:
         "Codice: [github.com/Vinavil334/xMercato](https://github.com/Vinavil334/xMercato). "
         "Sono stime, non consigli per scommesse."
     )
+
+
+def main() -> None:
+    st.set_page_config(page_title="xMercato", page_icon="⚽", layout="wide")
+    pages = [
+        st.Page(classifica, title="Classifica", icon=":material/leaderboard:", default=True),
+        st.Page(
+            str(Path(__file__).with_name("mercato.py")),
+            title="Mercato",
+            icon=":material/swap_horiz:",
+            url_path="mercato",
+        ),
+    ]
+    st.navigation(pages).run()
 
 
 main()
