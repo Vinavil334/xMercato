@@ -1,6 +1,6 @@
 name: Aggiorna mercato
 
-# Every Tuesday: rebuilds the needs and candidates of the market page with the latest
+# Every Tuesday (and after changes to squads, injuries or market code): rebuilds the needs and candidates of the market page with the latest
 # results (department form) and, if the FOOTBALL_DATA_TOKEN secret is set, the scorers
 # from football-data.org (form of the forwards). Commits mercato/ to main when it changed;
 # the app on Streamlit Community Cloud picks the new files up by itself.
@@ -9,6 +9,14 @@ on:
   schedule:
     - cron: "17 5 * * 2"
   workflow_dispatch:
+  # Also when the squads, the injury list or the market code change on main (the bot's own
+  # commits only touch mercato/, so they do not start it again).
+  push:
+    branches: [main]
+    paths:
+      - "rose/**"
+      - "src/xmercato/recommend/**"
+      - ".github/workflows/aggiorna-mercato.yml"
 
 permissions:
   contents: write

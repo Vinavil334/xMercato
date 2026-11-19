@@ -8,6 +8,8 @@ The output is two small tables that the app reads (folder ``mercato/``).
 from __future__ import annotations
 
 from collections.abc import Iterable
+from dataclasses import dataclass
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -71,27 +73,114 @@ def club_ids(data: MarketData, season: str) -> dict[int, str]:
     return dict(zip(mapping["tm_club_id"], mapping["club"], strict=True))
 
 
-def form_now(
-    squad: pd.DataFrame,
-    usage: pd.DataFrame,
+SQUAD_COLUMNS = [
+    "club", "giocatore", "ruolo", "slot", "data_nascita", "eta", "valore", "scadenza", "tipo",
+    "in_scadenza", "tm_id",
+]  # fmt: skip
+
+
+@dataclass
+class NeedParts:
+    """Everything the needs are computed from, small enough to ship with the app.
+
+    ``squad``: checked squads with slot, value, age and contract. ``usage``: starters per
+    game in each slot. ``teams`` (optional): department form this season. ``forwards``
+    (optional): goals+assists of every attacking player, from the scorers.
+    """
+
+    squad: pd.DataFrame
+    usage: pd.DataFrame
+    teams: pd.DataFrame | None = None
+    forwards: pd.DataFrame | None = None
+
+    FILES = {
+        "squad": "rosa",
+        "usage": "utilizzo",
+        "teams": "forma_squadre",
+        "forwards": "forma_attaccanti",
+    }
+
+    def save(self, folder: str | Path, tag: str) -> None:
+        for field_name, stem in self.FILES.items():
+            table = getattr(self, field_name)
+            if table is not None:
+                table.to_csv(Path(folder) / f"{stem}_{tag}.csv", index=False)
+
+    @classmethod
+    def load(cls, folder: str | Path, tag: str) -> NeedParts:
+        tables = {}
+        for field_name, stem in cls.FILES.items():
+            path = Path(folder) / f"{stem}_{tag}.csv"
+            tables[field_name] = pd.read_csv(path) if path.exists() else None
+        if tables["squad"] is None or tables["usage"] is None:
+            raise FileNotFoundError(f"Mancano rosa e utilizzo per {tag} in {folder}")
+        return cls(**tables)
+
+
+def parts_now(
+    squads: pd.DataFrame,
     data: MarketData,
-    history: pd.DataFrame,
-    season_start: int,
+    as_of: pd.Timestamp,
+    last_season: int,
+    season: str,
+    history: pd.DataFrame | None = None,
     scorers: pd.DataFrame | None = None,
-    injured: set | None = None,
-) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame | None]:
-    """(form needs, department table, attacking players table) for this season."""
-    teams = performance.team_form(history, season_start)
-    players = None
-    if scorers is not None and not scorers.empty:
-        names = team_names.map_names(set(scorers["squadra"]), set(squad["club"]))
-        scorers = scorers.assign(squadra=scorers["squadra"].map(names))
-        rates = performance.fit_rates(_with_slots(data))
-        games = teams.set_index("club")["partite"]
-        players = performance.player_form(
-            squad.dropna(subset=["slot"]), usage, scorers, rates, games, injured
+) -> NeedParts:
+    """The pieces of the needs for the current squads.
+
+    With ``history`` (results, as from ``xmercato storico``) they include how each
+    department is doing this season; with ``scorers`` too, the attacking players.
+    """
+    squad = current_squad(squads, data, as_of, last_season)
+    squad = squad.dropna(subset=["slot"]).reset_index(drop=True)
+    usage = nd.usage(_with_slots(data), club_ids(data, season), last_season)
+    teams = forwards = None
+    season_start = int(season[:4])
+    if history is not None and (history["season"] == season_start).any():
+        teams = performance.team_form(history, season_start)
+        if scorers is not None and not scorers.empty:
+            names = team_names.map_names(set(scorers["squadra"]), set(squad["club"]))
+            scorers = scorers.assign(squadra=scorers["squadra"].map(names))
+            rates = performance.fit_rates(_with_slots(data))
+            games = teams.set_index("club")["partite"]
+            forwards = performance.forward_stats(squad, scorers, rates, games)
+    return NeedParts(squad[SQUAD_COLUMNS], usage, teams, forwards)
+
+
+def needs_from_parts(
+    parts: NeedParts,
+    window: str,
+    opens: pd.Timestamp,
+    absences: pd.DataFrame | None = None,
+    today: pd.Timestamp | None = None,
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """(needs table, squad with an availability column) from the precomputed pieces.
+
+    Used by ``xmercato mercato suggerisci`` and live by the app, so that a change to the
+    injury list shows at once. ``absences`` as from ``availability.read``.
+    """
+    today = today if today is not None else min(opens, pd.Timestamp.today().normalize())
+    squad = parts.squad.copy()
+    squad["stato"] = "disponibile"
+    available, notes, out, injured = squad, None, set(), set()
+    if absences is not None and len(absences):
+        available, notes, injured_rows = availability.apply(
+            squad, absences, today, window_end(opens, window)
         )
-    return performance.form_needs(teams, players), teams, players
+        gone = squad.index.difference(available.index)
+        squad.loc[list(injured_rows), "stato"] = "infortunato"
+        squad.loc[gone, "stato"] = "fuori per la finestra"
+        out = set(zip(squad.loc[gone, "club"], squad.loc[gone, "giocatore"], strict=True))
+        hurt = squad.loc[list(injured_rows)]
+        injured = set(zip(hurt["club"], hurt["giocatore"], strict=True))
+    form = None
+    if parts.teams is not None:
+        players = None
+        if parts.forwards is not None:
+            players = performance.player_form(parts.forwards, parts.usage, out, injured)
+        form = performance.form_needs(parts.teams, players)
+    needs = nd.needs(available, parts.usage, window, form=form, absences=notes)
+    return needs, squad
 
 
 def needs_now(
@@ -105,26 +194,9 @@ def needs_now(
     scorers: pd.DataFrame | None = None,
     absences: pd.DataFrame | None = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """(needs table, squad with slots) for the current squads.
-
-    With ``history`` (results, as from ``xmercato storico``) the needs also weigh how each
-    department is doing this season; with ``scorers`` too, how the attacking starters are.
-    With ``absences`` (``availability.read``), players out beyond the window do not count.
-    """
-    squad = current_squad(squads, data, as_of, last_season)
-    usage = nd.usage(_with_slots(data), club_ids(data, season), last_season)
-    notes, injured, available = None, set(), squad
-    if absences is not None and len(absences):
-        today = min(as_of, pd.Timestamp.today().normalize())
-        available, notes, injured = availability.apply(
-            squad, absences, today, window_end(as_of, window)
-        )
-    form = None
-    if history is not None:
-        season_start = int(season[:4])
-        if (history["season"] == season_start).any():
-            form, _, _ = form_now(available, usage, data, history, season_start, scorers, injured)
-    return nd.needs(available, usage, window, form=form, absences=notes), squad
+    """(needs table, squad with slots) for the current squads, in one go."""
+    parts = parts_now(squads, data, as_of, last_season, season, history, scorers)
+    return needs_from_parts(parts, window, as_of, absences)
 
 
 def window_end(opens: pd.Timestamp, window: str) -> pd.Timestamp:

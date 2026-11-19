@@ -152,67 +152,90 @@ def match_scorers(scorers: pd.DataFrame, squad: pd.DataFrame, threshold: float =
     return out
 
 
-def player_form(
+FORWARD_COLUMNS = [
+    "club", "slot", "giocatore", "valore", "partite", "gol_assist", "nei_marcatori",
+    "attesi_per_partita", "partite_valutate",
+]  # fmt: skip
+
+
+def forward_stats(
     squad: pd.DataFrame,
-    usage: pd.DataFrame,
     scorers: pd.DataFrame,
     rates: dict[str, tuple[float, float]],
     team_games: pd.Series,
+) -> pd.DataFrame:
+    """Goals+assists and the expected rate of every squad player in an attacking slot.
+
+    A player missing from the scorers list has no goal and no assist: we do not know how
+    many matches he played, so half of his team's matches are assumed.
+    """
+    link = match_scorers(scorers, squad)
+    rows = []
+    for i, player in squad.iterrows():
+        slot = player["slot"]
+        if slot not in ATTACK_SLOTS or slot not in rates:
+            continue
+        if pd.notna(link[i]):
+            row = scorers.loc[link[i]]
+            games, made, listed = int(row["partite"]), int(row["gol"] + row["assist"]), True
+        else:
+            games, made, listed = int(0.5 * team_games.get(player["club"], 0)), 0, False
+        rows.append(
+            {
+                "club": player["club"],
+                "slot": slot,
+                "giocatore": player["giocatore"],
+                "valore": float(player["valore"]),
+                "partite": games if listed else None,
+                "gol_assist": made,
+                "nei_marcatori": listed,
+                "attesi_per_partita": expected_rate(rates, slot, float(player["valore"])),
+                "partite_valutate": games,
+            }
+        )
+    return pd.DataFrame(rows, columns=FORWARD_COLUMNS)
+
+
+def player_form(
+    stats: pd.DataFrame,
+    usage: pd.DataFrame,
+    out: set | None = None,
     injured: set | None = None,
 ) -> pd.DataFrame:
     """Goals+assists of the likely attacking starters against expectation.
 
-    Players in ``injured`` (squad indices) are not judged: few goals may only mean few
-    matches.
-
-    A starter missing from the scorers list has no goal and no assist: we do not know how
-    many matches he played, so half of his team's matches are assumed (he may have been
-    injured, which is a need too).
+    ``stats`` comes from :func:`forward_stats`. ``out`` and ``injured`` hold
+    ``(club, giocatore)`` pairs: players ``out`` for the window do not count as starters;
+    ``injured`` ones still do but are not judged (few goals may only mean few matches).
     """
+    out, injured = out or set(), injured or set()
     starters_used = usage.set_index(["club", "slot"])["titolari"]
-    link = match_scorers(scorers, squad)
+    keys = list(zip(stats["club"], stats["giocatore"], strict=True))
+    stats = stats[[k not in out for k in keys]]
     rows = []
-    for (club, slot), players in squad.groupby(["club", "slot"]):
-        if slot not in ATTACK_SLOTS or slot not in rates:
-            continue
+    for (club, slot), players in stats.groupby(["club", "slot"]):
         n = max(1, round(float(starters_used.get((club, slot), 0.0))))
-        for i, player in players.sort_values("valore", ascending=False).head(n).iterrows():
-            if injured and i in injured:
+        for _, player in players.sort_values("valore", ascending=False).head(n).iterrows():
+            if (club, player["giocatore"]) in injured:
                 continue
-            rate = expected_rate(rates, slot, float(player["valore"]))
-            if pd.notna(link[i]):
-                row = scorers.loc[link[i]]
-                games, made, listed = int(row["partite"]), int(row["gol"] + row["assist"]), True
-            else:
-                games, made, listed = int(0.5 * team_games.get(club, 0)), 0, False
-            expected = rate * games
+            expected = player["attesi_per_partita"] * player["partite_valutate"]
             if expected < MIN_EXPECTED:
                 continue
+            made = int(player["gol_assist"])
             rows.append(
                 {
                     "club": club,
                     "slot": slot,
                     "giocatore": player["giocatore"],
-                    "partite": games if listed else None,
+                    "partite": player["partite"],
                     "gol_assist": made,
                     "attesi": round(expected, 1),
                     "z": (made - expected) / np.sqrt(expected),
-                    "nei_marcatori": listed,
+                    "nei_marcatori": bool(player["nei_marcatori"]),
                 }
             )
-    return pd.DataFrame(
-        rows,
-        columns=[
-            "club",
-            "slot",
-            "giocatore",
-            "partite",
-            "gol_assist",
-            "attesi",
-            "z",
-            "nei_marcatori",
-        ],
-    )
+    columns = ["club", "slot", "giocatore", "partite", "gol_assist", "attesi", "z", "nei_marcatori"]
+    return pd.DataFrame(rows, columns=columns)
 
 
 # ------------------------------------------------------------------------------ together

@@ -99,7 +99,9 @@ def test_fit_rates_and_player_form():
         {"giocatore": ["R. Kolo Muani"], "squadra": ["Juventus"], "partite": [11], "gol": [1],
          "assist": [2]}
     )  # fmt: skip
-    got = perf.player_form(squad, usage, scorers, rates, pd.Series({"Juventus": 11}))
+    stats = perf.forward_stats(squad, scorers, rates, pd.Series({"Juventus": 11}))
+    assert len(stats) == 2  # every forward; only the likely starter is judged
+    got = perf.player_form(stats, usage)
     row = got.iloc[0]
     assert len(got) == 1 and row["giocatore"] == "Randal Kolo Muani" and row["nei_marcatori"]
     assert row["gol_assist"] == 3 and row["attesi"] > 4 and row["z"] < -1
@@ -117,7 +119,7 @@ def test_unlisted_starter_counts_as_no_goals():
     squad = pd.DataFrame({"club": ["A"], "slot": ["ATT"], "valore": [30.0], "giocatore": ["X Y"]})
     usage = pd.DataFrame({"club": ["A"], "slot": ["ATT"], "titolari": [1.0]})
     scorers = pd.DataFrame(columns=["giocatore", "squadra", "partite", "gol", "assist"])
-    got = perf.player_form(squad, usage, scorers, rates, pd.Series({"A": 12}))
+    got = perf.player_form(perf.forward_stats(squad, scorers, rates, pd.Series({"A": 12})), usage)
     assert not got.iloc[0]["nei_marcatori"] and got.iloc[0]["gol_assist"] == 0
 
 
