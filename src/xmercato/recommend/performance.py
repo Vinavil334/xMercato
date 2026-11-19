@@ -158,8 +158,12 @@ def player_form(
     scorers: pd.DataFrame,
     rates: dict[str, tuple[float, float]],
     team_games: pd.Series,
+    injured: set | None = None,
 ) -> pd.DataFrame:
     """Goals+assists of the likely attacking starters against expectation.
+
+    Players in ``injured`` (squad indices) are not judged: few goals may only mean few
+    matches.
 
     A starter missing from the scorers list has no goal and no assist: we do not know how
     many matches he played, so half of his team's matches are assumed (he may have been
@@ -173,6 +177,8 @@ def player_form(
             continue
         n = max(1, round(float(starters_used.get((club, slot), 0.0))))
         for i, player in players.sort_values("valore", ascending=False).head(n).iterrows():
+            if injured and i in injured:
+                continue
             rate = expected_rate(rates, slot, float(player["valore"]))
             if pd.notna(link[i]):
                 row = scorers.loc[link[i]]

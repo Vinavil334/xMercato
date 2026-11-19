@@ -26,8 +26,8 @@ from xmercato.evaluation import backtest, candidates_backtest, needs_backtest
 from xmercato.features import player_seasons
 from xmercato.ingest import football_data, football_data_org, history, transfermarkt, understat
 from xmercato.models import forecast
+from xmercato.recommend import availability, market
 from xmercato.recommend import data as market_data
-from xmercato.recommend import market
 from xmercato.sim import season
 
 
@@ -204,15 +204,21 @@ def _mercato_suggerisci(args: argparse.Namespace) -> None:
     squads = rose.read(args.rose)
     past = history.read(args.storico) if args.storico and Path(args.storico).exists() else None
     scorers = pd.read_csv(args.marcatori) if args.marcatori else None
+    absences = None
+    if args.indisponibili and Path(args.indisponibili).exists():
+        absences = availability.read(args.indisponibili)
     if past is None:
         print("Senza --storico: niente rendimento della stagione nei fabbisogni.")
     needs, squad = market.needs_now(
-        squads, data, as_of, args.ultima, args.finestra, args.stagione, past, scorers
+        squads, data, as_of, args.ultima, args.finestra, args.stagione, past, scorers, absences
     )
     if past is not None:
         current = past[past["season"] == int(args.stagione[:4])]
         needs["risultati_al"] = current["date"].max().date().isoformat() if len(current) else ""
         needs["marcatori"] = scorers is not None
+    needs["indisponibili_al"] = (
+        absences["aggiornato"].max().date().isoformat() if absences is not None else ""
+    )
     candidates = market.candidates_now(
         squad, needs, data, model, as_of, args.ultima, args.per_ruolo, args.stagione
     )
@@ -382,6 +388,11 @@ def main(argv: list[str] | None = None) -> None:
         "--storico",
         default="data/storico/serie_a.csv",
         help="Results (`xmercato storico`): adds this season's department form",
+    )
+    sug.add_argument(
+        "--indisponibili",
+        default="rose/indisponibili_2026_27.csv",
+        help="Hand-kept list of injured players (rose/indisponibili_*.csv)",
     )
     sug.add_argument(
         "--marcatori", help="Scorers (`xmercato mercato marcatori`): adds forwards' form"
