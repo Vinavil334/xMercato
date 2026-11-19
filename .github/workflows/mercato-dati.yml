@@ -47,3 +47,8 @@ jobs:
             uv run xmercato mercato verifica --dati mercato
             echo '```'
           } | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Temporary - copy the elevens table to the log
+        run: |
+          echo "=====BEGIN formazioni====="
+          base64 -w 0 mercato/formazioni_serie_a.csv.gz; echo
+          echo "=====END formazioni====="
