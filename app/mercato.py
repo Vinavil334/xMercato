@@ -25,6 +25,19 @@ def load(tag: str) -> tuple[pd.DataFrame, pd.DataFrame]:
     return needs, candidates
 
 
+@st.cache_data
+def absences(tag: str) -> pd.DataFrame:
+    """The hand-kept list of injured players of the season the window belongs to."""
+    year = int(tag.rsplit("_", 1)[1])
+    season = year - 1 if tag.startswith("gennaio") else year
+    path = FOLDER.parent / "rose" / f"indisponibili_{season}_{str(season + 1)[2:]}.csv"
+    if not path.exists():
+        return pd.DataFrame(columns=["club", "giocatore", "problema", "rientro", "fonte"])
+    table = pd.read_csv(path, dtype=str).fillna("")
+    still_out = pd.to_datetime(table["rientro_stimato"], errors="coerce")
+    return table[still_out.isna() | (still_out > pd.Timestamp.today())]
+
+
 def available_windows() -> list[str]:
     tags = [p.stem.removeprefix("fabbisogni_") for p in FOLDER.glob("fabbisogni_*.csv")]
     return sorted(tags, key=lambda t: (t.split("_")[-1], t.startswith("estate")), reverse=True)
@@ -132,6 +145,14 @@ notes = []
 if "risultati_al" in club_needs and str(club_needs["risultati_al"].iloc[0]) not in ("", "nan"):
     day = pd.Timestamp(club_needs["risultati_al"].iloc[0]).strftime("%d/%m/%Y")
     notes.append(f"Rendimento della stagione calcolato sui risultati fino al {day}.")
+if "indisponibili_al" in club_needs and str(club_needs["indisponibili_al"].iloc[0]) not in (
+    "",
+    "nan",
+):
+    day = pd.Timestamp(club_needs["indisponibili_al"].iloc[0]).strftime("%d/%m/%Y")
+    notes.append(
+        f"Infortunati aggiornati al {day}: chi resta fuori oltre la finestra non conta nella rosa."
+    )
 if "marcatori" in club_needs and bool(club_needs["marcatori"].iloc[0]):
     notes.append(f"Gol e assist degli attaccanti: {ATTRIBUTION}.")
 notes.append(
@@ -139,6 +160,20 @@ notes.append(
     "reparti si è visto anche negli acquisti veri delle finestre passate (vedi sotto)."
 )
 st.caption(" ".join(notes))
+
+out = absences(tag)
+out = out[out["club"] == club]
+if len(out):
+    with st.expander(f"Infortunati ({len(out)})"):
+        st.dataframe(
+            out[["giocatore", "problema", "rientro", "fonte"]].rename(
+                columns={"giocatore": "Giocatore", "problema": "Problema", "rientro": "Rientro previsto",
+                         "fonte": "Fonte"}
+            ),
+            hide_index=True,
+            width="stretch",
+            column_config={"Fonte": st.column_config.LinkColumn(display_text="notizia")},
+        )  # fmt: skip
 
 st.subheader("Candidati")
 left, middle, right, abroad = st.columns([2, 1, 1, 1], vertical_alignment="bottom")

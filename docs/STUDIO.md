@@ -146,6 +146,10 @@ attese, contro il 32–39% delle altre. Aggiunto alla classifica dei fabbisogni 
 15%). I pesi di gennaio sono stati scelti sul 2019–2022: profondità 1, rendimento 1,2, qualità 0,25
 (la qualità peggiorava la previsione, resta come lettura della rosa).
 
+**Infortuni** (`availability.py`). Da una lista tenuta a mano (vedi [DATI.md](DATI.md#infortunati)):
+chi resta fuori oltre la chiusura della finestra esce dal calcolo della rosa, chi è infortunato non viene
+giudicato sui gol. Non c'è uno storico degli infortuni, quindi questo pezzo non è verificato sul passato.
+
 **Cosa manca ancora:** la probabilità di *buon* acquisto (servono le proiezioni dei giocatori, fasi 2-4)
 e i campionati senza statistiche.
 

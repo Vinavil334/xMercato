@@ -15,9 +15,9 @@ import pandas as pd
 from xmercato import rose
 from xmercato.evaluation import candidates_backtest as cb
 from xmercato.ingest import teams as team_names
+from xmercato.recommend import availability, performance
 from xmercato.recommend import candidates as cand
 from xmercato.recommend import needs as nd
-from xmercato.recommend import performance
 from xmercato.recommend.data import MarketData, age, current_squad, latest_position
 from xmercato.recommend.slots import LABELS, SLOTS, best_slot
 
@@ -78,6 +78,7 @@ def form_now(
     history: pd.DataFrame,
     season_start: int,
     scorers: pd.DataFrame | None = None,
+    injured: set | None = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame | None]:
     """(form needs, department table, attacking players table) for this season."""
     teams = performance.team_form(history, season_start)
@@ -88,7 +89,7 @@ def form_now(
         rates = performance.fit_rates(_with_slots(data))
         games = teams.set_index("club")["partite"]
         players = performance.player_form(
-            squad.dropna(subset=["slot"]), usage, scorers, rates, games
+            squad.dropna(subset=["slot"]), usage, scorers, rates, games, injured
         )
     return performance.form_needs(teams, players), teams, players
 
@@ -102,20 +103,35 @@ def needs_now(
     season: str,
     history: pd.DataFrame | None = None,
     scorers: pd.DataFrame | None = None,
+    absences: pd.DataFrame | None = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """(needs table, squad with slots) for the current squads.
 
     With ``history`` (results, as from ``xmercato storico``) the needs also weigh how each
     department is doing this season; with ``scorers`` too, how the attacking starters are.
+    With ``absences`` (``availability.read``), players out beyond the window do not count.
     """
     squad = current_squad(squads, data, as_of, last_season)
     usage = nd.usage(_with_slots(data), club_ids(data, season), last_season)
+    notes, injured, available = None, set(), squad
+    if absences is not None and len(absences):
+        today = min(as_of, pd.Timestamp.today().normalize())
+        available, notes, injured = availability.apply(
+            squad, absences, today, window_end(as_of, window)
+        )
     form = None
     if history is not None:
         season_start = int(season[:4])
         if (history["season"] == season_start).any():
-            form, _, _ = form_now(squad, usage, data, history, season_start, scorers)
-    return nd.needs(squad, usage, window, form=form), squad
+            form, _, _ = form_now(available, usage, data, history, season_start, scorers, injured)
+    return nd.needs(available, usage, window, form=form, absences=notes), squad
+
+
+def window_end(opens: pd.Timestamp, window: str) -> pd.Timestamp:
+    """When the window closes: a month after it opens in January, 1 September in summer."""
+    if window == "gennaio":
+        return opens + pd.Timedelta(days=31)
+    return pd.Timestamp(year=opens.year, month=9, day=1)
 
 
 def expected_role(value: pd.Series, starters_value: float) -> pd.Series:

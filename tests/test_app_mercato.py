@@ -2,6 +2,7 @@
 
 from pathlib import Path
 
+import pandas as pd
 import pytest
 
 pytest.importorskip("streamlit")
@@ -21,7 +22,7 @@ def page():
 
 def test_needs_and_candidates(page):
     assert [h.value for h in page.subheader][1] == "Candidati"
-    needs, candidates = page.dataframe[0].value, page.dataframe[1].value
+    needs, candidates = page.dataframe[0].value, page.dataframe[-1].value
     assert len(needs) == 8  # one row per slot
     assert 0 < len(candidates) <= 15
     assert candidates["Probabilità"].is_monotonic_decreasing
@@ -48,3 +49,12 @@ def test_navigation_to_the_market_page():
     at.switch_page("mercato.py").run()
     assert not at.exception
     assert at.title[0].value == "Mercato"
+
+
+def test_injured_players_are_listed(page):
+    if pd.Timestamp.today() > pd.Timestamp("2027-02-15"):
+        pytest.skip("Locatelli's expected return has passed")
+    page.selectbox(key="club").set_value("Juventus").run()
+    tables = [d.value for d in page.dataframe]
+    injured = [t for t in tables if "Rientro previsto" in t.columns]
+    assert injured and "Manuel Locatelli" in set(injured[0]["Giocatore"])
