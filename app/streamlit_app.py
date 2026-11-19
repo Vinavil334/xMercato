@@ -7,6 +7,7 @@ The app only orchestrates: all the modelling lives in the ``xmercato`` package.
 
 from __future__ import annotations
 
+import json
 import sys
 from datetime import date
 from pathlib import Path
@@ -17,11 +18,14 @@ except ModuleNotFoundError:  # running from a checkout where the package is not 
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 import altair as alt
+import numpy as np
 import pandas as pd
 import streamlit as st
 
 from xmercato.ingest import football_data
-from xmercato.models import forecast
+from xmercato.models import forecast, lineups
+from xmercato.recommend import availability
+from xmercato.recommend.market import NeedParts
 from xmercato.sim import season
 
 SEED = 2026
@@ -36,6 +40,7 @@ MODELS = {
 # "close to zero" always recedes into the background.
 BLUE_RAMP = ["#cde2fb", "#86b6ef", "#3987e5", "#1c5cab", "#0d366b"]
 HEATMAP_ROW = 26  # pixels per team
+MARKET = Path(__file__).resolve().parents[1] / "mercato"
 
 
 # ----------------------------------------------------------------------------- data
@@ -65,12 +70,46 @@ def load_previous(season_start: int, n: int) -> dict[int, pd.DataFrame]:
 
 
 @st.cache_data(show_spinner="Simulo il campionato…")
+def market_tag(season_start: int) -> str | None:
+    """The saved market files (squads, slots) of a season, if any: the latest window."""
+    found = []
+    for path in MARKET.glob("info_*.json"):
+        tag = path.stem.removeprefix("info_")
+        window, year = tag.rsplit("_", 1)
+        if (
+            int(year) - (window == "gennaio") == season_start
+            and (MARKET / f"rosa_{tag}.csv").exists()
+        ):
+            found.append(tag)
+    return max(found, key=lambda t: t.rsplit("_", 1)[1], default=None)
+
+
+@st.cache_data
+def injury_effect(tag: str, absences: pd.DataFrame, start: str, season_start: int) -> pd.DataFrame:
+    parts = NeedParts.load(MARKET, tag)
+    return lineups.absence_effect(
+        parts.squad, parts.usage, absences, pd.Timestamp(start), lineups.season_end(season_start)
+    )
+
+
+def absences_for(tag: str) -> pd.DataFrame | None:
+    """The injury list: as edited in the market page in this session, else the saved file."""
+    edited = st.session_state.get(f"assenze_{tag}")
+    if edited is not None:
+        return edited
+    info = json.loads((MARKET / f"info_{tag}.json").read_text())
+    path = info.get("indisponibili")
+    root = MARKET.parent
+    return availability.read(root / path) if path and (root / path).exists() else None
+
+
 def run(
     results: pd.DataFrame,
     previous: tuple[tuple[int, pd.DataFrame], ...],
     season_start: int,
     model: str,
     teams: tuple[str, ...],
+    injuries: tuple[tuple[str, float, float], ...],
     goals_for: tuple[tuple[str, float], ...],
     goals_against: tuple[tuple[str, float], ...],
     fixed: tuple[tuple[str, str, int, int], ...],
@@ -80,6 +119,11 @@ def run(
     past = forecast.stack({**dict(previous), season_start: results})
     as_of = results["date"].max() + pd.Timedelta(days=1) if len(results) else past["date"].max()
     strengths = forecast.fit_as_of(past, season_start, as_of, forecast.CONFIGS[model], teams)
+    known = set(strengths.teams)
+    strengths = strengths.scaled(
+        goals_for={t: f for t, f, _ in injuries if t in known},
+        goals_against={t: g for t, _, g in injuries if t in known},
+    )
     strengths = strengths.scaled(goals_for=dict(goals_for), goals_against=dict(goals_against))
     fixed_df = pd.DataFrame(fixed, columns=["home", "away", "home_goals", "away_goals"])
     return season.simulate(strengths, results, n_sims=n_sims, seed=SEED, fixed=fixed_df)
@@ -337,7 +381,28 @@ def classifica() -> None:
             st.warning("Non riesco a scaricare le stagioni precedenti: uso solo quella scelta.")
             model = "base"
 
+        # Injuries: only for the season in progress, seen from its latest results.
+        tag = market_tag(season_start)
+        absences = absences_for(tag) if tag else None
+        use_injuries = False
+        if absences is not None and as_of == last and not complete:
+            use_injuries = st.toggle(
+                "Conta gli infortuni",
+                value=True,
+                help="Le partite rimanenti si giocano senza gli infortunati, finché non rientrano. "
+                "Elenco nella pagina Mercato, scheda Rosa e infortuni.",
+            )
+
     played = results[results["date"].dt.date <= as_of].reset_index(drop=True)
+    effect = None
+    if use_injuries:
+        start = max(pd.Timestamp(as_of) + pd.Timedelta(days=1), pd.Timestamp.today().normalize())
+        effect = injury_effect(tag, absences, start.date().isoformat(), season_start)
+    injuries = (
+        tuple((r.club, float(r.gol_fatti), float(r.gol_subiti)) for r in effect.itertuples())
+        if effect is not None
+        else ()
+    )
     todo = season.remaining_fixtures(played, teams)
     if len(teams) != 20:
         st.warning(
@@ -358,7 +423,7 @@ def classifica() -> None:
         with right:
             fixed = fixed_controls(todo)
 
-    args = (played, tuple(sorted(previous.items())), season_start, model, tuple(teams))
+    args = (played, tuple(sorted(previous.items())), season_start, model, tuple(teams), injuries)
     scenario = (
         tuple(sorted(goals_for.items())),
         tuple(sorted(goals_against.items())),
@@ -382,6 +447,9 @@ def classifica() -> None:
         grid = table.filter(like="pos_").rename(columns=lambda c: c.removeprefix("pos_"))
         st.dataframe((100 * grid).round(1), width="stretch")
 
+    if effect is not None:
+        show_injuries(effect, summary, season.summarise(run(*args[:-1], (), *scenario, n_sims)))
+
     with st.expander("Come funziona, e cosa non fa"):
         st.markdown(
             """
@@ -396,9 +464,14 @@ def classifica() -> None:
   fissati entrano nella classifica finale ma non cambiano la stima della forza.
 - **Confronto pulito.** Scenario e simulazione di base usano gli stessi numeri casuali: cambiano solo le
   partite toccate dalle tue modifiche, quindi le differenze non sono rumore.
+- **Infortuni.** Le partite rimanenti si giocano senza gli infortunati finché non rientrano. Quanto
+  pesa un'assenza dipende da quanto vale l'undici titolare senza di lui: secondo le quote dei bookmaker
+  (2.447 partite dal 2019), un undici che vale il 10% in meno segna circa l'1% in meno e fa segnare
+  l'1,3% in più all'avversario. È poco, e infatti sul 2023–2025 aggiungerlo non ha migliorato le
+  previsioni: gli infortuni spostano al massimo qualche decimo di punto.
 - **Limiti.** A pari punti decide la differenza reti, non gli scontri diretti. Il modello guarda solo i
   gol: gli xG migliorano poco le previsioni e non c'è una fonte gratuita aggiornata per la stagione in
-  corso. Niente infortuni, mercato o calendario delle coppe. A inizio stagione le stime restano incerte.
+  corso. Niente mercato o calendario delle coppe. A inizio stagione le stime restano incerte.
 """
         )
     st.caption(
@@ -406,6 +479,45 @@ def classifica() -> None:
         "Codice: [github.com/Vinavil334/xMercato](https://github.com/Vinavil334/xMercato). "
         "Sono stime, non consigli per scommesse."
     )
+
+
+def show_injuries(effect: pd.DataFrame, summary: pd.DataFrame, without: pd.DataFrame) -> None:
+    hit = effect[effect["calo"] < -0.001].sort_values("calo")
+    with st.expander(f"Effetto degli infortuni ({len(hit)} squadre)"):
+        if hit.empty:
+            st.write("Nessun infortunio pesa sulle partite rimanenti.")
+            return
+        points = summary["exp_points"] - without["exp_points"]
+        table = pd.DataFrame(
+            {
+                "Squadra": hit["club"],
+                "Assenti": hit["assenti"],
+                "Undici titolare": 100 * (np.exp(hit["calo"]) - 1),
+                "Gol fatti": 100 * (hit["gol_fatti"] - 1),
+                "Gol subiti": 100 * (hit["gol_subiti"] - 1),
+                "Punti attesi": hit["club"].map(points),
+            }
+        )
+        st.dataframe(
+            table,
+            hide_index=True,
+            width="stretch",
+            column_config={
+                "Assenti": st.column_config.TextColumn(width="large"),
+                "Undici titolare": st.column_config.NumberColumn(
+                    format="%+.1f%%",
+                    help="Valore medio dell'undici titolare da qui a fine stagione",
+                ),
+                "Gol fatti": st.column_config.NumberColumn(format="%+.1f%%"),
+                "Gol subiti": st.column_config.NumberColumn(format="%+.1f%%"),
+                "Punti attesi": st.column_config.NumberColumn(
+                    format="%+.2f", help="Rispetto alla stessa simulazione senza infortuni"
+                ),
+            },
+        )
+        st.caption(
+            "Gli infortuni sono quelli della pagina Mercato, con le tue eventuali modifiche."
+        )
 
 
 def main() -> None:

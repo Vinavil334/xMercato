@@ -72,6 +72,8 @@ modello usa anche le due stagioni precedenti, come fa l'app:
 uv run xmercato simulate --storico data/storico/serie_a.csv --modello gol
 # Quanto avrebbero previsto bene i modelli sulle stagioni 2020-2025, contro le quote dei bookmaker
 uv run xmercato backtest --da 2020 --a 2025
+# Quanto pesa un undici titolare più debole, misurato sulle quote dei bookmaker
+uv run xmercato formazioni
 ```
 
 Risultati del backtest in [docs/STUDIO.md](docs/STUDIO.md#verifica-sul-passato-backtest): con le
