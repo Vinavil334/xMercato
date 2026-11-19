@@ -7,6 +7,7 @@ xmercato rose riconcilia --lista ... apply a list of current squads to the squad
 xmercato storico --da 2014 --a 2026  results, odds and xG for several seasons
 xmercato backtest --da 2020 --a 2025 how the models would have done, against the bookmakers
 xmercato mercato dati --out DIR      player-season table from the Transfermarkt match data
+xmercato mercato marcatori           this season's scorers from football-data.org (token needed)
 xmercato mercato suggerisci          needs and candidates of every club for a window
 xmercato mercato verifica            backtest of needs and candidates on past windows
 """
@@ -23,7 +24,7 @@ import pandas as pd
 from xmercato import rose, rose_sync
 from xmercato.evaluation import backtest, candidates_backtest, needs_backtest
 from xmercato.features import player_seasons
-from xmercato.ingest import football_data, history, transfermarkt, understat
+from xmercato.ingest import football_data, football_data_org, history, transfermarkt, understat
 from xmercato.models import forecast
 from xmercato.recommend import data as market_data
 from xmercato.recommend import market
@@ -201,7 +202,17 @@ def _mercato_suggerisci(args: argparse.Namespace) -> None:
     print("Modello di plausibilità (effetto di una deviazione standard sul log-odds):")
     print(model.coefficients().to_string(), end="\n\n")
     squads = rose.read(args.rose)
-    needs, squad = market.needs_now(squads, data, as_of, args.ultima, args.finestra, args.stagione)
+    past = history.read(args.storico) if args.storico and Path(args.storico).exists() else None
+    scorers = pd.read_csv(args.marcatori) if args.marcatori else None
+    if past is None:
+        print("Senza --storico: niente rendimento della stagione nei fabbisogni.")
+    needs, squad = market.needs_now(
+        squads, data, as_of, args.ultima, args.finestra, args.stagione, past, scorers
+    )
+    if past is not None:
+        current = past[past["season"] == int(args.stagione[:4])]
+        needs["risultati_al"] = current["date"].max().date().isoformat() if len(current) else ""
+        needs["marcatori"] = scorers is not None
     candidates = market.candidates_now(
         squad, needs, data, model, as_of, args.ultima, args.per_ruolo, args.stagione
     )
@@ -218,18 +229,41 @@ def _mercato_suggerisci(args: argparse.Namespace) -> None:
     print(f"Scritti {out}/fabbisogni_{tag}.csv e {out}/candidati_{tag}.csv")
 
 
+def _mercato_marcatori(args: argparse.Namespace) -> None:
+    token = football_data_org.token_from_env()
+    if not token:
+        sys.exit(
+            f"Manca la variabile {football_data_org.TOKEN_VARIABLE}: chiave gratuita su "
+            "https://www.football-data.org/client/register"
+        )
+    scorers = football_data_org.load_scorers(token, season=args.stagione)
+    out = Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    scorers.to_csv(out, index=False)
+    print(f"{len(scorers)} giocatori con almeno un gol o un assist, scritti in {out}")
+    print(football_data_org.ATTRIBUTION)
+
+
 def _mercato_verifica(args: argparse.Namespace) -> None:
     data = market_data.load(args.dati)
     ps, players, transfers = data.player_seasons, data.players, data.transfers
     train_seasons = range(args.da, args.prova)
     test_seasons = range(args.prova, args.a + 1)
     rows = []
+    past = history.read(args.storico) if args.storico and Path(args.storico).exists() else None
+    names = data.clubs.set_index("club_id")["name"].to_dict()
     for window in ("gennaio", "estate"):
         result = needs_backtest.evaluate(ps, players, transfers, range(args.da, args.a + 1), window)
         train, test = result[result["season"] < args.prova], result[result["season"] >= args.prova]
         rows.append(
             {"finestra": window, "metodo": "fabbisogni", **needs_backtest.summary(test["rango"])}
         )
+        if window == "gennaio" and past is not None:
+            with_form = needs_backtest.evaluate(
+                ps, players, transfers, test_seasons, window, history=past, club_names=names
+            )
+            summary = needs_backtest.summary(with_form["rango"])
+            rows.append({"finestra": window, "metodo": "fabbisogni + forma dei reparti", **summary})
         base = needs_backtest.baseline_ranks(test, train)
         rows.append(
             {"finestra": window, "metodo": "ruoli più comprati", **needs_backtest.summary(base)}
@@ -255,7 +289,8 @@ def _mercato_verifica(args: argparse.Namespace) -> None:
     pool = sum(len(needs_backtest.arrivals(transfers, needs_backtest.clubs_of_season(ps, s), s, w))
                for s in test_seasons for w in ("gennaio", "estate"))  # fmt: skip
     print(
-        f"Candidati: rango degli acquisti veri tra i candidati dello stesso ruolo, {test_seasons}"
+        "Candidati: rango degli acquisti veri tra i candidati dello stesso ruolo, "
+        f"stagioni {args.prova}-{args.a}"
     )
     print(f"(acquisti da campionati coperti: {int(test['firmato'].sum())} su {pool})")
     with pd.option_context("display.width", 160, "display.float_format", "{:.3f}".format):
@@ -343,13 +378,27 @@ def main(argv: list[str] | None = None) -> None:
     sug.add_argument("--ultima", type=int, default=2025, help="Last season with match data")
     sug.add_argument("--per-ruolo", type=int, default=40, help="Candidates per club and slot")
     sug.add_argument("--out", default="mercato")
+    sug.add_argument(
+        "--storico",
+        default="data/storico/serie_a.csv",
+        help="Results (`xmercato storico`): adds this season's department form",
+    )
+    sug.add_argument(
+        "--marcatori", help="Scorers (`xmercato mercato marcatori`): adds forwards' form"
+    )
     sug.set_defaults(func=_mercato_suggerisci)
+
+    marc = mercato_sub.add_parser("marcatori", help="This season's scorers from football-data.org")
+    marc.add_argument("--stagione", type=int, default=None, help="Start year (default: current)")
+    marc.add_argument("--out", default="data/rendimento/marcatori.csv")
+    marc.set_defaults(func=_mercato_marcatori)
 
     ver = mercato_sub.add_parser("verifica", help="Backtest of needs and candidates")
     ver.add_argument("--dati", default="data/mercato")
     ver.add_argument("--da", type=int, default=2019, help="First season")
     ver.add_argument("--prova", type=int, default=2023, help="First test season")
     ver.add_argument("--a", type=int, default=2025, help="Last season")
+    ver.add_argument("--storico", default="data/storico/serie_a.csv", help="Results, for form")
     ver.set_defaults(func=_mercato_verifica)
 
     args = parser.parse_args(argv)

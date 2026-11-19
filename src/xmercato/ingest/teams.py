@@ -22,6 +22,9 @@ ALIASES = {
     "Chievo Verona": "Chievo",
     "AS Roma": "Roma",
     "SS Lazio": "Lazio",
+    # football-data.org
+    "FC Internazionale Milano": "Inter",
+    "Hellas Verona FC": "Verona",
 }
 
 

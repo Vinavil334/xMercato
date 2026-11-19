@@ -1,0 +1,70 @@
+name: Aggiorna mercato
+
+# Every Tuesday: rebuilds the needs and candidates of the market page with the latest
+# results (department form) and, if the FOOTBALL_DATA_TOKEN secret is set, the scorers
+# from football-data.org (form of the forwards). Commits mercato/ to main when it changed;
+# the app on Streamlit Community Cloud picks the new files up by itself.
+
+on:
+  schedule:
+    - cron: "17 5 * * 2"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: aggiorna-mercato
+  cancel-in-progress: false
+
+jobs:
+  aggiorna:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --locked
+      - name: Stagione in corso
+        run: |
+          year=$(date -u +%Y); month=$(date -u +%-m)
+          [ "$month" -ge 7 ] && season=$year || season=$((year - 1))
+          echo "SEASON=$season" >> "$GITHUB_ENV"
+      - name: Tabelle Transfermarkt
+        run: |
+          mkdir -p "$RUNNER_TEMP/tm"
+          for t in appearances game_lineups games competitions player_valuations players clubs transfers; do
+            curl -fsSL --retry 3 -o "$RUNNER_TEMP/tm/$t.csv.gz" \
+              "https://pub-e682421888d945d684bcae8890b0ec20.r2.dev/data/$t.csv.gz"
+          done
+          uv run xmercato mercato dati --tm "$RUNNER_TEMP/tm" --out data/mercato > /dev/null
+      - name: Risultati
+        run: uv run xmercato storico --da $((SEASON - 3)) --a "$SEASON" --out data/storico/serie_a.csv
+      - name: Marcatori (football-data.org)
+        env:
+          FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
+        run: |
+          if [ -n "$FOOTBALL_DATA_TOKEN" ]; then
+            uv run xmercato mercato marcatori --out data/rendimento/marcatori.csv
+            echo "SCORERS=--marcatori data/rendimento/marcatori.csv" >> "$GITHUB_ENV"
+          else
+            echo "Nessun secret FOOTBALL_DATA_TOKEN: solo il rendimento dei reparti."
+          fi
+      - name: Fabbisogni e candidati
+        run: |
+          uv run xmercato mercato suggerisci --storico data/storico/serie_a.csv $SCORERS \
+            | tail -n 45 | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Salva in main
+        if: github.ref == 'refs/heads/main'
+        run: |
+          if git diff --quiet -- mercato/; then
+            echo "Nessuna novità."; exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add mercato/
+          git commit -m "Mercato: aggiornamento del $(date -u +%d/%m/%Y)"
+          git push

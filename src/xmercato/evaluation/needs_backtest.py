@@ -9,6 +9,8 @@ window opened:
   1 July. Departures of that summer are not known in advance, as in real life.
 
 Contracts are not in the historical data, so the "expiring" signal is left out here.
+With the results history, the January check also includes department form (goals scored
+and conceded up to 31 December against the pre-season expectation).
 The arrivals of the window (loan returns and youth promotions excluded) are then compared
 with the club's need ranking.
 """
@@ -20,7 +22,9 @@ from collections.abc import Iterable, Mapping
 import numpy as np
 import pandas as pd
 
+from xmercato.ingest import teams as team_names
 from xmercato.recommend import needs as nd
+from xmercato.recommend import performance
 from xmercato.recommend.data import age, latest_position
 from xmercato.recommend.slots import SLOTS, best_slot
 
@@ -118,8 +122,14 @@ def evaluate(
     seasons: Iterable[int],
     window: str,
     weights: nd.NeedWeights | None = None,
+    history: pd.DataFrame | None = None,
+    club_names: Mapping[int, str] | None = None,
 ) -> pd.DataFrame:
-    """One row per arrival: its slot and the rank of that slot among the club's needs."""
+    """One row per arrival: its slot and the rank of that slot among the club's needs.
+
+    ``history`` (results) and ``club_names`` (Transfermarkt club id -> name) add the
+    department form to January windows.
+    """
     ps = player_seasons.assign(
         slot=best_slot(
             player_seasons["posizione"],
@@ -135,7 +145,10 @@ def evaluate(
         squad = squad[squad["club"].isin(clubs)]
         club_of: Mapping[int, int] = {c: c for c in clubs}
         usage = nd.usage(ps, club_of, season - 1)
-        ranking = nd.needs(squad, usage, window, weights)
+        form = None
+        if history is not None and club_names is not None and window == "gennaio":
+            form = department_form(history, season, clubs, club_names)
+        ranking = nd.needs(squad, usage, window, weights, form=form)
         rank = ranking.set_index(["club", "slot"])["rango"]
         came = arrivals(transfers, clubs, season, window)
         came = came.assign(
@@ -154,6 +167,22 @@ def evaluate(
                 }
             )
     return pd.DataFrame(rows)
+
+
+def department_form(
+    history: pd.DataFrame, season: int, clubs: Iterable[int], club_names: Mapping[int, str]
+) -> pd.DataFrame:
+    """Form needs on 31 December of ``season``, keyed by Transfermarkt club id."""
+    cut = pd.Timestamp(f"{season + 1}-01-01")
+    known = history[
+        (history["season"] < season) | ((history["season"] == season) & (history["date"] < cut))
+    ]
+    teams = performance.team_form(known, season)
+    names = {c: club_names.get(c, str(c)) for c in clubs}
+    to_results = team_names.map_names(set(names.values()), set(teams["club"]))
+    to_id = {to_results[name]: c for c, name in names.items()}
+    form = performance.form_needs(teams)
+    return form.assign(club=form["club"].map(to_id))
 
 
 def baseline_ranks(results: pd.DataFrame, train: pd.DataFrame) -> pd.Series:

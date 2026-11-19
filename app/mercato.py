@@ -10,6 +10,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+from xmercato.ingest.football_data_org import ATTRIBUTION
 from xmercato.recommend.slots import LABELS
 
 FOLDER = Path(__file__).resolve().parents[1] / "mercato"
@@ -127,10 +128,17 @@ club_needs = needs[needs["club"] == club].sort_values("rango")
 
 st.subheader(f"Dove la rosa è più debole · {window_label(tag)}")
 needs_table(club_needs)
-st.caption(
-    "È una lettura della rosa verificata, non una previsione di dove comprerà il club: sulle "
-    "finestre passate gli acquisti veri non seguivano questa classifica (vedi sotto)."
+notes = []
+if "risultati_al" in club_needs and str(club_needs["risultati_al"].iloc[0]) not in ("", "nan"):
+    day = pd.Timestamp(club_needs["risultati_al"].iloc[0]).strftime("%d/%m/%Y")
+    notes.append(f"Rendimento della stagione calcolato sui risultati fino al {day}.")
+if "marcatori" in club_needs and bool(club_needs["marcatori"].iloc[0]):
+    notes.append(f"Gol e assist degli attaccanti: {ATTRIBUTION}.")
+notes.append(
+    "Più che una previsione è una lettura della rosa: dei segnali, solo il rendimento dei "
+    "reparti si è visto anche negli acquisti veri delle finestre passate (vedi sotto)."
 )
+st.caption(" ".join(notes))
 
 st.subheader("Candidati")
 left, middle, right, abroad = st.columns([2, 1, 1, 1], vertical_alignment="bottom")
@@ -164,10 +172,17 @@ with st.expander("Come funziona, quanto è affidabile, cosa non fa"):
 - **Fabbisogni.** Per ogni ruolo: quanti giocatori ci sono rispetto a quanti ne servono col modulo
   usato l'anno scorso (un ricambio per titolare, tre portieri); quanto valgono i titolari rispetto a
   un titolare tipico della squadra, confrontato col distacco che c'è di solito nelle altre squadre;
-  età e contratti in scadenza. Rose: quelle verificate a mano a novembre 2026.
-- **Verifica dei fabbisogni.** Sulle finestre 2023–2025, solo il 23% degli acquisti veri cadeva nei due
-  ruoli più "urgenti": come a caso (25%) e meno che puntando sui ruoli comprati più spesso (38%).
-  I club comprano anche per partenze, infortuni e occasioni che una rosa non mostra.
+  età e contratti in scadenza; **rendimento della stagione**.
+- **Rendimento.** Gol fatti e subiti finora contro quelli che il modello della classifica si
+  aspettava a inizio stagione, dati gli avversari incontrati: se l'attacco segna meno del previsto
+  sale l'urgenza di centravanti, esterni e trequartisti; se la difesa subisce di più, quella di
+  centrali, portiere e terzini. Quando ci sono anche i marcatori (football-data.org), conta pure
+  quanti gol e assist stanno facendo gli attaccanti titolari rispetto a giocatori di pari ruolo e
+  valore.
+- **Verifica.** Il rendimento è l'unico segnale che si vede negli acquisti veri: dal 2019, a gennaio
+  ha preso un centravanti il 50% delle squadre il cui attacco era molto sotto le attese, contro il
+  24% di quelle molto sopra; un difensore centrale il 63% di quelle con la difesa molto sotto, contro
+  il 35%. Profondità e qualità della rosa invece non prevedono dove compra un club.
 - **Candidati.** Tutti i giocatori visti nel 2025/26 in 14 campionati europei (Serie A compresa).
   La probabilità viene da un modello addestrato sugli acquisti dei club di Serie A dal 2019: conta
   soprattutto il prezzo rispetto al livello del club, poi età, esperienza in Serie A, minuti giocati,
@@ -175,7 +190,7 @@ with st.expander("Come funziona, quanto è affidabile, cosa non fa"):
 - **Verifica dei candidati.** Sulle finestre 2023–2025 il 18% degli acquisti veri era tra i primi 10
   della lista del suo ruolo (su circa 1.200 candidati) e il 43% tra i primi 50. Scegliendo i giocatori
   col valore più vicino a quello della squadra: 5% e 24%.
-- **Cosa non fa.** Non dice se l'acquisto sarebbe buono: quella stima arriva con le proiezioni dei
+- **Cosa non fa.** Non vede infortuni e voti in pagella. Non dice se l'acquisto sarebbe buono: quella stima arriva con le proiezioni dei
   giocatori. Non vede Serie B, Sudamerica e gli altri campionati senza statistiche nel dataset (circa
   un acquisto su tre arriva da lì). Valori e club sono fermi a luglio 2026, statistiche al 2025/26.
 """
