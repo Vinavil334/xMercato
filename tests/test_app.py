@@ -2,6 +2,7 @@
 
 from pathlib import Path
 
+import pandas as pd
 import pytest
 
 pytest.importorskip("streamlit")
@@ -21,6 +22,7 @@ def _offline(source):
 
 
 ORIGINAL_LOAD = football_data.load_results
+MARKET = Path(__file__).resolve().parents[1] / "mercato"
 
 
 @pytest.fixture
@@ -100,3 +102,22 @@ def test_uses_the_previous_seasons_when_available(monkeypatch):
 
 def test_falls_back_to_one_season(app):
     assert [w.value for w in app.warning if "stagioni precedenti" in w.value]
+
+
+def test_injuries_in_the_season_in_progress(monkeypatch):
+    today = pd.Timestamp.today()
+    season_start = today.year if today.month >= 7 else today.year - 1
+    if not list(MARKET.glob(f"rosa_gennaio_{season_start + 1}.csv")):
+        pytest.skip("no market files for the season in progress")
+    # The first 110 games of the bundled season stand in for every downloaded season.
+    sample = ORIGINAL_LOAD(football_data.SAMPLE_SEASON)
+    monkeypatch.setattr(football_data, "load_results", lambda source: sample.head(110))
+    st.cache_data.clear()
+    at = AppTest.from_file(APP, default_timeout=120)
+    at.run()
+    assert not at.exception
+    assert [t.label for t in at.toggle] == ["Conta gli infortuni"]
+    effect = [d.value for d in at.dataframe if "Assenti" in d.value.columns]
+    assert effect and (effect[0]["Gol fatti"] <= 0).all()
+    at.toggle[0].set_value(False).run()
+    assert not [d for d in at.dataframe if "Assenti" in d.value.columns]

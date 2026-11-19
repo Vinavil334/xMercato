@@ -151,8 +151,8 @@ chi resta fuori oltre la chiusura della finestra esce dal calcolo della rosa, ch
 giudicato sui gol; i candidati fuori oltre la finestra spariscono dalla lista. L'app ricalcola i fabbisogni
 dai pezzi salvati in `mercato/` (rosa, utilizzo dei ruoli, rendimento), così una modifica all'elenco
 degli infortuni si vede subito. Non c'è uno storico degli infortuni, quindi questo pezzo non è
-verificato sul passato. Il simulatore della classifica invece non tiene conto degli infortuni: stima
-la forza delle squadre solo dai risultati.
+verificato sul passato. Nel simulatore della classifica gli infortuni entrano tramite il valore
+dell'undici titolare (vedi [Infortuni nella classifica](#infortuni-nella-classifica)).
 
 **Cosa manca ancora:** la probabilità di *buon* acquisto (servono le proiezioni dei giocatori, fasi 2-4)
 e i campionati senza statistiche.
@@ -209,6 +209,33 @@ Errore medio sui punti finali (per squadra), simulando il resto della stagione d
 Prima del via il modello sbaglia di quasi 9 punti a squadra: senza il mercato estivo non può fare di
 meglio. Dalla metà stagione in poi i due modelli si equivalgono.
 
+#### Infortuni nella classifica
+
+Il modello stima la forza delle squadre dai risultati: un'assenza pesa solo quando si vede nei
+risultati. Per farla pesare prima serve sapere quanto vale un giocatore per la sua squadra. Misura
+usata: il **valore di mercato dell'undici titolare** (Transfermarkt, alla data della partita), contro
+l'undici abituale della squadra (mediana delle dieci partite precedenti). Tabella delle formazioni
+2018–2025: `formazioni_serie_a.csv.gz` (vedi [DATI.md](DATI.md#tabelle-per-il-mercato)).
+
+- **Dai gol non si vede quasi niente.** Con la forza delle squadre fissata stagione per stagione, un
+  undici più debole cambia i gol di poco e in modo non distinguibile da zero (effetto sui gol propri
+  +0,04 ± 0,13 per unità di log del valore). I gol sono troppo rumorosi, e gli allenatori fanno turnover
+  proprio contro gli avversari più facili.
+- **Dalle quote sì.** Le quote di chiusura conoscono già le formazioni. Su 2.447 partite (2019–2025),
+  confrontando i gol attesi dai bookmaker con quelli del nostro modello: un undici che vale il 10% in
+  meno fa calare i gol attesi della squadra dell'1,0% (± 0,3%) e aumentare quelli dell'avversario
+  dell'1,3% (± 0,3%). Si rifà con `uv run xmercato formazioni`.
+- **Ma non migliora le previsioni.** Correggendo il modello con le formazioni vere (che prima della
+  partita non si conoscono nemmeno), sul 2023–2025 il log loss passa da 0,984 a 0,985: nessun guadagno.
+
+Nel simulatore (`src/xmercato/models/lineups.py`) l'undici di ogni squadra viene ricostruito settimana
+per settimana fino a fine stagione senza gli infortunati dell'elenco della pagina Mercato, e il calo
+medio di valore diventa un fattore sui gol fatti e subiti, con i coefficienti dei bookmaker.
+Con gli infortuni del 18/11/2026 l'effetto più grande è il Lecce (undici −7%, −0,3 punti attesi), poi
+Sassuolo, Juventus e Milan (−0,2): gli infortuni contano poco sulla classifica finale, perché i
+sostituti valgono qualcosa e la maggior parte delle assenze dura poche settimane. Il pezzo è attivo
+nell'app (si può spegnere) perché è il modo corretto di tenerne conto, non perché migliori i numeri.
+
 ## Pro
 
 - **Si parte da modelli semplici e spiegabili**, ognuno con un riferimento da battere: i miglioramenti si misurano.
@@ -254,6 +281,7 @@ Registro delle scelte, con la data. Si cambia idea aggiungendo una riga, non can
 | 16/11/2026 | **Soglia dei minuti** | Non è fissa: dipende dal ruolo per cui il giocatore è stato preso. Un secondo portiere che fa il secondo portiere è un acquisto riuscito |
 | 16/11/2026 | **Acquisti di gennaio** | Stessa definizione, valutata sulla stagione e mezza disponibile |
 | 16/11/2026 | **Simulatore interattivo** | Previsto, in tre livelli crescenti (vedi [ROADMAP.md](ROADMAP.md#simulatore-interattivo)) |
+| 19/11/2026 | **Infortuni nella classifica** | Valore dell'undici titolare con i coefficienti stimati dalle quote dei bookmaker; effetto piccolo (al massimo qualche decimo di punto) e nessun miglioramento misurabile delle previsioni. Attivo nell'app, spegnibile |
 | 18/11/2026 | **Rendimento nei fabbisogni** | Reparti dai risultati (automatico) e attaccanti dai marcatori di football-data.org (con chiave gratuita). Fantacalcio.it e FBref esclusi: i loro termini vietano estrazione automatica e strumenti pubblici. Aggiornamento automatico ogni martedì |
 | 18/11/2026 | **Mercato di gennaio** | Fabbisogni come lettura della rosa (la verifica mostra che non prevedono gli acquisti); candidati ordinati per probabilità che il club li prenda, con il ruolo previsto. La probabilità di buon acquisto arriva con le fasi 2-4 |
 | 17/11/2026 | **Modello della classifica** | Due stagioni precedenti, metà peso ogni 270 giorni, neopromosse sotto la media, solo gol. Gli xG non migliorano in modo misurabile e non hanno una fonte aggiornata: restano nel backtest, fuori dall'app |

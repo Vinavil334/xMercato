@@ -76,6 +76,7 @@ formazioni, partite, valori, trasferimenti) e scrive in `data/mercato/`:
 
 | File | Contenuto |
 |---|---|
+| `formazioni_serie_a.csv.gz` | Una riga per partita di Serie A e squadra, dal 2018/19: gol, titolari e valore dell'undici titolare alla data della partita, diviso tra attacco e difesa. Serve a stimare quanto pesa un'assenza (`xmercato formazioni`) |
 | `giocatori_stagioni.csv.gz` | Una riga per giocatore, stagione e club, dal 2018/19: convocazioni (panchina compresa), presenze, partite da titolare, minuti, gol, assist, cartellini, posizione in cui partiva più spesso, valore a inizio stagione, al 1° gennaio e a fine stagione. Le stesse cifre per il solo girone d'andata |
 | `giocatori.csv.gz` | Anagrafica: nascita, cittadinanza, posizione, contratto, club e valore a luglio 2026 |
 | `trasferimenti_serie_a.csv.gz` | Trasferimenti da e verso club italiani dal 2018 |

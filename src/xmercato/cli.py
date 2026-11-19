@@ -6,6 +6,7 @@ xmercato rose controlla FILE         check a hand-maintained squad file
 xmercato rose riconcilia --lista ... apply a list of current squads to the squad file
 xmercato storico --da 2014 --a 2026  results, odds and xG for several seasons
 xmercato backtest --da 2020 --a 2025 how the models would have done, against the bookmakers
+xmercato formazioni                  what a weaker starting eleven costs, from bookmaker odds
 xmercato mercato dati --out DIR      player-season table from the Transfermarkt match data
 xmercato mercato marcatori           this season's scorers from football-data.org (token needed)
 xmercato mercato suggerisci          needs and candidates of every club for a window
@@ -23,8 +24,8 @@ import numpy as np
 import pandas as pd
 
 from xmercato import rose, rose_sync
-from xmercato.evaluation import backtest, candidates_backtest, needs_backtest
-from xmercato.features import player_seasons
+from xmercato.evaluation import backtest, candidates_backtest, lineups_backtest, needs_backtest
+from xmercato.features import lineup_strength, player_seasons
 from xmercato.ingest import football_data, football_data_org, history, transfermarkt, understat
 from xmercato.models import forecast
 from xmercato.recommend import availability, market
@@ -156,20 +157,18 @@ def _mercato_dati(args: argparse.Namespace) -> None:
 
     competitions = load("competitions")
     clubs = load("clubs")
+    games, lineups, valuations = load("games"), load("game_lineups"), load("player_valuations")
     table = player_seasons.build(
-        load("appearances"),
-        load("game_lineups"),
-        load("games"),
-        competitions,
-        load("player_valuations"),
-        first_season=args.da,
+        load("appearances"), lineups, games, competitions, valuations, first_season=args.da
     )
+    elevens = lineup_strength.build(games, lineups, valuations, first_season=args.da)
     players = load("players")
     transfers = load("transfers")
 
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     table.to_csv(out / "giocatori_stagioni.csv.gz", index=False)
+    elevens.to_csv(out / "formazioni_serie_a.csv.gz", index=False)
     keep = set(table["player_id"]) | set(transfers["player_id"])
     players = players[players["player_id"].isin(keep)]
     players.drop(
@@ -310,6 +309,28 @@ def _mercato_verifica(args: argparse.Namespace) -> None:
     print(f"\nAcquisti attesi dal modello {expected:.0f}, veri {int(test['firmato'].sum())}")
 
 
+def _formazioni(args: argparse.Namespace) -> None:
+    past = history.read(args.storico)
+    elevens = pd.read_csv(Path(args.dati) / "formazioni_serie_a.csv.gz")
+    names = pd.read_csv(Path(args.dati) / "club.csv.gz").set_index("club_id")["name"].to_dict()
+    games = lineups_backtest.matched_games(past, elevens, names, range(args.da, args.a + 1))
+    train, test = games[games["season"] < args.prova], games[games["season"] >= args.prova]
+    effect, margin = lineups_backtest.estimate(games)
+    print(f"{len(games)} partite con quote e formazioni, stagioni {args.da}-{args.a}")
+    print(f"Effetto sui gol propri:       {effect.own:+.3f} ± {margin[0]:.3f}")
+    print(f"Effetto sui gol dell'avversario: {effect.opponent:+.3f} ± {margin[1]:.3f}")
+    print("(per unità di log del valore dell'undici: -0,1 = undici che vale il 10% in meno)\n")
+    fitted, _ = lineups_backtest.estimate(train)
+    plain = lineups_backtest.score_with(test, lineups_backtest.Effect(own=0.0, opponent=0.0))
+    adjusted = lineups_backtest.score_with(test, fitted)
+    book = backtest.score(backtest.bookmaker_probabilities(test))[["log_loss", "rps"]].mean()
+    print(f"Prova {args.prova}-{args.a} (effetto stimato prima del {args.prova}):")
+    table = pd.DataFrame(
+        {"modello": plain, "modello + formazioni vere": adjusted, "bookmaker": book}
+    ).T.round(4)
+    print(table.to_string())
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(prog="xmercato")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -359,6 +380,14 @@ def main(argv: list[str] | None = None) -> None:
     storico.add_argument("--out", default="data/storico/serie_a.csv")
     storico.add_argument("--tiri", help="Understat shots archive (.rds); without it, no xG")
     storico.set_defaults(func=_storico)
+
+    form = sub.add_parser("formazioni", help="What a weaker starting eleven costs (bookmakers)")
+    form.add_argument("--storico", default="data/storico/serie_a.csv")
+    form.add_argument("--dati", default="data/mercato", help="Output of `xmercato mercato dati`")
+    form.add_argument("--da", type=int, default=2019)
+    form.add_argument("--prova", type=int, default=2023, help="First test season")
+    form.add_argument("--a", type=int, default=2025)
+    form.set_defaults(func=_formazioni)
 
     bt = sub.add_parser("backtest", help="Score the models on past seasons")
     bt.add_argument("--storico", default="data/storico/serie_a.csv")

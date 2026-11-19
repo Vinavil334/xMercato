@@ -44,7 +44,11 @@ def predict_season(history: pd.DataFrame, season: int, config: ModelConfig) -> p
         strengths = fit_as_of(history, season, week["date"].min(), config, teams)
         lam_h, lam_a = _rates(strengths, week)
         probs = poisson.outcome_probabilities(lam_h, lam_a)
-        out.append(week.assign(p_home=probs[:, 0], p_draw=probs[:, 1], p_away=probs[:, 2]))
+        out.append(
+            week.assign(
+                p_home=probs[:, 0], p_draw=probs[:, 1], p_away=probs[:, 2], lam_h=lam_h, lam_a=lam_a
+            )
+        )
     return pd.concat(out).drop(columns="week").assign(model=config.name)
 
 
