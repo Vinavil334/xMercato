@@ -34,7 +34,10 @@ REQUIRED_COLUMNS = {
         "goals", "assists", "yellow_cards", "red_cards",
     ],
     "game_lineups": ["game_id", "player_id", "club_id", "type", "position"],
-    "games": ["game_id", "competition_id", "season", "date", "home_club_id", "away_club_id"],
+    "games": [
+        "game_id", "competition_id", "season", "date", "home_club_id", "away_club_id",
+        "home_club_goals", "away_club_goals",
+    ],
     "competitions": ["competition_id", "type", "country_name"],
 }  # fmt: skip
 

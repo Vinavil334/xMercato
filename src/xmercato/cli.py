@@ -24,7 +24,7 @@ import pandas as pd
 
 from xmercato import rose, rose_sync
 from xmercato.evaluation import backtest, candidates_backtest, needs_backtest
-from xmercato.features import player_seasons
+from xmercato.features import lineup_strength, player_seasons
 from xmercato.ingest import football_data, football_data_org, history, transfermarkt, understat
 from xmercato.models import forecast
 from xmercato.recommend import availability, market
@@ -156,20 +156,18 @@ def _mercato_dati(args: argparse.Namespace) -> None:
 
     competitions = load("competitions")
     clubs = load("clubs")
+    games, lineups, valuations = load("games"), load("game_lineups"), load("player_valuations")
     table = player_seasons.build(
-        load("appearances"),
-        load("game_lineups"),
-        load("games"),
-        competitions,
-        load("player_valuations"),
-        first_season=args.da,
+        load("appearances"), lineups, games, competitions, valuations, first_season=args.da
     )
+    elevens = lineup_strength.build(games, lineups, valuations, first_season=args.da)
     players = load("players")
     transfers = load("transfers")
 
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     table.to_csv(out / "giocatori_stagioni.csv.gz", index=False)
+    elevens.to_csv(out / "formazioni_serie_a.csv.gz", index=False)
     keep = set(table["player_id"]) | set(transfers["player_id"])
     players = players[players["player_id"].isin(keep)]
     players.drop(
