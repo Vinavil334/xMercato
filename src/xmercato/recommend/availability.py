@@ -74,3 +74,37 @@ def apply(
     notes = pd.DataFrame(notes, columns=["club", "slot", "nota_assenze"])
     notes = notes.groupby(["club", "slot"], as_index=False)["nota_assenze"].agg("; ".join)
     return squad.drop(index=long_out["row"]), notes, set(current["row"])
+
+
+def to_csv(absences: pd.DataFrame) -> str:
+    """The list in the file format (dates back to text), sorted by club and player."""
+    out = absences[COLUMNS].copy()
+    for column in ("rientro_stimato", "aggiornato"):
+        out[column] = pd.to_datetime(out[column], errors="coerce").dt.strftime("%Y-%m-%d")
+    return out.fillna("").sort_values(["club", "giocatore"]).to_csv(index=False)
+
+
+def candidate_status(
+    candidates: pd.DataFrame,
+    absences: pd.DataFrame,
+    today: pd.Timestamp,
+    until: pd.Timestamp,
+    threshold: float = 0.85,
+) -> tuple[pd.Series, pd.Series]:
+    """(note, out for the window) for each candidate playing at a club on the list.
+
+    ``candidates`` needs ``giocatore`` and ``club_attuale``. Only Serie A clubs are on the
+    list, so players abroad are never flagged.
+    """
+    note = pd.Series("", index=candidates.index)
+    out = pd.Series(False, index=candidates.index)
+    current = absences[absences["rientro_stimato"].isna() | (absences["rientro_stimato"] > today)]
+    for row in current.itertuples():
+        here = candidates[candidates["club_attuale"] == row.club]
+        if here.empty:
+            continue
+        same = here["giocatore"].map(lambda name, row=row: similarity(row.giocatore, name))
+        hit = same[same >= threshold].index
+        note[hit] = f"infortunato ({row.problema}, rientro {row.rientro})"
+        out[hit] = bool(pd.notna(row.rientro_stimato) and row.rientro_stimato > until)
+    return note, out

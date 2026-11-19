@@ -80,7 +80,7 @@ stagioni precedenti il modello recupera più di metà della distanza dai bookmak
 ## Il mercato
 
 La pagina **Mercato** dell'app mostra, per ogni squadra, dove la rosa è più debole (anche in base a
-come stanno rendendo reparti e attaccanti in questa stagione) e i candidati per ogni ruolo, ordinati per probabilità che il club li prenda a gennaio 2027. Sulle finestre 2023–2025 il
+come stanno rendendo reparti e attaccanti in questa stagione), la rosa completa con gli infortunati (modificabili dall'app) e i candidati per ogni ruolo, ordinati per probabilità che il club li prenda a gennaio 2027. Sulle finestre 2023–2025 il
 43% degli acquisti veri era tra i primi 50 candidati del suo ruolo (su circa 1.200). Come funziona e
 cosa non fa: [docs/STUDIO.md](docs/STUDIO.md#versione-di-gennaio-2027-fase-g).
 

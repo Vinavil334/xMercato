@@ -148,7 +148,11 @@ attese, contro il 32–39% delle altre. Aggiunto alla classifica dei fabbisogni 
 
 **Infortuni** (`availability.py`). Da una lista tenuta a mano (vedi [DATI.md](DATI.md#infortunati)):
 chi resta fuori oltre la chiusura della finestra esce dal calcolo della rosa, chi è infortunato non viene
-giudicato sui gol. Non c'è uno storico degli infortuni, quindi questo pezzo non è verificato sul passato.
+giudicato sui gol; i candidati fuori oltre la finestra spariscono dalla lista. L'app ricalcola i fabbisogni
+dai pezzi salvati in `mercato/` (rosa, utilizzo dei ruoli, rendimento), così una modifica all'elenco
+degli infortuni si vede subito. Non c'è uno storico degli infortuni, quindi questo pezzo non è
+verificato sul passato. Il simulatore della classifica invece non tiene conto degli infortuni: stima
+la forza delle squadre solo dai risultati.
 
 **Cosa manca ancora:** la probabilità di *buon* acquisto (servono le proiezioni dei giocatori, fasi 2-4)
 e i campionati senza statistiche.

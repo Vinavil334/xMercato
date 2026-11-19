@@ -20,12 +20,42 @@ def page():
     return at
 
 
-def test_needs_and_candidates(page):
-    assert [h.value for h in page.subheader][1] == "Candidati"
-    needs, candidates = page.dataframe[0].value, page.dataframe[-1].value
+def _tables(page):
+    """The page's tables by their first column: needs, editor, squad, candidates."""
+    return {tuple(d.value.columns[:2]): d.value for d in page.dataframe}
+
+
+def test_needs_squad_and_candidates(page):
+    tables = _tables(page)
+    needs = tables[("Urgenza", "Perché")]
+    squad = tables[("Giocatore", "Ruolo")]
+    candidates = tables[("Giocatore", "Probabilità")]
     assert len(needs) == 8  # one row per slot
+    assert len(squad) > 20 and set(squad["Stato"]) <= {
+        "disponibile",
+        "infortunato",
+        "fuori per la finestra",
+    }
     assert 0 < len(candidates) <= 15
     assert candidates["Probabilità"].is_monotonic_decreasing
+
+
+def test_an_added_injury_changes_the_needs(page):
+    key = "assenze_gennaio_2027"
+    before = _tables(page)[("Urgenza", "Perché")]
+    absences = page.session_state[key]
+    extra = pd.DataFrame(
+        [{"club": "Atalanta", "giocatore": "Marco Carnesecchi", "problema": "test",
+          "rientro": "marzo", "rientro_stimato": pd.Timestamp("2027-03-15"), "fonte": "x",
+          "aggiornato": pd.Timestamp("2026-11-19")}]
+    )  # fmt: skip
+    page.session_state[key] = pd.concat([absences, extra], ignore_index=True)
+    page.run()
+    assert not page.exception
+    after = _tables(page)[("Urgenza", "Perché")]
+    assert "Marco Carnesecchi" in after.loc["Portiere", "Perché"]
+    assert after.loc["Portiere", "Urgenza"] > before.loc["Portiere", "Urgenza"]
+    assert page.info  # "Elenco modificato"
 
 
 def test_other_club_and_slot(page):
@@ -41,7 +71,7 @@ def test_other_club_and_slot(page):
 def test_filters_can_empty_the_list(page):
     page.slider(key="max_age").set_value(17).run()
     assert not page.exception
-    assert page.info  # nobody aged 17 or less among the top candidates
+    assert any(i.value.startswith("Nessun candidato") for i in page.info)
 
 
 def test_navigation_to_the_market_page():
@@ -55,6 +85,7 @@ def test_injured_players_are_listed(page):
     if pd.Timestamp.today() > pd.Timestamp("2027-02-15"):
         pytest.skip("Locatelli's expected return has passed")
     page.selectbox(key="club").set_value("Juventus").run()
-    tables = [d.value for d in page.dataframe]
-    injured = [t for t in tables if "Rientro previsto" in t.columns]
-    assert injured and "Manuel Locatelli" in set(injured[0]["Giocatore"])
+    editor = _tables(page)[("Giocatore", "Problema")]
+    assert "Manuel Locatelli" in set(editor["Giocatore"])
+    squad = _tables(page)[("Giocatore", "Ruolo")].set_index("Giocatore")
+    assert squad.loc["Manuel Locatelli", "Stato"] == "fuori per la finestra"

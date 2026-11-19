@@ -120,12 +120,29 @@ link alla notizia e la data dell'aggiornamento):
 | `rientro_stimato` | La nostra lettura in data: "dicembre" = 15/12, "nel 2027" = 15/2, crociato "nel 2027" = 31/3; vuota se la notizia non dà tempi |
 | `fonte`, `aggiornato` | Link alla notizia e data |
 
+**Modificarlo dall'app.** Nella pagina Mercato, scheda *Rosa e infortuni*, si possono aggiungere,
+cambiare ed eliminare le righe di ogni squadra: fabbisogni e candidati si ricalcolano subito. Le
+modifiche restano nella sessione del browser; con "Scarica l'elenco" si ottiene il file aggiornato.
+Per salvarle per tutti direttamente dall'app servono, nei *Secrets* dell'app su Streamlit Community
+Cloud (Settings → Secrets):
+
+```toml
+[github]
+token = "github_pat_..."   # token fine-grained, solo questo repository, permesso Contents: read and write
+password = "..."           # chi la conosce può salvare; l'app è pubblica
+```
+
+Il salvataggio diventa un commit in `main`; il workflow **Aggiorna mercato** riparte da solo e l'app
+si aggiorna in qualche minuto.
+
 Effetti: chi rientra dopo la chiusura della finestra non conta nella rosa (manca un giocatore nel suo
 ruolo e il titolare diventa il successivo); chi è infortunato oggi non viene giudicato sui gol e gli
-assist. Le righe con il rientro già passato vengono ignorate. Il file **non si aggiorna da solo**:
-va rinnovato a mano prima della finestra (o chiedendolo a Claude), e l'app mostra la data.
+assist. Le righe con il rientro già passato vengono ignorate. Tra i candidati, chi gioca in
+Serie A ed è fuori oltre la finestra viene tolto dalla lista. Il file **non si aggiorna da solo**: va
+rinnovato prima della finestra (dall'app o chiedendolo a Claude), e l'app mostra la data.
 
-Il workflow **Aggiorna mercato** gira ogni martedì: scarica risultati, tabelle Transfermarkt e, se
+Il workflow **Aggiorna mercato** gira ogni martedì e a ogni modifica di rose, infortuni o codice del
+mercato in `main`: scarica risultati, tabelle Transfermarkt e, se
 nel repository c'è il secret `FOOTBALL_DATA_TOKEN`, i marcatori; poi rigenera `mercato/` e lo salva
 in `main`, così l'app si aggiorna da sola.
 

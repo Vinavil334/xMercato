@@ -57,14 +57,42 @@ def test_unknown_names_are_an_error(tmp_path):
         availability.apply(_squad(), absences, TODAY, CLOSE)
 
 
-def test_injured_forwards_are_not_judged():
-    squad = pd.DataFrame({"club": ["A"], "slot": ["ATT"], "valore": [30.0], "giocatore": ["X Y"]})
+def test_injured_forwards_are_not_judged_and_out_ones_are_replaced():
+    squad = pd.DataFrame(
+        {"club": ["A", "A"], "slot": ["ATT", "ATT"], "valore": [30.0, 10.0],
+         "giocatore": ["X Y", "Z W"]}
+    )  # fmt: skip
     usage = pd.DataFrame({"club": ["A"], "slot": ["ATT"], "titolari": [1.0]})
     scorers = pd.DataFrame(columns=["giocatore", "squadra", "partite", "gol", "assist"])
-    rates = {"ATT": (-1.7, 0.3)}
-    games = pd.Series({"A": 12})
-    assert len(perf.player_form(squad, usage, scorers, rates, games)) == 1
-    assert perf.player_form(squad, usage, scorers, rates, games, injured={0}).empty
+    stats = perf.forward_stats(squad, scorers, {"ATT": (-1.7, 0.3)}, pd.Series({"A": 12}))
+    assert list(perf.player_form(stats, usage)["giocatore"]) == ["X Y"]
+    assert perf.player_form(stats, usage, injured={("A", "X Y")}).empty
+    assert list(perf.player_form(stats, usage, out={("A", "X Y")})["giocatore"]) == ["Z W"]
+
+
+def test_candidates_out_for_the_window(tmp_path):
+    absences = _absences(tmp_path, [
+        ["Juventus", "Locatelli", "menisco", "nel 2027", "2027-02-15", "x", "2026-11-18"],
+        ["Juventus", "Kenan Yildiz", "piede", "dicembre", "2026-12-15", "x", "2026-11-18"],
+    ])  # fmt: skip
+    candidates = pd.DataFrame(
+        {"giocatore": ["Manuel Locatelli", "Kenan Yıldız", "Manuel Locatelli"],
+         "club_attuale": ["Juventus", "Juventus", "Sassuolo"]}
+    )  # fmt: skip
+    note, out = availability.candidate_status(candidates, absences, TODAY, CLOSE)
+    assert list(out) == [True, False, False]
+    assert note[1].startswith("infortunato (piede") and note[2] == ""
+
+
+def test_csv_round_trip(tmp_path):
+    rows = [["Juventus", "Locatelli", "menisco", "nel 2027", "2027-02-15", "x", "2026-11-18"],
+            ["Inter", "Bonny", "flessori", "dicembre", "", "y", "2026-11-18"]]  # fmt: skip
+    absences = _absences(tmp_path, rows)
+    text = availability.to_csv(absences)
+    assert text.splitlines()[1].startswith("Inter,Bonny,flessori,dicembre,,y,2026-11-18")
+    path = tmp_path / "again.csv"
+    path.write_text(text)
+    assert availability.to_csv(availability.read(path)) == text
 
 
 def test_the_real_list_matches_the_squads():

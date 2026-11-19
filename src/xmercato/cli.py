@@ -15,6 +15,7 @@ xmercato mercato verifica            backtest of needs and candidates on past wi
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -209,16 +210,18 @@ def _mercato_suggerisci(args: argparse.Namespace) -> None:
         absences = availability.read(args.indisponibili)
     if past is None:
         print("Senza --storico: niente rendimento della stagione nei fabbisogni.")
-    needs, squad = market.needs_now(
-        squads, data, as_of, args.ultima, args.finestra, args.stagione, past, scorers, absences
-    )
+    parts = market.parts_now(squads, data, as_of, args.ultima, args.stagione, past, scorers)
+    needs, squad = market.needs_from_parts(parts, args.finestra, as_of, absences)
+    info = {"finestra": args.finestra, "apertura": as_of.date().isoformat(), "marcatori": False}
     if past is not None:
         current = past[past["season"] == int(args.stagione[:4])]
-        needs["risultati_al"] = current["date"].max().date().isoformat() if len(current) else ""
-        needs["marcatori"] = scorers is not None
-    needs["indisponibili_al"] = (
-        absences["aggiornato"].max().date().isoformat() if absences is not None else ""
-    )
+        info["risultati_al"] = current["date"].max().date().isoformat() if len(current) else ""
+        info["marcatori"] = parts.forwards is not None
+    if absences is not None:
+        info["indisponibili_al"] = absences["aggiornato"].max().date().isoformat()
+        info["indisponibili"] = args.indisponibili
+    for key in ("risultati_al", "marcatori", "indisponibili_al"):
+        needs[key] = info.get(key, "")
     candidates = market.candidates_now(
         squad, needs, data, model, as_of, args.ultima, args.per_ruolo, args.stagione
     )
@@ -229,6 +232,8 @@ def _mercato_suggerisci(args: argparse.Namespace) -> None:
         out / f"fabbisogni_{tag}.csv", index=False
     )
     candidates.to_csv(out / f"candidati_{tag}.csv", index=False)
+    parts.save(out, tag)
+    (out / f"info_{tag}.json").write_text(json.dumps(info, indent=2) + "\n")
     top = needs[needs["rango"] <= 2][["club", "slot", "punteggio", "motivo"]]
     with pd.option_context("display.width", 200, "display.max_colwidth", 120):
         print(top.to_string(index=False), end="\n\n")
